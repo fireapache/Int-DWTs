@@ -1,17 +1,9 @@
 #include <iostream>
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cmath>
 #include <interval.hpp>
 
 using namespace std;
 using namespace cxsc;
-
-struct ImageInfo
-{
-	int x, y;
-	char magic[3];
-};
 
 #ifndef UINT
 #define UINT unsigned int
@@ -69,6 +61,3 @@ real INT_error(interval *x, int n);
 real INT_error(interval **x, int linhas, int colunas);
 
 #endif /* INTHAAR */
-
-void escrever_imagem(char *arquivo, double **matriz);
-struct ImageInfo carregar_imagem(char *arquivo, double **data);

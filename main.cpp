@@ -1,4 +1,5 @@
 #include "int-dwts.h"
+#include "misc.h"
 
 // Testes.
 int main(int argc, char **argv)

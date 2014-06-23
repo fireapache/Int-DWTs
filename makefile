@@ -26,7 +26,7 @@ LFLAGS = -L/home/vinicius/cxsc/lib
 LIBS = -lcxsc -lm
 
 # define the C source files
-SRCS = int-dwts.cpp int-haar.cpp main.cpp
+SRCS = int-dwts.cpp int-haar.cpp misc.cpp main.cpp
 
 # define the C object files 
 #
