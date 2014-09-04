@@ -1,5 +1,7 @@
 #include "misc.h"
 
+timeval tCounter, tTime;
+
 struct ImageInfo carregar_imagem(char *arquivo, double **data)
 {
     char auxc[5];
@@ -49,6 +51,18 @@ struct ImageInfo carregar_imagem(char *arquivo, double **data)
     }
 
     return imgInfo;
+}
+
+void startTimeCounter()
+{
+    gettimeofday(&tCounter, NULL);
+}
+
+double getTimeCounter()
+{
+    gettimeofday(&tTime, NULL);
+
+    return double(tTime.tv_usec - tCounter.tv_usec);
 }
 
 void escrever_imagem(char *arquivo, double **matriz, struct ImageInfo imgInfo)
