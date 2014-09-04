@@ -13,12 +13,12 @@ CFLAGS = -Wall
 
 # define any directories containing header files other than /usr/include
 #
-INCLUDES = -I/home/vinicius/cxsc/include
+INCLUDES = -I $(HOME)/cxsc/include
 
 # define library paths in addition to /usr/lib
 #   if I wanted to include libraries not in /usr/lib I'd specify
 #   their path using -Lpath, something like:
-LFLAGS = -L/home/vinicius/cxsc/lib
+LFLAGS = -L $(HOME)/cxsc/lib
 
 # define any libraries to link into executable:
 #   if I want to link in libraries (libx.so or libx.a) I use the -llibname 
