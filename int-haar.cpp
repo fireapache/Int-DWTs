@@ -863,3 +863,60 @@ void Haar_PerLevel_Compression(double *vec, int n, double percentage)
 		Haar_Compression(v, i, percentage);
 	}
 }
+
+void Haar_Matrix_Compression(double **matrix, int n, float percentage)
+{
+	double t, tMax, tMin, s, e;
+
+	if (percentage >= 1.0)
+	{
+		for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+		{
+			matrix[i][j] = 0.0;
+		}
+	}
+
+	tMax = tMin = abs(matrix[0][0]);
+	s = 0.0;
+
+	for (int i = 0; i < n; i++)
+	for (int j = 0; j < n; j++)
+	{
+		if (abs(matrix[i][j]) > tMax) tMax = abs(matrix[i][j]);
+		if (abs(matrix[i][j]) < tMin) tMin = abs(matrix[i][j]);
+		s += pow(matrix[i][j], 2.0);
+	}
+
+	e = s * percentage;
+
+	do
+	{
+		t = (tMax + tMin) / 2.0;
+		s = 0.0;
+
+		for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+		{
+			if (abs(matrix[i][j]) < t) s += pow(matrix[i][j], 2.0);
+		}
+
+		if (s < e) tMin = t;
+		else tMax = t;
+
+	} while ((tMax - tMin) > HAAR_COMPRESS_ERROR);
+
+	for (int i = 0; i < n; i++)
+	for (int j = 0; j < n; j++)
+	{
+		if (abs(matrix[i][j]) < t)
+		{
+			matrix[i][j] = 0.0;
+		}
+	}
+}
+
+void Haar_PerLevel_Matrix_Compression(double **matrix, int n, float percentage)
+{
+	
+}
