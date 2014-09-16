@@ -9,12 +9,15 @@ using namespace cxsc;
 #define UINT unsigned int
 #endif
 
+#define HAAR_COMPRESS_ERROR 0.0000000001
+
 #define INTHAAR
 #define HAAROPMIZATION
 
 void Haar_Composition(double *vec, int n, bool normal);
 void Haar_CompositionStep(double *vec, int n, bool normal);
-void Haar_Compress(double **matrix, int rows, int cols, float percentege);
+void Haar_Compress(double *vec, int n, float percentage);
+void Haar_Levels_Compress(double *vec, int n, double percentage);
 void Haar_Decomposition(double *vec, int n, bool normal);
 void Haar_DecompositionStep(double *vec, int n, bool normal);
 double **Haar_Decomposition_For_Graphs(double *vec, int n, bool normal);

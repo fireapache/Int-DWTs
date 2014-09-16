@@ -805,42 +805,61 @@ real INT_error(interval **x, int linhas, int colunas)
 	return r;
 }
 
-void Haar_Compress(double **matrix, int rows, int cols, float percentege)
+void Haar_Compress(double *vec, int n, float percentage)
 {
-	double low, high, dif, cut, count;
+	double t, tMax, tMin, s, e;
 
-	low = high = matrix[0][0];
-
-	for (int i = 0; i < rows; i++)
-	for (int j = 0; j < cols; j++)
+	if (percentage >= 1.0)
 	{
-		if (matrix[i][j] < low) low = matrix[i][j];
-
-		if (matrix[i][j] > high) high = matrix[i][j];
-	}
-
-	dif = high - low;
-
-	if (dif == 0.0) return;
-
-	cut = percentege * (dif / 100.0);
-
-	cout << "high:\t" << high << endl;
-	cout << "low:\t" << low << endl;
-	cout << "dif:\t" << dif << endl;
-	cout << "cut:\t" << cut << endl;
-
-	count = 0.0;
-
-	for (int i = 0; i < rows; i++)
-	for (int j = 0; j < cols; j++)
-	{
-		if (abs(matrix[i][j]) <= cut)
+		for (int i = 0; i < n; i++)
 		{
-			count++;
-			matrix[i][j] = 0.0;
+			vec[i] = 0.0;
 		}
 	}
 
-	cout << "count:\t" << count << endl;
+	tMax = tMin = abs(vec[0]);
+	s = 0.0;
+
+	for (int i = 0; i < n; i++)
+	{
+		if (abs(vec[i]) > tMax) tMax = abs(vec[i]);
+		if (abs(vec[i]) < tMin) tMin = abs(vec[i]);
+		s += pow(vec[i], 2.0);
+	}
+
+	e = s * percentage;
+
+	do
+	{
+		t = (tMax + tMin) / 2.0;
+		s = 0.0;
+
+		for (int i = 0; i < n; i++)
+		{
+			if (abs(vec[i]) < t) s += pow(vec[i], 2.0);
+		}
+
+		if (s < e) tMin = t;
+		else tMax = t;
+
+	} while ((tMax - tMin) > HAAR_COMPRESS_ERROR);
+
+	for (int i = 0; i < n; i++)
+	{
+		if (abs(vec[i]) < t)
+		{
+			vec[i] = 0.0;
+		}
+	}
+}
+
+void Haar_Levels_Compress(double *vec, int n, double percentage)
+{
+	double *v;
+
+	for (int i = 1; i < n; i *= 2)
+	{
+		v = &vec[i];
+		Haar_Compress(v, i, percentage);
+	}
 }
