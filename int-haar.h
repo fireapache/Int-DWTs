@@ -1,13 +1,10 @@
 #include <iostream>
 #include <cmath>
 #include <interval.hpp>
+#include "common.h"
 
 using namespace std;
 using namespace cxsc;
-
-#ifndef UINT
-#define UINT unsigned int
-#endif
 
 #define HAAR_COMPRESS_ERROR 0.0000000001
 
