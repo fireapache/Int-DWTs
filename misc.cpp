@@ -94,6 +94,135 @@ void escrever_imagem(char *arquivo, double **matriz, struct ImageInfo imgInfo)
     fclose(imagem);
 }
 
+void gnuplot_dat(const char *filename, double *x, double *y, int n)
+{
+    ofstream out;
+
+    out.open(filename, ios_base::trunc);
+
+    for (int i = 0; i < n; i++)
+        out << x[i] << '\t' << y[i] << '\n';
+
+    out.close();
+}
+
+void gnuplot_dat_Vdecomposition(const char *file, double x1, double x2, double *v, int n, int levels, bool normal)
+{
+    ofstream out;
+    double x, alpha;
+
+    if (normal)
+    for (int i = 0; i < n; i++)
+        v[i] = v[i] / sqrt(float(n));
+
+    for (int i = 0; i < levels; i++)
+    {
+        Haar_DecompositionStep(v, n, normal);
+        n /= 2;
+    }
+
+    out.open(file, ios_base::trunc);
+
+    for (int i = 0; i < n; i++)
+    {
+        alpha = (double)i / (double)(n);
+        x = x1 * (1.0 - alpha) + x2 * alpha;
+
+        out << x << '\t' << v[i] << '\n';
+    }
+
+    out.close();
+
+    for (int i = levels; i > 0; i--)
+    {
+        Haar_CompositionStep(v, n, normal);
+        n *= 2;
+    }
+
+    if (normal)
+    for (int i = 0; i < n; i++)
+        v[i] = v[i] * sqrt(float(n));
+}
+
+void gnuplot_dat_Wdecomposition(const char *file, double x1, double x2, double *v, int n, int levels, bool normal)
+{
+    ofstream out;
+    double x, alpha;
+
+    if (normal)
+    for (int i = 0; i < n; i++)
+        v[i] = v[i] / sqrt(float(n));
+
+    for (int i = 0; i < levels; i++)
+    {
+        Haar_DecompositionStep(v, n, normal);
+        n /= 2;
+    }
+
+    out.open(file, ios_base::trunc);
+
+    for (int i = 0; i < n; i++)
+    {
+        alpha = (double)i / (double)(n);
+        x = x1 * (1.0 - alpha) + x2 * alpha;
+        x += (x2 - x1) / (2 * n);
+        out << x << '\t' << v[i + n] << '\n';
+    }
+
+    out.close();
+
+    for (int i = levels; i > 0; i--)
+    {
+        Haar_CompositionStep(v, n, normal);
+        n *= 2;
+    }
+
+    if (normal)
+    for (int i = 0; i < n; i++)
+        v[i] = v[i] * sqrt(float(n));
+}
+
+void gnuplot_dat_VWdecomposition(const char *file1, const char *file2, double x1, double x2, double *v, int n, int levels, bool normal)
+{
+    ofstream out1, out2;
+    double x, alpha;
+
+    if (normal)
+    for (int i = 0; i < n; i++)
+        v[i] = v[i] / sqrt(float(n));
+
+    for (int i = 0; i < levels; i++)
+    {
+        Haar_DecompositionStep(v, n, normal);
+        n /= 2;
+    }
+
+    out1.open(file1, ios_base::trunc);
+    out2.open(file2, ios_base::trunc);
+
+    for (int i = 0; i < n; i++)
+    {
+        alpha = (double)i / (double)(n);
+        x = x1 * (1.0 - alpha) + x2 * alpha;
+
+        out1 << x << '\t' << v[i] << '\n';
+        out2 << x << '\t' << v[i + n] << '\n';
+    }
+
+    out1.close();
+    out2.close();
+
+    for (int i = levels; i > 0; i--)
+    {
+        Haar_CompositionStep(v, n, normal);
+        n *= 2;
+    }
+
+    if (normal)
+    for (int i = 0; i < n; i++)
+        v[i] = v[i] * sqrt(float(n));
+}
+
 /*void escrever_imagem_from_greyscale(char *arquivo, double **matriz)
 {
     FILE *imagem;
