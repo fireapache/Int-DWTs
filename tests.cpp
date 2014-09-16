@@ -31,6 +31,7 @@ void test2_1()
 		}
 	}
 
+	cout.setf(std::ios::fixed);
 	cout << '\t';
 	startTimeCounter();
 
@@ -85,7 +86,7 @@ void test2_1()
 	Haar_MatrixComposition(test, POINTS, POINTS, true, false);
 
 	cout << getTimeCounter() << endl;
-
+	cout.unsetf(std::ios::fixed);
 
 	for (int i = 0; i < POINTS; i++)
 	{
