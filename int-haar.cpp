@@ -1,38 +1,38 @@
 #include "int-haar.h"
 
-void VinisNormalization(double *vec, UINT n)
+void VinisNormalization(double *vec, uint n)
 {
-	UINT levels = log2(n);
+	uint levels = log2(n);
 	
-	for (UINT level = 0; level < levels; level++)
+	for (uint level = 0; level < levels; level++)
 	{
-		UINT inicio;
+		uint inicio;
 		
 		if (level == 0) inicio = 0;
-		else        	inicio = (UINT)pow(2.0, (double)(level));
+		else        	inicio = (uint)pow(2.0, (double)(level));
 		
-		UINT fim    = (UINT)pow(2.0, (double)(level + 1));
+		uint fim    = (uint)pow(2.0, (double)(level + 1));
 		
-		for (UINT i = inicio; i < fim; i++)
+		for (uint i = inicio; i < fim; i++)
 			vec[i] *= pow(2.0, - (double)level / 2.0);
 	}
 }
 
-void INT_VinisNormalization(interval *vec, UINT n)
+void INT_VinisNormalization(interval *vec, uint n)
 {
-	UINT levels = (UINT)log2((double)(n));
+	uint levels = (uint)log2((double)(n));
 	interval div;
 	
-	for (UINT level = 0; level < levels; level++)
+	for (uint level = 0; level < levels; level++)
 	{
-		UINT inicio;
+		uint inicio;
 		
 		if (level == 0) inicio = 0;
-		else			inicio = (UINT)pow(2.0, (double)(level));
+		else			inicio = (uint)pow(2.0, (double)(level));
 		
-		UINT fim    = (UINT)pow(2.0, (double)(level + 1));
+		uint fim    = (uint)pow(2.0, (double)(level + 1));
 		
-		for (UINT i = inicio; i < fim; i++)
+		for (uint i = inicio; i < fim; i++)
 		{
 			if (level & 1)
 			{
@@ -47,38 +47,38 @@ void INT_VinisNormalization(interval *vec, UINT n)
 	}
 }
 
-void VinisStandardMatrixNormalization(double **mat, UINT n, bool invert)
+void VinisStandardMatrixNormalization(double **mat, uint n, bool invert)
 {
-	UINT levels = log2(n);
+	uint levels = log2(n);
 	
-	for (UINT levelL = 0; levelL < levels; levelL++)
+	for (uint levelL = 0; levelL < levels; levelL++)
 	{
-		UINT inicioL;
+		uint inicioL;
 		
 		if (levelL == 0)	inicioL = 0;
-		else        		inicioL = (UINT)pow(2.0, (double)(levelL));
+		else        		inicioL = (uint)pow(2.0, (double)(levelL));
 		
-		UINT fimL = (UINT)pow(2.0, (double)(levelL + 1));
+		uint fimL = (uint)pow(2.0, (double)(levelL + 1));
 
-		for (UINT l = inicioL; l < fimL; l++)
+		for (uint l = inicioL; l < fimL; l++)
 		{
-			for (UINT levelC = 0; levelC < levels; levelC++)
+			for (uint levelC = 0; levelC < levels; levelC++)
 			{
-				UINT inicioC;
+				uint inicioC;
 				
 				if (levelC == 0)	inicioC = 0;
-				else        		inicioC = (UINT)pow(2.0, (double)(levelC));
+				else        		inicioC = (uint)pow(2.0, (double)(levelC));
 				
-				UINT fimC = (UINT)pow(2.0, (double)(levelC + 1));
+				uint fimC = (uint)pow(2.0, (double)(levelC + 1));
 
 				if (invert)
 				{
-					for (UINT c = inicioC; c < fimC; c++)
+					for (uint c = inicioC; c < fimC; c++)
 						mat[l][c] *= pow(2.0, (double)(levelL + levelC) / 2.0);
 				}
 				else
 				{
-					for (UINT c = inicioC; c < fimC; c++)
+					for (uint c = inicioC; c < fimC; c++)
 						mat[l][c] /= pow(2.0, (double)(levelL + levelC) / 2.0);
 				}
 			}
@@ -86,34 +86,34 @@ void VinisStandardMatrixNormalization(double **mat, UINT n, bool invert)
 	}
 }
 
-void INT_VinisStandardMatrixNormalization(interval **mat, UINT n, bool invert)
+void INT_VinisStandardMatrixNormalization(interval **mat, uint n, bool invert)
 {
-	UINT levels = log2(n);
+	uint levels = log2(n);
 	interval div;
 	
-	for (UINT levelL = 0; levelL < levels; levelL++)
+	for (uint levelL = 0; levelL < levels; levelL++)
 	{
-		UINT inicioL;
+		uint inicioL;
 		
 		if (levelL == 0)	inicioL = 0;
-		else        		inicioL = (UINT)pow(2.0, (double)(levelL));
+		else        		inicioL = (uint)pow(2.0, (double)(levelL));
 		
-		UINT fimL = (UINT)pow(2.0, (double)(levelL + 1));
+		uint fimL = (uint)pow(2.0, (double)(levelL + 1));
 
-		for (UINT l = inicioL; l < fimL; l++)
+		for (uint l = inicioL; l < fimL; l++)
 		{
-			for (UINT levelC = 0; levelC < levels; levelC++)
+			for (uint levelC = 0; levelC < levels; levelC++)
 			{
-				UINT inicioC;
+				uint inicioC;
 				
 				if (levelC == 0)	inicioC = 0;
-				else        		inicioC = (UINT)pow(2.0, (double)(levelC));
+				else        		inicioC = (uint)pow(2.0, (double)(levelC));
 				
-				UINT fimC = (UINT)pow(2.0, (double)(levelC + 1));
+				uint fimC = (uint)pow(2.0, (double)(levelC + 1));
 
-				for (UINT c = inicioC; c < fimC; c++)
+				for (uint c = inicioC; c < fimC; c++)
 				{
-					UINT levelSum = (levelL + levelC);
+					uint levelSum = (levelL + levelC);
 
 					if (levelSum & 1)
 					{
@@ -134,24 +134,24 @@ void INT_VinisStandardMatrixNormalization(interval **mat, UINT n, bool invert)
 	}
 }
 
-void VinisNonStandardMatrixNormalization(double **matrix, UINT n, bool invert)
+void VinisNonStandardMatrixNormalization(double **matrix, uint n, bool invert)
 {
     double div;
-    UINT start, limit;
+    uint start, limit;
 
-    UINT level = (UINT)(log((double)n) / log(2.0)) - 1;
+    uint level = (uint)(log((double)n) / log(2.0)) - 1;
 
     if (level <= 0) return;
 
-    for (UINT i = level; i > 0; i--)
+    for (uint i = level; i > 0; i--)
     {
         div   = pow(2.0, (double)i);
-        start = (UINT)div;
-        limit = (UINT)pow(2.0, (double)i + 1);
+        start = (uint)div;
+        limit = (uint)pow(2.0, (double)i + 1);
 
-        for (UINT l = 0; l < limit / 2; l++)
+        for (uint l = 0; l < limit / 2; l++)
         {
-            for (UINT c = start; c < limit; c++)
+            for (uint c = start; c < limit; c++)
             {
                 matrix[l][c] /= div;
             }
@@ -159,38 +159,38 @@ void VinisNonStandardMatrixNormalization(double **matrix, UINT n, bool invert)
 
         if (invert)
         {
-        	for (UINT l = start; l < limit; l++)
-        	for (UINT c = 0; c < limit; c++)
+        	for (uint l = start; l < limit; l++)
+        	for (uint c = 0; c < limit; c++)
         		matrix[l][c] *= div;
         }
         else
         {
-        	for (UINT l = start; l < limit; l++)
-        	for (UINT c = 0; c < limit; c++)
+        	for (uint l = start; l < limit; l++)
+        	for (uint c = 0; c < limit; c++)
         		matrix[l][c] /= div;
         }
         
     }
 }
 
-void INT_VinisNonStandardMatrixNormalization(interval **matrix, UINT n, bool invert)
+void INT_VinisNonStandardMatrixNormalization(interval **matrix, uint n, bool invert)
 {
 	interval div;
-    UINT start, limit;
+    uint start, limit;
 
-    UINT level = (UINT)(log((double)n) / log(2.0)) - 1;
+    uint level = (uint)(log((double)n) / log(2.0)) - 1;
 
     if (level <= 0) return;
 
-    for (UINT i = level; i > 0; i--)
+    for (uint i = level; i > 0; i--)
     {
         div   = interval(pow(2.0, (double)i));
-        start = (UINT)pow(2.0, (double)i);
-        limit = (UINT)pow(2.0, (double)i + 1);
+        start = (uint)pow(2.0, (double)i);
+        limit = (uint)pow(2.0, (double)i + 1);
 
-        for (UINT l = 0; l < limit / 2; l++)
+        for (uint l = 0; l < limit / 2; l++)
         {
-            for (UINT c = start; c < limit; c++)
+            for (uint c = start; c < limit; c++)
             {
                 matrix[l][c] /= div;
             }
@@ -198,26 +198,26 @@ void INT_VinisNonStandardMatrixNormalization(interval **matrix, UINT n, bool inv
 
         if (invert)
         {
-        	for (UINT l = start; l < limit; l++)
-        	for (UINT c = 0; c < limit; c++)
+        	for (uint l = start; l < limit; l++)
+        	for (uint c = 0; c < limit; c++)
         		matrix[l][c] *= div;
         }
         else
         {
-        	for (UINT l = start; l < limit; l++)
-        	for (UINT c = 0; c < limit; c++)
+        	for (uint l = start; l < limit; l++)
+        	for (uint c = 0; c < limit; c++)
         		matrix[l][c] /= div;
         }
     }
 }
 
-void VinisMatrixNormalization(double **mat, UINT n, bool standard, bool invert)
+void VinisMatrixNormalization(double **mat, uint n, bool standard, bool invert)
 {
 	if (standard)	VinisStandardMatrixNormalization(mat, n, invert);
 	else			VinisNonStandardMatrixNormalization(mat, n, invert);
 }
 
-void INT_VinisMatrixNormalization(interval **mat, UINT n, bool standard, bool invert)
+void INT_VinisMatrixNormalization(interval **mat, uint n, bool standard, bool invert)
 {
 	if (standard)	INT_VinisStandardMatrixNormalization(mat, n, invert);
 	else			INT_VinisNonStandardMatrixNormalization(mat, n, invert);

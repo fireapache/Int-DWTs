@@ -27,10 +27,10 @@ void Haar_StandardDecomposition(double **matrix, int rows, int cols, bool normal
 
 #ifdef HAAROPMIZATION
 
-void VinisMatrixNormalization(double **mat, UINT n, bool standard, bool invert = false);
-void VinisNonStandardMatrixNormalization(double **matrix, UINT n, bool invert = false);
-void VinisNormalization(double *vec, UINT n);
-void VinisStandardMatrixNormalization(double **mat, UINT n, bool invert = false);
+void VinisMatrixNormalization(double **mat, uint n, bool standard, bool invert = false);
+void VinisNonStandardMatrixNormalization(double **matrix, uint n, bool invert = false);
+void VinisNormalization(double *vec, uint n);
+void VinisStandardMatrixNormalization(double **mat, uint n, bool invert = false);
 
 #endif /* HAAROPMIZATION */
 
@@ -49,10 +49,10 @@ void INT_Haar_StandardDecomposition(interval **matrix, int rows, int cols, bool 
 
 #ifdef HAAROPMIZATION
 
-void INT_VinisMatrixNormalization(interval **mat, UINT n, bool standard, bool invert = false);
-void INT_VinisNonStandardMatrixNormalization(interval **matrix, UINT n, bool invert = false);
-void INT_VinisNormalization(interval *vec, UINT n);
-void INT_VinisStandardMatrixNormalization(interval **mat, UINT n, bool invert = false);
+void INT_VinisMatrixNormalization(interval **mat, uint n, bool standard, bool invert = false);
+void INT_VinisNonStandardMatrixNormalization(interval **matrix, uint n, bool invert = false);
+void INT_VinisNormalization(interval *vec, uint n);
+void INT_VinisStandardMatrixNormalization(interval **mat, uint n, bool invert = false);
 
 #endif /* HAAROPMIZATION */
 
