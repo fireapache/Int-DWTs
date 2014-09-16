@@ -21,3 +21,6 @@
 *.app
 
 *.nfs*
+
+# Image Files
+*.ppm
