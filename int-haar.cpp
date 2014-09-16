@@ -805,7 +805,7 @@ real INT_error(interval **x, int linhas, int colunas)
 	return r;
 }
 
-void Haar_Compress(double *vec, int n, float percentage)
+void Haar_Compression(double *vec, int n, float percentage)
 {
 	double t, tMax, tMin, s, e;
 
@@ -853,13 +853,13 @@ void Haar_Compress(double *vec, int n, float percentage)
 	}
 }
 
-void Haar_Levels_Compress(double *vec, int n, double percentage)
+void Haar_PerLevel_Compression(double *vec, int n, double percentage)
 {
 	double *v;
 
 	for (int i = 1; i < n; i *= 2)
 	{
 		v = &vec[i];
-		Haar_Compress(v, i, percentage);
+		Haar_Compression(v, i, percentage);
 	}
 }

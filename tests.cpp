@@ -34,7 +34,7 @@ int test3(const char *ppmfilepath, double percentage)
 
 	imageInfo = carregar_imagem((char*)(ppmfilepath), image);
 
-	
+
 
 	for (int i = 0; i < imageInfo.x; i++)
 	{
@@ -256,8 +256,8 @@ void test0()
 	gnuplot_dat_Wdecomposition("1_3W.dat", x1, x2, image, POINTS, 3, true);
 
 	Haar_Decomposition(t1, POINTS, true);
-	//Haar_Compress(t1, POINTS, 0.01);
-	Haar_Levels_Compress(t1, POINTS, 0.01);
+	//Haar_Compression(t1, POINTS, 0.01);
+	Haar_PerLevel_Compression(t1, POINTS, 0.01);
 	Haar_Composition(t1, POINTS, true);
 
 	gnuplot_dat_Vdecomposition("2_V.dat", x1, x2, t1, POINTS, 1, true);
@@ -266,8 +266,8 @@ void test0()
 	gnuplot_dat_Wdecomposition("2_3W.dat", x1, x2, t1, POINTS, 3, true);
 
 	Haar_Decomposition(t2, POINTS, true);
-	//Haar_Compress(t2, POINTS, 0.02);
-	Haar_Levels_Compress(t2, POINTS, 0.02);
+	//Haar_Compression(t2, POINTS, 0.02);
+	Haar_PerLevel_Compression(t2, POINTS, 0.02);
 	Haar_Composition(t2, POINTS, true);
 
 	gnuplot_dat_Vdecomposition("3_V.dat", x1, x2, t2, POINTS, 1, true);
@@ -276,8 +276,8 @@ void test0()
 	gnuplot_dat_Wdecomposition("3_3W.dat", x1, x2, t2, POINTS, 3, true);
 
 	Haar_Decomposition(t3, POINTS, true);
-	//Haar_Compress(t3, POINTS, 0.035);
-	Haar_Levels_Compress(t3, POINTS, 0.035);
+	//Haar_Compression(t3, POINTS, 0.035);
+	Haar_PerLevel_Compression(t3, POINTS, 0.035);
 	Haar_Composition(t3, POINTS, true);
 
 	gnuplot_dat_Vdecomposition("4_V.dat", x1, x2, t3, POINTS, 1, true);
