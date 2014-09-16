@@ -888,7 +888,7 @@ void Haar_Matrix_Compression(double **matrix, int n, float percentage)
 		s += pow(matrix[i][j], 2.0);
 	}
 
-	e = s * percentage;
+	e = s * (1.0 - percentage);
 
 	do
 	{
@@ -918,5 +918,5 @@ void Haar_Matrix_Compression(double **matrix, int n, float percentage)
 
 void Haar_PerLevel_Matrix_Compression(double **matrix, int n, float percentage)
 {
-	
+
 }
