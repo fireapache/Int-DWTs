@@ -12,7 +12,7 @@ struct ImageInfo
 
 void startTimeCounter();
 double getTimeCounter();
-void escrever_imagem(char *arquivo, double **matriz);
+void escrever_imagem(char *arquivo, double **matriz, struct ImageInfo imgInfo);
 struct ImageInfo carregar_imagem(char *arquivo, double **data);
 void gnuplot_dat(const char *filename, double *x, double *y, int n);
 void gnuplot_dat_Vdecomposition(const char *file, double x1, double x2, double *v, int n, int levels, bool normal);
