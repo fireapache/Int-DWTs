@@ -62,7 +62,14 @@ double getTimeCounter()
 {
     gettimeofday(&tTime, NULL);
 
-    return double(tTime.tv_usec - tCounter.tv_usec);
+    double usecDiff = tTime.tv_usec - tCounter.tv_usec;
+    //double secDiff =  tTime.tv_sec - tCounter.tv_sec;
+    double returnTime;
+
+    if (usecDiff < 0) returnTime = (double)(usecDiff + 1000000) / 1000000.0;
+    else returnTime = usecDiff / 1000000.0;
+
+    return returnTime;
 }
 
 void escrever_imagem(char *arquivo, double **matriz, struct ImageInfo imgInfo)
