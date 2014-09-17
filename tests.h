@@ -1,3 +1,6 @@
+#ifndef TESTS_H
+#define TESTS_H
+
 #include <iostream>
 #include <string.h>
 #include "misc.h"
@@ -13,3 +16,5 @@ void test2(unsigned int n);		// 24/07/2014
 int test3(const char *filepath, double percentage); // Compression test.
 
 void matrixCopy(double **m1, double **m2, int x, int y);
+
+#endif /* TESTS_H */

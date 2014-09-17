@@ -1,3 +1,6 @@
+#ifndef INTHAAR_H
+#define INTHAAR_H
+
 #include <iostream>
 #include <cmath>
 #include <interval.hpp>
@@ -63,3 +66,5 @@ real INT_error(interval *x, int n);
 real INT_error(interval **x, int linhas, int colunas);
 
 #endif /* INTHAAR */
+
+#endif /* INTHAAR_H */

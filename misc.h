@@ -1,3 +1,6 @@
+#ifndef MISC_H
+#define MISC_H
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -24,3 +27,5 @@ void gnuplot_dat(const char *filename, double *x, double *y, int n);
 void gnuplot_dat_Vdecomposition(const char *file, double x1, double x2, double *v, int n, int levels, bool normal);
 void gnuplot_dat_Wdecomposition(const char *file, double x1, double x2, double *v, int n, int levels, bool normal);
 void gnuplot_dat_VWdecomposition(const char *file1, const char *file2, double x1, double x2, double *v, int n, int levels, bool normal);
+
+#endif /* MISC_H */
