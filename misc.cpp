@@ -1,6 +1,11 @@
 #include "misc.h"
 
+#ifdef WIN32
+double pcFreq = 0.0;
+__int64 counterStart = 0;
+#else
 timeval tCounter, tTime;
+#endif
 
 struct ImageInfo carregar_imagem(char *arquivo, double **data)
 {
@@ -55,19 +60,31 @@ struct ImageInfo carregar_imagem(char *arquivo, double **data)
 
 void startTimeCounter()
 {
-    gettimeofday(&tCounter, NULL);
+#ifdef WIN32
+	LARGE_INTEGER li;
+	QueryPerformanceFrequency(&li);
+	pcFreq = double(li.QuadPart);
+	QueryPerformanceCounter(&li);
+	counterStart = li.QuadPart;
+#else
+	gettimeofday(&tCounter, NULL);
+#endif
 }
 
 double getTimeCounter()
 {
-    gettimeofday(&tTime, NULL);
+	double returnTime;
 
+#ifdef WIN32
+	LARGE_INTEGER li;
+	QueryPerformanceCounter(&li);
+	returnTime = double(li.QuadPart - counterStart) / pcFreq;
+#else
+	gettimeofday(&tTime, NULL);
     double usecDiff = tTime.tv_usec - tCounter.tv_usec;
-    //double secDiff =  tTime.tv_sec - tCounter.tv_sec;
-    double returnTime;
-
     if (usecDiff < 0) returnTime = (double)(usecDiff + 1000000) / 1000000.0;
     else returnTime = usecDiff / 1000000.0;
+#endif
 
     return returnTime;
 }

@@ -1,6 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+
+#ifdef WIN32
+#include <windows.h>
+#else
 #include <sys/time.h>
+#endif
+
 #include <fstream>
 #include "int-dwts.h"
 
