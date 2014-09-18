@@ -51,7 +51,9 @@ MAIN = tests.exe
 .PHONY: depend clean
 
 tests: $(MAIN)
-	@echo  Int-DWTs library has been compiled
+	@echo  
+	@echo	Int-DWTs library has been compiled
+	@echo  
 
 $(MAIN): $(OBJS) 
 	$(CC) $(DEBUGCFLAGS) $(INCLUDES) -o $(MAIN) $(OBJS) $(LFLAGS) $(LIBS)
