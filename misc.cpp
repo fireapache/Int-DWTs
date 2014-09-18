@@ -243,6 +243,24 @@ void gnuplot_dat_VWdecomposition(const char *file1, const char *file2, double x1
         v[i] = v[i] * sqrt(float(n));
 }
 
+void data_analysis(double *data, uint n, DataAnalysis *analysis)
+{
+	double mean, sum = 0.0, deviation;
+
+	for (uint i = 0; i < n; i++) sum += data[i];
+
+	mean = sum / (double)(n);
+	sum = 0.0;
+
+	for (uint i = 0; i < n; i++)
+		sum += (data[i] - mean) * (data[i] - mean);
+
+	deviation = sqrt(sum / (double)(n));
+
+	analysis->mean = mean;
+	analysis->deviation = deviation;
+}
+
 /*void escrever_imagem_from_greyscale(char *arquivo, double **matriz)
 {
     FILE *imagem;

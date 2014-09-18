@@ -19,6 +19,12 @@ typedef struct ImageInfo
 	char magic[3];
 } ImageInfo;
 
+typedef struct DataAnalysis
+{
+	double mean;
+	double deviation;
+} DataAnalysis;
+
 void startTimeCounter();
 double getTimeCounter();
 void escrever_imagem(char *arquivo, double **matriz, ImageInfo imgInfo);
@@ -27,5 +33,6 @@ void gnuplot_dat(const char *filename, double *x, double *y, int n);
 void gnuplot_dat_Vdecomposition(const char *file, double x1, double x2, double *v, int n, int levels, bool normal);
 void gnuplot_dat_Wdecomposition(const char *file, double x1, double x2, double *v, int n, int levels, bool normal);
 void gnuplot_dat_VWdecomposition(const char *file1, const char *file2, double x1, double x2, double *v, int n, int levels, bool normal);
+void data_analysis(double *data, uint n, DataAnalysis *analysis);
 
 #endif /* MISC_H */
