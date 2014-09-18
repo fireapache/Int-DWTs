@@ -11,6 +11,47 @@ void matrixCopy(double **m1, double **m2, int x, int y)
 	}
 }
 
+int test4(const char *ppmfilepath, double percentage)
+{
+	double **image = NULL;
+	ImageInfo imageInfo;
+	char *outppmpath;
+	int charCount;
+
+	charCount = 0;
+
+	while (ppmfilepath[charCount] != '.')
+		charCount++;
+
+	if (charCount < 1) return 1;
+
+	outppmpath = new char[charCount + 9];
+
+	for (int i = 0; i < charCount ; ++i)
+		outppmpath[i] = ppmfilepath[i];
+
+	strcpy(&outppmpath[charCount], "_out.ppm");
+
+	image = carregar_imagem((char*)(ppmfilepath), &imageInfo);
+
+	Haar_MatrixDecomposition(image, imageInfo.x, imageInfo.y, true, false);
+
+	Haar_PerLevel_Matrix_Compression(image, imageInfo.x, percentage);
+
+	Haar_MatrixComposition(image, imageInfo.x, imageInfo.y, true, false);	
+
+	escrever_imagem(outppmpath, image, imageInfo);
+
+	for (int i = 0; i < imageInfo.x; i++)
+	{
+		delete[] image[i];
+	}
+
+	delete[] image;
+
+	return 0;
+}
+
 int test3(const char *ppmfilepath, double percentage)
 {
 	double **image = NULL;

@@ -14,6 +14,7 @@ void test0();					// 27/06/2014
 void test1();					// 22/07/2014
 void test2(unsigned int n);		// 24/07/2014
 int test3(const char *filepath, double percentage); // Compression test.
+int test4(const char *filepath, double percentage); // Compression test.
 
 void matrixCopy(double **m1, double **m2, int x, int y);
 
