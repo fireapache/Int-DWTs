@@ -34,7 +34,13 @@ int test3(const char *ppmfilepath, double percentage)
 
 	image = carregar_imagem((char*)(ppmfilepath), &imageInfo);
 
-	
+	Haar_MatrixDecomposition(image, imageInfo.x, imageInfo.y, true, false);
+
+	Haar_Matrix_Compression(image, imageInfo.x, percentage);
+
+	Haar_MatrixComposition(image, imageInfo.x, imageInfo.y, true, false);	
+
+	escrever_imagem(outppmpath, image, imageInfo);
 
 	for (int i = 0; i < imageInfo.x; i++)
 	{
