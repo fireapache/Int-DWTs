@@ -91,7 +91,7 @@ double getTimeCounter()
     return returnTime;
 }
 
-void escrever_imagem(char *arquivo, double **matriz, struct ImageInfo imgInfo)
+void escrever_imagem(char *arquivo, double **matriz, ImageInfo imgInfo)
 {
     FILE *imagem;
     int l, c, auxi;

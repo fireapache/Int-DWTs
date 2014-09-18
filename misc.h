@@ -21,7 +21,7 @@ typedef struct ImageInfo
 
 void startTimeCounter();
 double getTimeCounter();
-void escrever_imagem(char *arquivo, double **matriz, struct ImageInfo imgInfo);
+void escrever_imagem(char *arquivo, double **matriz, ImageInfo imgInfo);
 double** carregar_imagem(char *arquivo, ImageInfo *imageInfo);
 void gnuplot_dat(const char *filename, double *x, double *y, int n);
 void gnuplot_dat_Vdecomposition(const char *file, double x1, double x2, double *v, int n, int levels, bool normal);
