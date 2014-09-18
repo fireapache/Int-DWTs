@@ -7,17 +7,18 @@ __int64 counterStart = 0;
 timeval tCounter, tTime;
 #endif
 
-struct ImageInfo carregar_imagem(char *arquivo, double **data)
+double** carregar_imagem(char *arquivo, ImageInfo *imageInfo)
 {
     char auxc[5];
     int l, c, aux, temp[3];
+    double **data;
     FILE *imagem;
-    struct ImageInfo imgInfo;
+    ImageInfo imgInfo;
 
     if ((imagem = fopen(arquivo, "r")) == NULL)
     {
         printf("Erro ao abrir o arquivo %s\n", arquivo);
-        return imgInfo;
+        return NULL;
     }
 
     fscanf(imagem, "%s", imgInfo.magic);
@@ -34,16 +35,11 @@ struct ImageInfo carregar_imagem(char *arquivo, double **data)
 	fscanf(imagem,"%d", &imgInfo.y);
     fscanf(imagem, "%d", &aux);
 
-    if ((data = (double **)malloc(sizeof(double *)*imgInfo.y)) == NULL)
+    data = new double*[imgInfo.x];
+
+    for (int i = 0; i < imgInfo.x; i++)
     {
-        printf("Erro na alocação de memória!1\n");
-        return imgInfo;
-    }
-    for (aux = 0; aux < imgInfo.x; aux++)
-    if ((data[aux] = (double *)malloc(sizeof(double)*imgInfo.x)) == NULL)
-    {
-        printf("Erro na alocação de memória!\n");
-        return imgInfo;
+    	data[i] = new double[imgInfo.x];
     }
     
     for (l = 0; l < imgInfo.y; l++)
@@ -55,7 +51,13 @@ struct ImageInfo carregar_imagem(char *arquivo, double **data)
         data[l][c] = ((double)temp[2] + (double)temp[1] + (double)temp[0]) / 3.0;
     }
 
-    return imgInfo;
+    imageInfo->x = imgInfo.x;
+    imageInfo->y = imgInfo.y;
+    imageInfo->magic[0] = imgInfo.magic[0];
+    imageInfo->magic[1] = imgInfo.magic[1];
+    imageInfo->magic[2] = imgInfo.magic[2];
+
+    return data;
 }
 
 void startTimeCounter()

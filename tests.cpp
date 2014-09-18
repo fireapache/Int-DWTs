@@ -14,7 +14,7 @@ void matrixCopy(double **m1, double **m2, int x, int y)
 int test3(const char *ppmfilepath, double percentage)
 {
 	double **image = NULL;
-	struct ImageInfo imageInfo;
+	ImageInfo imageInfo;
 	char *outppmpath;
 	int charCount;
 
@@ -32,9 +32,9 @@ int test3(const char *ppmfilepath, double percentage)
 
 	strcpy(&outppmpath[charCount], "_out.ppm");
 
-	imageInfo = carregar_imagem((char*)(ppmfilepath), image);
+	image = carregar_imagem((char*)(ppmfilepath), &imageInfo);
 
-
+	
 
 	for (int i = 0; i < imageInfo.x; i++)
 	{

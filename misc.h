@@ -13,16 +13,16 @@
 #include <fstream>
 #include "int-dwts.h"
 
-struct ImageInfo
+typedef struct ImageInfo
 {
 	int x, y;
 	char magic[3];
-};
+} ImageInfo;
 
 void startTimeCounter();
 double getTimeCounter();
 void escrever_imagem(char *arquivo, double **matriz, struct ImageInfo imgInfo);
-struct ImageInfo carregar_imagem(char *arquivo, double **data);
+double** carregar_imagem(char *arquivo, ImageInfo *imageInfo);
 void gnuplot_dat(const char *filename, double *x, double *y, int n);
 void gnuplot_dat_Vdecomposition(const char *file, double x1, double x2, double *v, int n, int levels, bool normal);
 void gnuplot_dat_Wdecomposition(const char *file, double x1, double x2, double *v, int n, int levels, bool normal);
