@@ -868,15 +868,6 @@ void Haar_Matrix_Compression(double **matrix, int n, float percentage)
 {
 	double t, tMax, tMin, s, e;
 
-	if (percentage >= 1.0)
-	{
-		for (int i = 0; i < n; i++)
-		for (int j = 0; j < n; j++)
-		{
-			matrix[i][j] = 0.0;
-		}
-	}
-
 	tMax = tMin = abs(matrix[0][0]);
 	s = 0.0;
 
