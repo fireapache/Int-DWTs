@@ -93,31 +93,25 @@ double getTimeCounter()
 
 void escrever_imagem(char *arquivo, double **matriz, ImageInfo imgInfo)
 {
-    FILE *imagem;
-    int l, c, auxi;
+	int data;
+    ofstream out;
 
-    if ((imagem = fopen(arquivo, "w")) == NULL)
+    out.open(arquivo, ios_base::trunc);
+
+    out << imgInfo.magic << endl;
+    out << imgInfo.x << " " << imgInfo.y << endl;
+    out << "255" << endl;
+
+    for (int l = 0; l < imgInfo.y; l++)
     {
-        printf("Erro ao abrir o arquivo %s\n", arquivo);
-        return;
-    }
-
-    fwrite(&imgInfo.magic[0], 1, 1, imagem);
-    fwrite(&imgInfo.magic[1], 1, 1, imagem);
-    fprintf(imagem, "\n%d %d\n255\n", imgInfo.x, imgInfo.y);
-
-    for (l = 0; l < imgInfo.y; l++)
-    {
-        for (c = 0; c < imgInfo.x; c++)
+        for (int c = 0; c < imgInfo.x; c++)
         {
-			auxi = static_cast<int>(matriz[l][c]);
-            fprintf(imagem, "%d %d %d ", auxi, auxi, auxi);
+			data = static_cast<int>(matriz[l][c]);
+            out << data << " " << data << " " << data << endl;
         }
-
-        fprintf(imagem, "\n");
     }
 
-    fclose(imagem);
+    out.close();
 }
 
 void gnuplot_dat(const char *filename, double *x, double *y, int n)
