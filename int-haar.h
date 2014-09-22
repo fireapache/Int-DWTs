@@ -52,6 +52,7 @@ void INT_Haar_NonStandardComposition(interval **matrix, int rows, int cols, bool
 void INT_Haar_NonStandardDecomposition(interval **matrix, int rows, int cols, bool normal);
 void INT_Haar_StandardComposition(interval **matrix, int rows, int cols, bool normal);
 void INT_Haar_StandardDecomposition(interval **matrix, int rows, int cols, bool normal);
+void INT_Haar_Compression(interval *vec, int n, float percentage);
 
 #ifdef HAAROPMIZATION
 

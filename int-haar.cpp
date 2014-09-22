@@ -805,6 +805,60 @@ real INT_error(interval **x, int linhas, int colunas)
 	return r;
 }
 
+void INT_Haar_Compression(interval *vec, int n, float percentage)
+{
+	real tMax, tMin, sup, inf;
+	interval t, s, e;
+
+	if (percentage >= 1.0)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			vec[i] = 0.0;
+		}
+	}
+
+	tMax = abs(Sup(vec[0]));
+	tMin = abs(Inf(vec[0]));
+	s = interval(0.0);
+
+	for (int i = 0; i < n; i++)
+	{
+		sup = Sup(vec[i]);
+		inf = Inf(vec[i]);
+
+		if (sup > tMax) tMax = sup;
+		if (inf < tMin) tMin = inf;
+
+		s += vec[i] * vec[i];
+	}
+
+	e = s * percentage;
+
+	do
+	{
+		t = interval(tMax, tMin) / 2.0;
+		s = interval(0.0);
+
+		for (int i = 0; i < n; i++)
+		{
+			if (abs(Sup(vec[i])) < Inf(t)) s += vec[i] * vec[i];
+		}
+
+		if (s < e) tMin = Inf(t);
+		else tMax = Sup(t);
+
+	} while ((tMax - tMin) > HAAR_COMPRESS_ERROR);
+
+	for (int i = 0; i < n; i++)
+	{
+		if (abs(Sup(vec[i])) < Inf(t))
+		{
+			vec[i] = interval(0.0);
+		}
+	}
+}
+
 void Haar_Compression(double *vec, int n, float percentage)
 {
 	double t, tMax, tMin, s, e;
