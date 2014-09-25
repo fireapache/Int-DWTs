@@ -15,6 +15,8 @@ void test1();					// 22/07/2014
 void test2(unsigned int n);		// 24/07/2014
 int test3(const char *filepath, double percentage); // Compression test.
 int test4(const char *filepath, double percentage); // Compression test.
+int test5(float percentage);	// Intervalar and ponctual compression comparison.
+int test6(float percentage);	// Matrix version of test5().
 
 void matrixCopy(double **m1, double **m2, int x, int y);
 

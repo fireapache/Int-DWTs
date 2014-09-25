@@ -11,6 +11,79 @@ void matrixCopy(double **m1, double **m2, int x, int y)
 	}
 }
 
+int test5(float percentage)
+{
+	int n = 8;
+
+	double *dMat = new double[n];
+	interval *iMat = new interval[n];
+
+	for (int i = 0; i < n; ++i)
+	{
+		dMat[i] = i * i;
+		iMat[i] = interval(i * i);
+	}
+
+	Haar_Decomposition(dMat, n, false);
+	INT_Haar_Decomposition(iMat, n, false);
+
+	printVector<double>(dMat, n);
+	printVector<interval>(iMat, n);
+
+	Haar_Compression(dMat, n, percentage);
+	INT_Haar_Compression(iMat, n, percentage);
+
+	printVector<double>(dMat, n);
+	printVector<interval>(iMat, n);
+
+	delete[] dMat;
+	delete[] iMat;
+
+	return 1;
+}
+
+int test6(float percentage)
+{
+	int n = 8;
+
+	double **dMat = new double*[n];
+	interval **iMat = new interval*[n];
+
+	for (int i = 0; i < n; ++i)
+	{
+		dMat[i] = new double[n];
+		iMat[i] = new interval[n];
+	}
+
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			dMat[i][j] = double(i * j);
+			iMat[i][j] = interval(i * j);
+		}
+	}
+
+	printMatrix<double>(dMat, n);
+	printMatrix<interval>(iMat, n);
+
+	// Compression
+
+	printMatrix<double>(dMat, n);
+	printMatrix<interval>(iMat, n);
+
+	for (int i = 0; i < n; ++i)
+	{
+		delete[] dMat[i];
+		delete[] iMat[i];
+	}
+
+	delete[] dMat;
+	delete[] iMat;
+
+	return 1;
+}
+
 int test4(const char *ppmfilepath, double percentage)
 {
 	double **image = NULL;
