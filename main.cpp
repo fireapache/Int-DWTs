@@ -2,13 +2,13 @@
 
 int main(int argc, char **argv)
 {
-	if (argc > 2)
+	if (argc > 1)
 	{
-		double p = (double)atoi(argv[2]) / 100.0;
+		double p = (double)atoi(argv[1]) / 100.0;
 
-		test4(argv[1], p);
+		test5(p);
 	}
-	else cout << "Enter with <ppmfilepath> <energytokeep 0-100>" << endl;
+	else cout << "Enter with <energytocompress 0-100>" << endl;
 	
 	return 0;
 }
