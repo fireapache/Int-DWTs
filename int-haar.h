@@ -1,6 +1,8 @@
 #ifndef INTHAAR_H
 #define INTHAAR_H
 
+// TODO: Fix 1D intervalar compression!
+
 #include <iostream>
 #include <cmath>
 #include <interval.hpp>

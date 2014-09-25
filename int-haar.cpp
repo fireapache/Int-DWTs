@@ -837,7 +837,7 @@ void INT_Haar_Compression(interval *vec, int n, float percentage)
 
 	do
 	{
-		t = interval(tMax, tMin) / 2.0;
+		t = (interval(tMin) + interval(tMax)) / interval(2.0);
 		s = interval(0.0);
 
 		for (int i = 0; i < n; i++)
@@ -848,7 +848,7 @@ void INT_Haar_Compression(interval *vec, int n, float percentage)
 		if (s < e) tMin = Inf(t);
 		else tMax = Sup(t);
 
-	} while ((tMax - tMin) > HAAR_COMPRESS_ERROR);
+	} while (INT_diameter(t) > HAAR_COMPRESS_ERROR);
 
 	for (int i = 0; i < n; i++)
 	{
