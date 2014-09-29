@@ -57,7 +57,7 @@ void printMatrix(T **mat, int n)
 	{
 		for (j = 0; j < n; j++)
 		{
-			cout << mat[i] << '\t';
+			cout << mat[i][j] << '\t';
 		}
 
 		cout << endl;
