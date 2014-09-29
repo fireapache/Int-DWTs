@@ -64,10 +64,14 @@ int test6(float percentage)
 		}
 	}
 
+	Haar_MatrixDecomposition(dMat, n, n, false, false);
+	INT_Haar_MatrixDecomposition(iMat, n, n, false, false);
+
 	printMatrix<double>(dMat, n);
 	printMatrix<interval>(iMat, n);
 
-	// Compression
+	Haar_Matrix_Compression(dMat, n, percentage);
+	INT_Haar_Matrix_Compression(iMat, n, percentage);
 
 	printMatrix<double>(dMat, n);
 	printMatrix<interval>(iMat, n);
