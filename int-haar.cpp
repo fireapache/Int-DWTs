@@ -815,6 +815,8 @@ void INT_Haar_Compression(interval *vec, int n, float percentage)
 		{
 			vec[i] = interval(0.0);
 		}
+
+		return;
 	}
 
 	tMax = abs(vec[0]);
@@ -868,6 +870,8 @@ void INT_Haar_Matrix_Compression(interval **matrix, int n, float percentage)
 		{
 			matrix[i][j] = interval(0.0);
 		}
+
+		return;
 	}
 
 	tMax = abs(matrix[0][0]);
@@ -923,6 +927,8 @@ void Haar_Compression(double *vec, int n, float percentage)
 		{
 			vec[i] = 0.0;
 		}
+
+		return;
 	}
 
 	tMax = tMin = abs(vec[0]);
@@ -983,6 +989,8 @@ void Haar_Matrix_Compression(double **matrix, int n, float percentage)
 		{
 			matrix[i][j] = 0.0;
 		}
+
+		return;
 	}
 
 	tMax = tMin = abs(matrix[0][0]);
