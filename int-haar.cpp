@@ -857,6 +857,62 @@ void INT_Haar_Compression(interval *vec, int n, float percentage)
 	}
 }
 
+void INT_Haar_Matrix_Compression(interval **matrix, int n, float percentage)
+{
+	interval t, tMax, tMin, s, e, temp;
+
+	if (percentage >= 1.0)
+	{
+		for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+		{
+			matrix[i][j] = interval(0.0);
+		}
+	}
+
+	tMax = abs(matrix[0][0]);
+	tMin = abs(matrix[0][0]);
+	s = interval(0.0);
+
+	for (int i = 0; i < n; i++)
+	for (int j = 0; j < n; j++)
+	{
+		temp = abs(matrix[i][j]);
+
+		if (Inf(temp) > Sup(tMax)) tMax = temp;
+		if (Sup(temp) < Inf(tMin)) tMin = temp;
+
+		s += pow(matrix[i][j], interval(2.0));
+	}
+
+	e = s * percentage;
+
+	do
+	{
+		t = (tMin + tMax) / interval(2.0);
+		s = interval(0.0);
+
+		for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+		{
+			if (abs(Sup(matrix[i][j])) < abs(Inf(t))) s += pow(matrix[i][j], interval(2.0));
+		}
+
+		if (Sup(s) < Inf(e)) tMin = t;
+		else tMax = t;
+
+	} while (Sup(tMax) - Inf(tMin) > real(HAAR_COMPRESS_ERROR));
+
+	for (int i = 0; i < n; i++)
+	for (int j = 0; j < n; j++)
+	{
+		if (abs(Sup(matrix[i][j])) < abs(Inf(t)))
+		{
+			matrix[i][j] = interval(0.0);
+		}
+	}
+}
+
 void Haar_Compression(double *vec, int n, float percentage)
 {
 	double t, tMax, tMin, s, e;
