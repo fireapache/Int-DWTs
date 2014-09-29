@@ -6,7 +6,7 @@ int main(int argc, char **argv)
 	{
 		double p = (double)atoi(argv[1]) / 100.0;
 
-		test5(p);
+		test6(p);
 	}
 	else cout << "Enter with <energytocompress 0-100>" << endl;
 	
