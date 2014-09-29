@@ -807,52 +807,50 @@ real INT_error(interval **x, int linhas, int colunas)
 
 void INT_Haar_Compression(interval *vec, int n, float percentage)
 {
-	real tMax, tMin, sup, inf;
-	interval t, s, e;
+	interval t, tMax, tMin, s, e, temp;
 
 	if (percentage >= 1.0)
 	{
 		for (int i = 0; i < n; i++)
 		{
-			vec[i] = 0.0;
+			vec[i] = interval(0.0);
 		}
 	}
 
-	tMax = abs(Sup(vec[0]));
-	tMin = abs(Inf(vec[0]));
+	tMax = abs(vec[0]);
+	tMin = abs(vec[0]);
 	s = interval(0.0);
 
 	for (int i = 0; i < n; i++)
 	{
-		sup = Sup(vec[i]);
-		inf = Inf(vec[i]);
+		temp = abs(vec[i]);
 
-		if (sup > tMax) tMax = sup;
-		if (inf < tMin) tMin = inf;
+		if (Inf(temp) > Sup(tMax)) tMax = temp;
+		if (Sup(temp) < Inf(tMin)) tMin = temp;
 
-		s += vec[i] * vec[i];
+		s += pow(vec[i], interval(2.0));
 	}
 
 	e = s * percentage;
 
 	do
 	{
-		t = (interval(tMin) + interval(tMax)) / interval(2.0);
+		t = (tMin + tMax) / interval(2.0);
 		s = interval(0.0);
 
 		for (int i = 0; i < n; i++)
 		{
-			if (abs(Sup(vec[i])) < Inf(t)) s += vec[i] * vec[i];
+			if (abs(Sup(vec[i])) < abs(Inf(t))) s += pow(vec[i], interval(2.0));
 		}
 
-		if (s < e) tMin = Inf(t);
-		else tMax = Sup(t);
+		if (Sup(s) < Inf(e)) tMin = t;
+		else tMax = t;
 
-	} while (INT_diameter(t) > HAAR_COMPRESS_ERROR);
+	} while (Sup(tMax) - Inf(tMin) > real(HAAR_COMPRESS_ERROR));
 
 	for (int i = 0; i < n; i++)
 	{
-		if (abs(Sup(vec[i])) < Inf(t))
+		if (abs(Sup(vec[i])) < abs(Inf(t)))
 		{
 			vec[i] = interval(0.0);
 		}
