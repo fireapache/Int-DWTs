@@ -36,6 +36,20 @@ void gnuplot_dat_VWdecomposition(const char *file1, const char *file2, double x1
 void data_analysis(double *data, uint n, DataAnalysis *analysis);
 
 template <typename T>
+T MSE(T **m1, T **m2, uint n)
+{
+	T result = T();
+
+	for (uint i = 0; i < n; ++i)
+	for (uint j = 0; j < n; ++j)
+	{
+		result += (m1 - m2) * (m1 - m2);
+	}
+
+	return result / (n * n);
+}
+
+template <typename T>
 void printVector(T *vec, int n)
 {
 	int i;
