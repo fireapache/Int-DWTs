@@ -25,6 +25,13 @@ typedef struct DataAnalysis
 	double deviation;
 } DataAnalysis;
 
+template <typename T>
+struct EucMSE_data
+{
+	T mse;
+	T euc;
+};
+
 void startTimeCounter();
 double getTimeCounter();
 void escrever_imagem(char *arquivo, double **matriz, ImageInfo imgInfo);
@@ -47,6 +54,26 @@ T MSE(T **m1, T **m2, uint n)
 	}
 
 	return result / (n * n);
+}
+
+template <typename T>
+EucMSE_data<T> EucMSE(T **m1, T **m2, uint n)
+{
+	EucMSE_data<T> result;
+	T euc;
+
+	result.mse = T();
+	result.EucDistance = T();
+
+	for (uint i = 0; i < n; ++i)
+	for (uint j = 0; j < n; ++j)
+	{
+		result.mse += (m1[i][j] - m2[i][j]) * (m1[i][j] - m2[i][j]);
+		euc = abs(m1[i][j] - m2[i][j]);
+		if (result.euc < euc) result.euc = euc;
+	}
+
+	return result;
 }
 
 template <typename T>
