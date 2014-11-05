@@ -261,6 +261,31 @@ void data_analysis(double *data, uint n, DataAnalysis *analysis)
 	analysis->deviation = deviation;
 }
 
+void data_analysis(double **data, uint n, DataAnalysis *analysis)
+{
+	double mean, sum = 0.0, deviation;
+
+	for (uint i = 0; i < n; i++)
+	for (uint j = 0; j < n; j++)
+	{
+		sum += data[i][j];
+	}
+
+	mean = sum / (double)(n);
+	sum = 0.0;
+
+	for (uint i = 0; i < n; i++)
+	for (uint j = 0; j < n; j++)
+	{
+		sum += (data[i][j] - mean) * (data[i][j] - mean);
+	}
+
+	deviation = sqrt(sum / (double)(n));
+
+	analysis->mean = mean;
+	analysis->deviation = deviation;
+}
+
 /*void escrever_imagem_from_greyscale(char *arquivo, double **matriz)
 {
     FILE *imagem;
