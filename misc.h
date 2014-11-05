@@ -50,6 +50,16 @@ T MSE(T **m1, T **m2, uint n)
 }
 
 template <typename T>
+T PSNR(T mse, T max)
+{
+	T result = T();
+
+	result = 10.0 * log10((max * max) / mse);
+
+	return result;
+}
+
+template <typename T>
 void printVector(T *vec, int n)
 {
 	int i;
