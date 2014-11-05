@@ -64,7 +64,7 @@ EucMSE_data<T> EucMSE(T **m1, T **m2, uint n)
 	T euc;
 
 	result.mse = T();
-	result.EucDistance = T();
+	result.euc = T();
 
 	for (uint i = 0; i < n; ++i)
 	for (uint j = 0; j < n; ++j)
