@@ -50,7 +50,7 @@ T MSE(T **m1, T **m2, uint n)
 	for (uint i = 0; i < n; ++i)
 	for (uint j = 0; j < n; ++j)
 	{
-		result += (m1 - m2) * (m1 - m2);
+		result += (m1[i][j] - m2[i][j]) * (m1[i][j] - m2[i][j]);
 	}
 
 	return result / (n * n);
