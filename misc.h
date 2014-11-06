@@ -32,6 +32,14 @@ struct EucMSE_data
 	T euc;
 };
 
+template <typename T>
+struct ImageQuality
+{
+	T mse;
+	T euc;
+	T psnr;
+};
+
 void startTimeCounter();
 double getTimeCounter();
 void escrever_imagem(char *arquivo, double **matriz, ImageInfo imgInfo);
@@ -85,6 +93,21 @@ T PSNR(T mse, T max)
 	result = 10.0 * log10((max * max) / mse);
 
 	return result;
+}
+
+template <typename T>
+ImageQuality<T> imageQuality(T **m1, T **m2, T max, uint n)
+{
+	ImageQuality<T> result;
+    EucMSE_data<double> data;
+
+    data = EucMSE<T>(m1, m2, n);
+
+    result.mse = data.mse;
+    result.euc = data.euc;
+    result.psnr = PSNR<T>(data.mse, max);
+
+    return result;
 }
 
 template <typename T>
