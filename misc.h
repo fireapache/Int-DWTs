@@ -52,6 +52,16 @@ void data_analysis(double *data, uint n, DataAnalysis *analysis);
 void data_analysis(double **data, uint n, DataAnalysis *analysis);
 
 template <typename T>
+void copyMatrix(T **m1, T **m2, uint n)
+{
+	for (int i = 0; i < n; i++)
+	for (int j = 0; j < n; j++)
+	{
+		m2[i][j] = m1[i][j];
+	}
+}
+
+template <typename T>
 void deleteMatrix(T **matrix, uint n)
 {
 	for (int i = 0; i < n; i++)

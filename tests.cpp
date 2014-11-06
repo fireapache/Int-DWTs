@@ -1,16 +1,5 @@
 #include "tests.h"
 
-void matrixCopy(double **m1, double **m2, int x, int y)
-{
-	for (int i = 0; i < x; i++)
-	{
-		for (int j = 0; j < y; j++)
-		{
-			m2[i][j] = m1[i][j];
-		}
-	}
-}
-
 int test7(const char *filepath)
 {
 	double **oImg, **fImg = NULL;
@@ -259,20 +248,20 @@ void test2_1()
 	VinisMatrixNormalization(test, POINTS, true, false);
 
 	cout << getTimeCounter() << '\t';
-	matrixCopy(matrix, test, POINTS, POINTS);
+	copyMatrix(matrix, test, POINTS);
 	startTimeCounter();
 
 	Haar_MatrixDecomposition(test, POINTS, POINTS, true, true);
 
 	cout << getTimeCounter() << '\t';
-	matrixCopy(matrix, test, POINTS, POINTS);
+	copyMatrix(matrix, test, POINTS);
 	startTimeCounter();
 
 	Haar_MatrixDecomposition(test, POINTS, POINTS, false, false);
 	VinisMatrixNormalization(test, POINTS, false, false);
 
 	cout << getTimeCounter() << '\t';
-	matrixCopy(matrix, test, POINTS, POINTS);
+	copyMatrix(matrix, test, POINTS);
 	startTimeCounter();
 
 	Haar_MatrixDecomposition(test, POINTS, POINTS, true, false);
@@ -280,27 +269,27 @@ void test2_1()
 	cout << getTimeCounter() << '\t';
 
 	cout << '\t';
-	matrixCopy(test, matrix, POINTS, POINTS);
+	copyMatrix(test, matrix, POINTS);
 	startTimeCounter();
 
 	Haar_MatrixComposition(test, POINTS, POINTS, false, true);
 	VinisMatrixNormalization(test, POINTS, true, true);
 
 	cout << getTimeCounter() << '\t';
-	matrixCopy(matrix, test, POINTS, POINTS);
+	copyMatrix(matrix, test, POINTS);
 	startTimeCounter();
 
 	Haar_MatrixComposition(test, POINTS, POINTS, true, true);
 
 	cout << getTimeCounter() << '\t';
-	matrixCopy(matrix, test, POINTS, POINTS);
+	copyMatrix(matrix, test, POINTS);
 	startTimeCounter();
 
 	Haar_MatrixComposition(test, POINTS, POINTS, false, false);
 	VinisMatrixNormalization(test, POINTS, false, true);
 
 	cout << getTimeCounter() << '\t';
-	matrixCopy(matrix, test, POINTS, POINTS);
+	copyMatrix(matrix, test, POINTS);
 	startTimeCounter();
 
 	Haar_MatrixComposition(test, POINTS, POINTS, true, false);
@@ -363,20 +352,20 @@ void test1()
 	VinisMatrixNormalization(test, POINTS, true, false);
 
 	cout << "Metodo Padrao Novo: " << getTimeCounter() << endl;
-	matrixCopy(matrix, test, POINTS, POINTS);
+	copyMatrix(matrix, test, POINTS);
 	startTimeCounter();
 
 	Haar_MatrixDecomposition(test, POINTS, POINTS, true, true);
 
 	cout << "Metodo Padrao Original: " << getTimeCounter() << endl;
-	matrixCopy(matrix, test, POINTS, POINTS);
+	copyMatrix(matrix, test, POINTS);
 	startTimeCounter();
 
 	Haar_MatrixDecomposition(test, POINTS, POINTS, false, false);
 	VinisMatrixNormalization(test, POINTS, false, false);
 
 	cout << "Metodo Nao-Padrao Novo: " << getTimeCounter() << endl;
-	matrixCopy(matrix, test, POINTS, POINTS);
+	copyMatrix(matrix, test, POINTS);
 	startTimeCounter();
 
 	Haar_MatrixDecomposition(test, POINTS, POINTS, true, false);
@@ -384,27 +373,27 @@ void test1()
 	cout << "Metodo Nao-Padrao Original: " << getTimeCounter() << endl;
 
 	cout << endl << endl << "Composicao:" << endl << endl;
-	matrixCopy(test, matrix, POINTS, POINTS);
+	copyMatrix(test, matrix, POINTS);
 	startTimeCounter();
 
 	Haar_MatrixComposition(test, POINTS, POINTS, false, true);
 	VinisMatrixNormalization(test, POINTS, true, true);
 
 	cout << "Metodo Padrao Novo: " << getTimeCounter() << endl;
-	matrixCopy(matrix, test, POINTS, POINTS);
+	copyMatrix(matrix, test, POINTS);
 	startTimeCounter();
 
 	Haar_MatrixComposition(test, POINTS, POINTS, true, true);
 
 	cout << "Metodo Padrao Original: " << getTimeCounter() << endl;
-	matrixCopy(matrix, test, POINTS, POINTS);
+	copyMatrix(matrix, test, POINTS);
 	startTimeCounter();
 
 	Haar_MatrixComposition(test, POINTS, POINTS, false, false);
 	VinisMatrixNormalization(test, POINTS, false, true);
 
 	cout << "Metodo Nao-Padrao Novo: " << getTimeCounter() << endl;
-	matrixCopy(matrix, test, POINTS, POINTS);
+	copyMatrix(matrix, test, POINTS);
 	startTimeCounter();
 
 	Haar_MatrixComposition(test, POINTS, POINTS, true, false);
