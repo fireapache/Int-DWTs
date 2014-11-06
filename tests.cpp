@@ -11,6 +11,67 @@ void matrixCopy(double **m1, double **m2, int x, int y)
 	}
 }
 
+int test7(const char *filepath)
+{
+	double **oImg, **fImg = NULL;
+	ImageInfo imageInfo;
+	ImageQuality<double> imgQuality;
+
+	oImg = carregar_imagem((char*)(filepath), &imageInfo);
+	fImg = carregar_imagem((char*)(filepath), &imageInfo);
+
+	Haar_MatrixDecomposition(fImg, imageInfo.x, imageInfo.y, true, false);
+	Haar_MatrixComposition(fImg, imageInfo.x, imageInfo.y, true, false);
+
+	imgQuality = imageQuality<double>(oImg, fImg, 255.0, imageInfo.x);
+
+	cout << endl << endl;
+	cout << "Algoritmos originais nao padrao: MSE, EUC, PSNR" << endl << endl;
+	cout << imgQuality.mse << endl << imgQuality.euc << endl << imgQuality.psnr << endl << endl;
+
+	deleteMatrix<double>(fImg, imageInfo.x);
+	fImg = carregar_imagem((char*)(filepath), &imageInfo);
+
+	Haar_MatrixDecomposition(fImg, imageInfo.x, imageInfo.y, false, false);
+	VinisMatrixNormalization(fImg, imageInfo.x, false);
+	VinisMatrixNormalization(fImg, imageInfo.x, false, true);
+	Haar_MatrixComposition(fImg, imageInfo.x, imageInfo.y, false, false);
+
+	imgQuality = imageQuality<double>(oImg, fImg, 255.0, imageInfo.x);
+
+	cout << "Algoritmos novos nao padrao: MSE, EUC, PSNR" << endl << endl;
+	cout << imgQuality.mse << endl << imgQuality.euc << endl << imgQuality.psnr << endl << endl;
+
+	deleteMatrix<double>(fImg, imageInfo.x);
+	fImg = carregar_imagem((char*)(filepath), &imageInfo);
+
+	Haar_MatrixDecomposition(fImg, imageInfo.x, imageInfo.y, true, true);
+	Haar_MatrixComposition(fImg, imageInfo.x, imageInfo.y, true, true);
+
+	imgQuality = imageQuality<double>(oImg, fImg, 255.0, imageInfo.x);
+
+	cout << "Algoritmos originais padrao: MSE, EUC, PSNR" << endl << endl;
+	cout << imgQuality.mse << endl << imgQuality.euc << endl << imgQuality.psnr << endl << endl;
+
+	deleteMatrix<double>(fImg, imageInfo.x);
+	fImg = carregar_imagem((char*)(filepath), &imageInfo);
+
+	Haar_MatrixDecomposition(fImg, imageInfo.x, imageInfo.y, false, true);
+	VinisMatrixNormalization(fImg, imageInfo.x, true);
+	VinisMatrixNormalization(fImg, imageInfo.x, true, true);
+	Haar_MatrixComposition(fImg, imageInfo.x, imageInfo.y, false, true);
+
+	imgQuality = imageQuality<double>(oImg, fImg, 255.0, imageInfo.x);
+
+	cout << "Algoritmos novos padrao: MSE, EUC, PSNR" << endl << endl;
+	cout << imgQuality.mse << endl << imgQuality.euc << endl << imgQuality.psnr << endl << endl;
+
+	deleteMatrix<double>(fImg, imageInfo.x);
+	deleteMatrix<double>(oImg, imageInfo.x);
+
+	return 0;
+}
+
 int test5(float percentage)
 {
 	int n = 8;
