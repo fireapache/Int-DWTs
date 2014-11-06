@@ -52,6 +52,17 @@ void data_analysis(double *data, uint n, DataAnalysis *analysis);
 void data_analysis(double **data, uint n, DataAnalysis *analysis);
 
 template <typename T>
+void deleteMatrix(T **matrix, uint n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		delete [] matrix[i];
+	}
+
+	delete [] matrix;
+}
+
+template <typename T>
 T MSE(T **m1, T **m2, uint n)
 {
 	T result = T();
