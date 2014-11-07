@@ -149,12 +149,17 @@ void VinisNonStandardMatrixNormalization(double **matrix, uint n, bool invert)
         start = (uint)div;
         limit = (uint)pow(2.0, (double)i + 1);
 
-        for (uint l = 0; l < limit / 2; l++)
+        if (invert)
         {
+        	for (uint l = 0; l < limit / 2; l++)
             for (uint c = start; c < limit; c++)
-            {
+                matrix[l][c] *= div;
+        }
+        else
+        {
+        	for (uint l = 0; l < limit / 2; l++)
+            for (uint c = start; c < limit; c++)
                 matrix[l][c] /= div;
-            }
         }
 
         if (invert)
@@ -188,12 +193,17 @@ void INT_VinisNonStandardMatrixNormalization(interval **matrix, uint n, bool inv
         start = (uint)pow(2.0, (double)i);
         limit = (uint)pow(2.0, (double)i + 1);
 
-        for (uint l = 0; l < limit / 2; l++)
+        if (invert)
         {
+        	for (uint l = 0; l < limit / 2; l++)
             for (uint c = start; c < limit; c++)
-            {
+                matrix[l][c] *= div;
+        }
+        else
+        {
+        	for (uint l = 0; l < limit / 2; l++)
+            for (uint c = start; c < limit; c++)
                 matrix[l][c] /= div;
-            }
         }
 
         if (invert)
