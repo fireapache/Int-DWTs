@@ -10,6 +10,7 @@ using namespace std;
 #define POINTS 1024
 #define PI atan(1) * 4
 
+void fundamentalTest();			// 07/11/2014
 void test0();					// 27/06/2014
 void test1();					// 22/07/2014
 void test2(unsigned int n);		// 24/07/2014

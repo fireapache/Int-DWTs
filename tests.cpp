@@ -459,3 +459,200 @@ void test0()
 	gnuplot_dat_Wdecomposition("4_2W.dat", x1, x2, t3, POINTS, 2, true);
 	gnuplot_dat_Wdecomposition("4_3W.dat", x1, x2, t3, POINTS, 3, true);
 }
+
+void fundamentalTest()
+{
+	cout << endl;
+	
+	cout << "==========================================" << endl;
+	cout << "Entrada: \n" << endl;
+	cout << "{5, 6, 1, 2}" << endl;
+	cout << "{4, 2, 5, 5}" << endl;
+	cout << "{3, 1, 7, 1}" << endl;
+	cout << "{6, 3, 5, 1}" << endl;
+	cout << endl;
+	
+	double **mat = new double*[4];
+	
+	for (int m = 0; m < 4; m++)
+		mat[m] = new double[4];
+	
+	mat[0][0] = 5; mat[0][1] = 6; mat[0][2] = 1; mat[0][3] = 2;
+	mat[1][0] = 4; mat[1][1] = 2; mat[1][2] = 5; mat[1][3] = 5;
+	mat[2][0] = 3; mat[2][1] = 1; mat[2][2] = 7; mat[2][3] = 1;
+	mat[3][0] = 6; mat[3][1] = 3; mat[3][2] = 5; mat[3][3] = 1;
+
+	interval **intmat = new interval*[4];
+	
+	for (int m = 0; m < 4; m++)
+		intmat[m] = new interval[4];
+	
+	for (int i = 0; i < 4; i++)
+	for (int j = 0; j < 4; j++)
+	{
+		intmat[i][j] = interval(mat[i][j]);
+	}
+	
+	double **matriz = new double*[4];
+	
+	for (int m = 0; m < 4; m++)
+		matriz[m] = new double[4];
+	
+	copyMatrix<double>(mat, matriz, 4);
+
+	interval **intmatriz = new interval*[4];
+	
+	for (int m = 0; m < 4; m++)
+		intmatriz[m] = new interval[4];
+	
+	copyMatrix<interval>(intmat, intmatriz, 4);
+	
+	cout << "==========================================" << endl;
+	cout << "(Algoritmos originais) Processo não normalizado: \n" << endl;
+	
+	cout << "Pontual padrão: " << endl << endl;
+
+	Haar_MatrixDecomposition(matriz, 4, 4, false, true);
+	printMatrix<double>(matriz, 4);
+	Haar_MatrixComposition(matriz, 4, 4, false, true);
+	printMatrix<double>(matriz, 4);
+	copyMatrix<double>(mat, matriz, 4);
+	
+	cout << "Pontual não-padrão: " << endl << endl;
+
+	Haar_MatrixDecomposition(matriz, 4, 4, false, false);
+	printMatrix<double>(matriz, 4);
+	Haar_MatrixComposition(matriz, 4, 4, false, false);
+	printMatrix<double>(matriz, 4);
+	cout << endl;
+	
+	cout << "Intervalar padrão: " << endl << endl;
+	
+	INT_Haar_MatrixDecomposition(intmatriz, 4, 4, false, true);
+	printMatrix<interval>(intmatriz, 4);
+	cout << '\t' << "Intervalo de erro:  " << INT_error(intmatriz, 4, 4) << endl << endl;
+	INT_Haar_MatrixComposition(intmatriz, 4, 4, false, true);
+	printMatrix<interval>(intmatriz, 4);
+	cout << '\t' << "Intervalo de erro:  " << INT_error(intmatriz, 4, 4) << endl << endl;
+	
+	cout << endl;
+	
+	copyMatrix<interval>(intmat, intmatriz, 4);
+	
+	cout << "Intervalar não-padrão: " << endl << endl;
+	
+	INT_Haar_MatrixDecomposition(intmatriz, 4, 4, false, false);
+	printMatrix<interval>(intmatriz, 4);
+	cout << '\t' << "Intervalo de erro:  " << INT_error(intmatriz, 4, 4) << endl << endl;
+	INT_Haar_MatrixComposition(intmatriz, 4, 4, false, false);
+	printMatrix<interval>(intmatriz, 4);
+	cout << '\t' << "Intervalo de erro:  " << INT_error(intmatriz, 4, 4) << endl << endl;
+
+	cout << endl;
+	
+	cout << "==========================================" << endl;
+	cout << "(Algoritmos originais) Processo normalizado: \n" << endl;
+	
+	copyMatrix<double>(mat, matriz, 4);
+	copyMatrix<interval>(intmat, intmatriz, 4);
+	
+	cout << "Pontual padrão (normalizado): " << endl << endl;
+
+	Haar_MatrixDecomposition(matriz, 4, 4, true, true);
+	printMatrix<double>(matriz, 4);
+	Haar_MatrixComposition(matriz, 4, 4, true, true);
+	printMatrix<double>(matriz, 4);
+	
+	cout << endl;
+	
+	copyMatrix<double>(mat, matriz, 4);
+	
+	cout << "Pontual não-padrão (normalizado): " << endl << endl;
+
+	Haar_MatrixDecomposition(matriz, 4, 4, true, false);
+	printMatrix<double>(matriz, 4);
+	Haar_MatrixComposition(matriz, 4, 4, true, false);
+	printMatrix<double>(matriz, 4);
+	
+	cout << endl;
+	
+	cout << "Intervalar padrão (normalizado): " << endl << endl;
+	
+	INT_Haar_MatrixDecomposition(intmatriz, 4, 4, true, true);
+	printMatrix<interval>(intmatriz, 4);
+	cout << '\t' << "Intervalo de erro:  " << INT_error(intmatriz, 4, 4) << endl << endl;
+	INT_Haar_MatrixComposition(intmatriz, 4, 4, true, true);
+	printMatrix<interval>(intmatriz, 4);
+	cout << '\t' << "Intervalo de erro:  " << INT_error(intmatriz, 4, 4) << endl << endl;
+	
+	cout << endl;
+	
+	copyMatrix<interval>(intmat, intmatriz, 4);
+	
+	cout << "Intervalar não-padrão (normalizado): " << endl << endl;
+	INT_Haar_MatrixDecomposition(intmatriz, 4, 4, true, false);
+	printMatrix<interval>(intmatriz, 4);
+	cout << '\t' << "Intervalo de erro:  " << INT_error(intmatriz, 4, 4) << endl << endl;
+	INT_Haar_MatrixComposition(intmatriz, 4, 4, true, false);
+	printMatrix<interval>(intmatriz, 4);
+	
+	cout << '\t' << "Intervalo de erro:  " << INT_error(intmatriz, 4, 4) << endl << endl;
+
+	cout << endl;
+
+	cout << "==========================================" << endl;
+	cout << "(Algoritmos novos) Processo normalizado: \n" << endl;
+
+	copyMatrix<double>(mat, matriz, 4);
+	copyMatrix<interval>(intmat, intmatriz, 4);
+	
+	cout << "Pontual padrão (normalizado): " << endl << endl;
+
+	Haar_MatrixDecomposition(matriz, 4, 4, false, true);
+	VinisMatrixNormalization(matriz, 4, true);
+	printMatrix<double>(matriz, 4);
+	VinisMatrixNormalization(matriz, 4, true, true);
+	Haar_MatrixComposition(matriz, 4, 4, false, true);
+	printMatrix<double>(matriz, 4);
+	
+	cout << endl;
+	
+	copyMatrix<double>(mat, matriz, 4);
+	
+	cout << "Pontual não-padrão (normalizado): " << endl << endl;
+
+	Haar_MatrixDecomposition(matriz, 4, 4, false, false);
+	VinisMatrixNormalization(matriz, 4, false);
+	printMatrix<double>(matriz, 4);
+	VinisMatrixNormalization(matriz, 4, false, true);
+	Haar_MatrixComposition(matriz, 4, 4, false, false);
+	printMatrix<double>(matriz, 4);
+	
+	cout << endl;
+	
+	cout << "Intervalar padrão (normalizado): " << endl << endl;
+	
+	INT_Haar_MatrixDecomposition(intmatriz, 4, 4, false, true);
+	INT_VinisMatrixNormalization(intmatriz, 4, true);
+	printMatrix<interval>(intmatriz, 4);
+	cout << '\t' << "Intervalo de erro:  " << INT_error(intmatriz, 4, 4) << endl << endl;
+	INT_VinisMatrixNormalization(intmatriz, 4, true, true);
+	INT_Haar_MatrixComposition(intmatriz, 4, 4, false, true);
+	printMatrix<interval>(intmatriz, 4);
+	cout << '\t' << "Intervalo de erro:  " << INT_error(intmatriz, 4, 4) << endl << endl;
+	
+	cout << endl;
+	
+	copyMatrix<interval>(intmat, intmatriz, 4);
+	
+	INT_Haar_MatrixDecomposition(intmatriz, 4, 4, false, false);
+	INT_VinisMatrixNormalization(intmatriz, 4, false);
+	printMatrix<interval>(intmatriz, 4);
+	cout << '\t' << "Intervalo de erro:  " << INT_error(intmatriz, 4, 4) << endl << endl;
+	INT_VinisMatrixNormalization(intmatriz, 4, false, true);
+	INT_Haar_MatrixComposition(intmatriz, 4, 4, false, false);
+	printMatrix<interval>(intmatriz, 4);
+	cout << '\t' << "Intervalo de erro:  " << INT_error(intmatriz, 4, 4) << endl << endl;
+	
+	cout << endl;
+}
