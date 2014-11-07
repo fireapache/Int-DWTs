@@ -4,11 +4,9 @@ int main(int argc, char **argv)
 {
 	if (argc > 1)
 	{
-		double p = (double)atoi(argv[1]) / 100.0;
-
-		test6(p);
+		test7(argv[1]);
 	}
-	else cout << "Enter with <energytocompress 0-100>" << endl;
-	
+	else cout << "Enter with <ppmfilepath>" << endl;
+
 	return 0;
 }
