@@ -460,7 +460,7 @@ void test0()
 	gnuplot_dat_Wdecomposition("4_3W.dat", x1, x2, t3, POINTS, 3, true);
 }
 
-void fundamentalTest()
+void fundamentalTest0()
 {
 	cout << endl;
 	
@@ -655,4 +655,16 @@ void fundamentalTest()
 	cout << '\t' << "Intervalo de erro:  " << INT_error(intmatriz, 4, 4) << endl << endl;
 	
 	cout << endl;
+}
+
+void fundamentalTest(unsigned int n)
+{
+	switch(n)
+	{
+		case 0:
+			fundamentalTest0();
+			break;
+		default:
+			cout << "\n\tFundamental test " << n << " not found!\n\n";
+	}
 }
