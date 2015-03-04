@@ -657,12 +657,27 @@ void fundamentalTest0()
 	cout << endl;
 }
 
+void fundamentalTest1()
+{
+	double *vec = new double[8];
+	double *vector = new double[8];
+	//interval *intVector = new interval[8];
+
+	vec[0] = 1.0; vec[1] = 4.0; vec[2] = 5.0; vec[3] = 2.0;
+	vec[4] = 10.0; vec[5] = -3.0; vec[6] = 7.0; vec[7] = 6.0;
+
+	copyVector<double>(vec, vector, 8);
+}
+
 void fundamentalTest(unsigned int n)
 {
 	switch(n)
 	{
 		case 0:
 			fundamentalTest0();
+			break;
+		case 1:
+			fundamentalTest1();
 			break;
 		default:
 			cout << "\n\tFundamental test " << n << " not found!\n\n";

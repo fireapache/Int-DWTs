@@ -52,6 +52,15 @@ void data_analysis(double *data, uint n, DataAnalysis *analysis);
 void data_analysis(double **data, uint n, DataAnalysis *analysis);
 
 template <typename T>
+void copyVector(T *v1, T *v2, uint n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		v2[i] = v1[i];
+	}
+}
+
+template <typename T>
 void copyMatrix(T **m1, T **m2, uint n)
 {
 	for (int i = 0; i < n; i++)
