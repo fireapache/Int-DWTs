@@ -661,12 +661,37 @@ void fundamentalTest1()
 {
 	double *vec = new double[8];
 	double *vector = new double[8];
-	//interval *intVector = new interval[8];
+	double **resultBuffer = new double*[8];
+	interval *intVec = new interval[8];
+	interval *intVector = new interval[8];
+	interval **intResultBuffer = new interval*[8];
 
 	vec[0] = 1.0; vec[1] = 4.0; vec[2] = 5.0; vec[3] = 2.0;
 	vec[4] = 10.0; vec[5] = -3.0; vec[6] = 7.0; vec[7] = 6.0;
 
+	for (int i = 0; i < 8; i++) intVector[i] = interval(vec[i]);
+
+	for (int i = 0; i < 8; ++i)
+	{
+		resultBuffer[i] = new double[8];
+		intResultBuffer[i] = new interval[8];
+	}
+
 	copyVector<double>(vec, vector, 8);
+	copyVector<interval>(intVec, intVector, 8);
+
+	copyVector<double>(vec, resultBuffer[0], 8);
+	copyVector<interval>(intVec, intResultBuffer[0], 8);
+
+	Haar_Decomposition(vec, 8, true);
+	INT_Haar_Decomposition(intVec, 8, true);
+
+	copyVector<double>(vec, resultBuffer[1], 8);
+	copyVector<interval>(intVec, intResultBuffer[1], 8);
+
+	cout << setw(16) << resultBuffer[0][0] << setw(16) << resultBuffer[1][0] << endl;
+	cout << setw(16) << resultBuffer[0][1] << setw(16) << resultBuffer[1][1] << endl;
+	
 }
 
 void fundamentalTest(unsigned int n)

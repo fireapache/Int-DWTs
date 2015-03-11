@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string.h>
+#include <iomanip>
 #include "misc.h"
 
 using namespace std;
