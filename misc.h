@@ -11,6 +11,7 @@
 #endif
 
 #include <fstream>
+#include <iomanip>
 #include "int-dwts.h"
 
 typedef struct ImageInfo
@@ -50,6 +51,37 @@ void gnuplot_dat_Wdecomposition(const char *file, double x1, double x2, double *
 void gnuplot_dat_VWdecomposition(const char *file1, const char *file2, double x1, double x2, double *v, int n, int levels, bool normal);
 void data_analysis(double *data, uint n, DataAnalysis *analysis);
 void data_analysis(double **data, uint n, DataAnalysis *analysis);
+
+template <typename T>
+void printVectors(T **vecs, uint n1, uint n2, uint space, bool row = true)
+{
+	if (n1 <= 0 || n2 <= 0 || space <= 0) return;
+
+	if (row)
+	for (int i = 0; i < n2; ++i)
+	{
+		cout << vecs[i][0];
+
+		for (int j = 0; j < n1; ++j)
+		{
+			cout << setw(space) << vecs[i][j];
+		}
+
+		cout << endl;
+	}
+	else
+	for (int i = 0; i < n1; ++i)
+	{
+		cout << vecs[0][i];
+
+		for (int j = 0; j < n1; ++j)
+		{
+			cout << setw(space) << vecs[j][i];
+		}
+
+		cout << endl;
+	}
+}
 
 template <typename T>
 void copyVector(T *v1, T *v2, uint n)
