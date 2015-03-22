@@ -1,6 +1,6 @@
 #include "int-haar.h"
 
-void VinisNormalization(double *vec, uint n)
+void VinisNormalization(double *vec, uint n, bool invert)
 {
 	uint levels = log2(n);
 	
@@ -13,12 +13,16 @@ void VinisNormalization(double *vec, uint n)
 		
 		uint fim    = (uint)pow(2.0, (double)(level + 1));
 		
+		if (invert)
+		for (uint i = inicio; i < fim; i++)
+			vec[i] /= pow(2.0, - (double)level / 2.0);
+		else
 		for (uint i = inicio; i < fim; i++)
 			vec[i] *= pow(2.0, - (double)level / 2.0);
 	}
 }
 
-void INT_VinisNormalization(interval *vec, uint n)
+void INT_VinisNormalization(interval *vec, uint n, bool invert)
 {
 	uint levels = (uint)log2((double)(n));
 	interval div;
@@ -41,8 +45,10 @@ void INT_VinisNormalization(interval *vec, uint n)
 			}
 			else				div = interval((int)(level));
 
-			if (div != interval(0))
-				vec[i] /= div;
+			if (div == interval(0)) continue;
+
+			if (invert) vec[i] *= div;
+			else vec[i] /= div;
 		}
 	}
 }

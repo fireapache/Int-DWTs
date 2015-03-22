@@ -37,7 +37,7 @@ void Haar_StandardDecomposition(double **matrix, int rows, int cols, bool normal
 
 void VinisMatrixNormalization(double **mat, uint n, bool standard, bool invert = false);
 void VinisNonStandardMatrixNormalization(double **matrix, uint n, bool invert = false);
-void VinisNormalization(double *vec, uint n);
+void VinisNormalization(double *vec, uint n, bool invert = false);
 void VinisStandardMatrixNormalization(double **mat, uint n, bool invert = false);
 
 #endif /* HAAROPMIZATION */
@@ -61,7 +61,7 @@ void INT_Haar_Matrix_Compression(interval **matrix, int n, float percentage);
 
 void INT_VinisMatrixNormalization(interval **mat, uint n, bool standard, bool invert = false);
 void INT_VinisNonStandardMatrixNormalization(interval **matrix, uint n, bool invert = false);
-void INT_VinisNormalization(interval *vec, uint n);
+void INT_VinisNormalization(interval *vec, uint n, bool invert = false);
 void INT_VinisStandardMatrixNormalization(interval **mat, uint n, bool invert = false);
 
 #endif /* HAAROPMIZATION */
