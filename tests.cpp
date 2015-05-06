@@ -957,12 +957,16 @@ void fundamentalTest2()
 	cout << endl;
 	cout << endl;
 
+	cout << "---------- Input" << endl;
 	printVectors<double>(&vec, 8, 1, 10);
 	cout << endl;
+	cout << "---------- Normalized Decomposition" << endl;
 	printVectors<double>(data, 8, 8, 10);
 	cout << endl;
+	cout << "---------- Input" << endl;
 	printVectors<interval>(&intVec, 8, 1, 1);
 	cout << endl;
+	cout << "---------- Normalized Decomposition" << endl;
 	printVectors<interval>(intData, 8, 8, 1);
 	cout << endl;
 
@@ -976,25 +980,31 @@ void fundamentalTest2()
 
 	data = Haar_atrous_Decomposition<double>(vec, 8, 4, false);
 
+	cout << "---------- Input" << endl;
 	printVectors<double>(&vec, 8, 1, 10);
 	cout << endl;
+	cout << "---------- Non-Normalized Decomposition" << endl;
 	printVectors<double>(data, 8, 8, 10);
 	cout << endl;
 
 	Haar_atrous_Normalization<double>(vec, data, 8, 4);
 
+	cout << "---------- Normalization Step" << endl;
 	printVectors<double>(data, 8, 8, 10);
 	cout << endl;
 
 	intData = Haar_atrous_Decomposition<interval>(intVec, 8, 4, false);
 
+	cout << "---------- Input" << endl;
 	printVectors<interval>(&intVec, 8, 1, 1);
 	cout << endl;
+	cout << "---------- Non-Normalized Decomposition" << endl;
 	printVectors<interval>(intData, 8, 8, 1);
 	cout << endl;
 
 	Haar_atrous_Normalization<interval>(intVec, intData, 8, 4);
 
+	cout << "---------- Normalization Step" << endl;
 	printVectors<interval>(intData, 8, 8, 1);
 	cout << endl;
 
