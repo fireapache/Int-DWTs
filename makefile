@@ -68,6 +68,8 @@ $(MAIN): $(OBJS)
 clean:
 	$(RM) *.o *~ $(MAIN)
 
+rebuild: clean tests
+
 depend: $(SRCS)
 	makedepend $(INCLUDES) $^
 
