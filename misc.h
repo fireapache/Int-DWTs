@@ -62,7 +62,7 @@ void printVectors(T **vecs, uint n1, uint n2, uint space, bool row = true)
 	{
 		cout << vecs[i][0];
 
-		for (int j = 0; j < n1; ++j)
+		for (int j = 1; j < n1; ++j)
 		{
 			cout << setw(space) << vecs[i][j];
 		}
@@ -74,7 +74,7 @@ void printVectors(T **vecs, uint n1, uint n2, uint space, bool row = true)
 	{
 		cout << vecs[0][i];
 
-		for (int j = 0; j < n1; ++j)
+		for (int j = 1; j < n1; ++j)
 		{
 			cout << setw(space) << vecs[j][i];
 		}
