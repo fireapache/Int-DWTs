@@ -937,6 +937,69 @@ void fundamentalTest1()
 
 }
 
+void fundamentalTest2()
+{
+	double *vec = new double[8];
+	double **data;
+	interval *intVec = new interval[8];
+	interval **intData;
+
+	vec[0] = 1.0; vec[1] = 7.0; vec[2] = 2.0; vec[3] = 6.0;
+	vec[4] = 3.0; vec[5] = 5.0; vec[6] = 4.0; vec[7] = 4.0;
+
+	for (int i = 0; i < 8; ++i) intVec[i] = interval(vec[i]);
+
+	data = Haar_atrous_Decomposition<double>(vec, 8, 4, true);
+	intData = Haar_atrous_Decomposition<interval>(intVec, 8, 4, true);
+	
+	cout << endl;
+	cout << "========== Normalized Decomposition" << endl;
+	cout << endl;
+	cout << endl;
+
+	printVectors<double>(&vec, 8, 1, 10);
+	cout << endl;
+	printVectors<double>(data, 8, 8, 10);
+	cout << endl;
+	printVectors<interval>(&intVec, 8, 1, 1);
+	cout << endl;
+	printVectors<interval>(intData, 8, 8, 1);
+	cout << endl;
+
+	cout << endl;
+	cout << "========== Normalized Decomposition using our new methods" << endl;
+	cout << endl;
+	cout << endl;
+
+	deleteMatrix<double>(data, 8);
+	deleteMatrix<interval>(intData, 8);
+
+	data = Haar_atrous_Decomposition<double>(vec, 8, 4, false);
+
+	printVectors<double>(&vec, 8, 1, 10);
+	cout << endl;
+	printVectors<double>(data, 8, 8, 10);
+	cout << endl;
+
+	Haar_atrous_Normalization<double>(vec, data, 8, 4);
+
+	printVectors<double>(data, 8, 8, 10);
+	cout << endl;
+
+	intData = Haar_atrous_Decomposition<interval>(intVec, 8, 4, false);
+
+	printVectors<interval>(&intVec, 8, 1, 1);
+	cout << endl;
+	printVectors<interval>(intData, 8, 8, 1);
+	cout << endl;
+
+	Haar_atrous_Normalization<interval>(intVec, intData, 8, 4);
+
+	printVectors<interval>(intData, 8, 8, 1);
+	cout << endl;
+
+}
+
 void fundamentalTest(unsigned int n)
 {
 	switch(n)
@@ -946,6 +1009,9 @@ void fundamentalTest(unsigned int n)
 			break;
 		case 1:
 			fundamentalTest1();
+			break;
+		case 2:
+			fundamentalTest2();
 			break;
 		default:
 			cout << "\n\tFundamental test " << n << " not found!\n\n";
