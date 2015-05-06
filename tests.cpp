@@ -706,11 +706,14 @@ void fundamentalTest1()
 	cout << endl;
 	cout << "========= Testing compress methods on original and new algorithms ==========" << endl;
 	cout << endl;
-	cout << "========= Using original algorithms:";
+	cout << "========= Using original algorithms:" << endl;
 	cout << endl;
-	cout << endl;	
+	cout << "* vector states by row!" << endl;
+	cout << endl;
 
 	printVectors<double>(resultBuffer, 8, 4, 10);
+	cout << endl;
+	cout << "* vector states by row!" << endl;
 	cout << endl;
 	printVectors<interval>(intResultBuffer, 8, 4, 1);
 
@@ -743,14 +746,195 @@ void fundamentalTest1()
 	copyVector<interval>(intVec, intResultBuffer[3], 8);
 
 	cout << endl;
-	cout << "========= Using new algorithms:";
+	cout << "========= Using new algorithms:" << endl;
 	cout << endl;
+	cout << "* vector states by row!" << endl;
 	cout << endl;
 
 	printVectors<double>(resultBuffer, 8, 4, 10);
 	cout << endl;
+	cout << "* vector states by row!" << endl;
+	cout << endl;
 	printVectors<interval>(intResultBuffer, 8, 4, 1);
 	
+	// =====================================================
+	// ==================== Matrix part ====================
+	// =====================================================
+
+	double **mat = new double*[8];
+	double **matrix = new double*[8];
+	double ***resultMatBuffer = new double**[4];
+	interval **intMat = new interval*[8];
+	interval **intMatrix = new interval*[8];
+	interval ***intResultMatBuffer = new interval**[4];
+
+	for (int i = 0; i < 8; ++i)
+	{
+		mat[i] = new double[8];
+		matrix[i] = new double[8];
+		intMat[i] = new interval[8];
+		intMatrix[i] = new interval[8];
+	}
+	
+	for (int i = 0; i < 8; ++i)
+	for (int j = 0; j < 8; ++j)
+	{
+		matrix[i][j] = (double)(i + j);
+		intMatrix[i][j] = interval(i + j);
+	}
+	
+	for (int i = 0; i < 4; ++i)
+	{
+		resultMatBuffer[i] = new double*[8];
+		intResultMatBuffer[i] = new interval*[8];
+
+		for (int j = 0; j < 8; ++j)
+		{
+			resultMatBuffer[i][j] = new double[8];
+			intResultMatBuffer[i][j] = new interval[8];
+		}
+	}
+	
+	copyMatrix<double>(matrix, mat, 8);
+	copyMatrix<interval>(intMatrix, intMat, 8);
+	
+	copyMatrix<double>(mat, resultMatBuffer[0], 8);
+	copyMatrix<interval>(intMat, intResultMatBuffer[0], 8);
+	
+	Haar_MatrixDecomposition(mat, 8, 8, true, true);
+	INT_Haar_MatrixDecomposition(intMat, 8, 8, true, true);
+	
+	copyMatrix<double>(mat, resultMatBuffer[1], 8);
+	copyMatrix<interval>(intMat, intResultMatBuffer[1], 8);
+	
+	Haar_Matrix_Compression(mat, 8, 0.01);
+	INT_Haar_Matrix_Compression(intMat, 8, 0.01);
+	
+	copyMatrix<double>(mat, resultMatBuffer[2], 8);
+	copyMatrix<interval>(intMat, intResultMatBuffer[2], 8);
+	
+	Haar_MatrixComposition(mat, 8, 8, true, true);
+	INT_Haar_MatrixComposition(intMat, 8, 8, true, true);
+	
+	copyMatrix<double>(mat, resultMatBuffer[3], 8);
+	copyMatrix<interval>(intMat, intResultMatBuffer[3], 8);
+	
+	cout << endl;
+	cout << "=====================================================" << endl;
+	cout << "==================== Matrix part ====================" << endl;
+	cout << "=====================================================" << endl;
+	cout << endl;
+	cout << "========== Using Original Standard Transformation" << endl;
+	cout << endl;
+	
+	printMatrices<double>(resultMatBuffer, 8, 8, 4, 10);
+	cout << endl;
+	printMatrices<interval>(intResultMatBuffer, 8, 8, 4, 1);
+	
+	copyMatrix<double>(matrix, mat, 8);
+	copyMatrix<interval>(intMatrix, intMat, 8);
+	
+	copyMatrix<double>(mat, resultMatBuffer[0], 8);
+	copyMatrix<interval>(intMat, intResultMatBuffer[0], 8);
+
+	Haar_MatrixDecomposition(mat, 8, 8, true, false);
+	INT_Haar_MatrixDecomposition(intMat, 8, 8, true, false);
+	
+	copyMatrix<double>(mat, resultMatBuffer[1], 8);
+	copyMatrix<interval>(intMat, intResultMatBuffer[1], 8);
+	
+	Haar_Matrix_Compression(mat, 8, 0.01);
+	INT_Haar_Matrix_Compression(intMat, 8, 0.01);
+	
+	copyMatrix<double>(mat, resultMatBuffer[2], 8);
+	copyMatrix<interval>(intMat, intResultMatBuffer[2], 8);
+	
+	Haar_MatrixComposition(mat, 8, 8, true, false);
+	INT_Haar_MatrixComposition(intMat, 8, 8, true, false);
+	
+	copyMatrix<double>(mat, resultMatBuffer[3], 8);
+	copyMatrix<interval>(intMat, intResultMatBuffer[3], 8);
+
+	cout << endl;
+	cout << "========== Using Original Non-Standard Transformation" << endl;
+	cout << endl;
+
+	printMatrices<double>(resultMatBuffer, 8, 8, 4, 10);
+	cout << endl;
+	printMatrices<interval>(intResultMatBuffer, 8, 8, 4, 1);
+
+	copyMatrix<double>(matrix, mat, 8);
+	copyMatrix<interval>(intMatrix, intMat, 8);
+	
+	copyMatrix<double>(mat, resultMatBuffer[0], 8);
+	copyMatrix<interval>(intMat, intResultMatBuffer[0], 8);
+
+	Haar_MatrixDecomposition(mat, 8, 8, false, true);
+	VinisMatrixNormalization(mat, 8, true);
+	INT_Haar_MatrixDecomposition(intMat, 8, 8, false, true);
+	INT_VinisMatrixNormalization(intMat, 8, true);
+	
+	copyMatrix<double>(mat, resultMatBuffer[1], 8);
+	copyMatrix<interval>(intMat, intResultMatBuffer[1], 8);
+	
+	Haar_Matrix_Compression(mat, 8, 0.01);
+	INT_Haar_Matrix_Compression(intMat, 8, 0.01);
+	
+	copyMatrix<double>(mat, resultMatBuffer[2], 8);
+	copyMatrix<interval>(intMat, intResultMatBuffer[2], 8);
+	
+	VinisMatrixNormalization(mat, 8, true, true);
+	Haar_MatrixComposition(mat, 8, 8, false, true);
+	INT_VinisMatrixNormalization(intMat, 8, true, true);
+	INT_Haar_MatrixComposition(intMat, 8, 8, false, true);
+	
+	copyMatrix<double>(mat, resultMatBuffer[3], 8);
+	copyMatrix<interval>(intMat, intResultMatBuffer[3], 8);
+
+	cout << endl;
+	cout << "========== Using Our New Standard Transformation" << endl;
+	cout << endl;
+
+	printMatrices<double>(resultMatBuffer, 8, 8, 4, 10);
+	cout << endl;
+	printMatrices<interval>(intResultMatBuffer, 8, 8, 4, 1);
+
+	copyMatrix<double>(matrix, mat, 8);
+	copyMatrix<interval>(intMatrix, intMat, 8);
+	
+	copyMatrix<double>(mat, resultMatBuffer[0], 8);
+	copyMatrix<interval>(intMat, intResultMatBuffer[0], 8);
+
+	Haar_MatrixDecomposition(mat, 8, 8, false, false);
+	VinisMatrixNormalization(mat, 8, false);
+	INT_Haar_MatrixDecomposition(intMat, 8, 8, false, false);
+	INT_VinisMatrixNormalization(intMat, 8, false);
+	
+	copyMatrix<double>(mat, resultMatBuffer[1], 8);
+	copyMatrix<interval>(intMat, intResultMatBuffer[1], 8);
+	
+	Haar_Matrix_Compression(mat, 8, 0.01);
+	INT_Haar_Matrix_Compression(intMat, 8, 0.01);
+	
+	copyMatrix<double>(mat, resultMatBuffer[2], 8);
+	copyMatrix<interval>(intMat, intResultMatBuffer[2], 8);
+	
+	VinisMatrixNormalization(mat, 8, false, true);
+	Haar_MatrixComposition(mat, 8, 8, false, false);
+	INT_VinisMatrixNormalization(intMat, 8, false, true);
+	INT_Haar_MatrixComposition(intMat, 8, 8, false, false);
+	
+	copyMatrix<double>(mat, resultMatBuffer[3], 8);
+	copyMatrix<interval>(intMat, intResultMatBuffer[3], 8);
+
+	cout << endl;
+	cout << "========== Using Our New Non-Standard Transformation" << endl;
+	cout << endl;
+
+	printMatrices<double>(resultMatBuffer, 8, 8, 4, 10);
+	cout << endl;
+	printMatrices<interval>(intResultMatBuffer, 8, 8, 4, 1);
+
 }
 
 void fundamentalTest(unsigned int n)

@@ -84,6 +84,18 @@ void printVectors(T **vecs, uint n1, uint n2, uint space, bool row = true)
 }
 
 template <typename T>
+void printMatrices(T ***mats,  uint n1, uint n2, uint n3, uint space)
+{
+	if (n1 <= 0 || n2 <= 0 || n3 <= 0 || space <= 0) return;
+
+	for (int i = 0; i < n3; ++i)
+	{
+		printVectors(mats[i], n1, n2, space);
+		cout << "====================" << endl;
+	}
+}
+
+template <typename T>
 void copyVector(T *v1, T *v2, uint n)
 {
 	for (int i = 0; i < n; i++)
