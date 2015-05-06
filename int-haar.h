@@ -33,6 +33,108 @@ void Haar_NonStandardDecomposition(double **matrix, int rows, int cols, bool nor
 void Haar_StandardComposition(double **matrix, int rows, int cols, bool normal);
 void Haar_StandardDecomposition(double **matrix, int rows, int cols, bool normal);
 
+template <typename T>
+T** Haar_atrous_Decomposition(T *vec, int n, int levels, bool normal)
+{
+	if (n <= 0 || levels <= 0) return NULL;
+
+	T **data = new T*[levels * 2];
+	T *D0, *D1;
+	T divisor;
+
+	for (int i = 0; i < levels * 2; ++i)
+	{
+		data[i] = new T[n];
+	}
+
+	// Setting normalization factor, if needed.
+	if (normal) divisor = sqrt(T(2.0));
+	else divisor = T(2.0);
+
+	D0 = vec;
+
+	// Calculating degree coefficients.
+	for (int i = 0; i < levels; ++i)
+	{
+		for (int j = 0; j < n - 1; ++j)
+		{
+			data[i * 2][j] = (D0[j] + D0[j + 1]) / divisor;
+		}
+
+		data[i * 2][n - 1] = (D0[n - 1] + D0[0]) / divisor;
+
+		D0 = data[i * 2];
+	}
+
+	D0 = vec;
+	D1 = data[0];
+
+	// Calculating wavelet coefficients.
+	for (int i = 0; i < levels; ++i)
+	{
+		for (int j = 0; j < n ; ++j)
+		{
+			data[i * 2 + 1][j] = D0[j] - D1[j];
+		}
+
+		if (i + 1 < levels);
+		{
+			D0 = data[i * 2];
+			D1 = data[(i + 1) * 2];
+		}
+	}
+
+	return data;
+}
+
+template <typename T>
+void Haar_atrous_Normalization(T *vec, T **data, int n, int levels, bool invert = false)
+{
+	if (n <= 0 || levels <= 0) return;
+
+	T factor, *D0, *D1;
+
+	// Normalizing degree coefficients.
+	for (int i = 0; i < levels; ++i)
+	{
+		// Normalization factor rule.
+		factor = pow(T(2.0), T(i + 1) / T(2.0));
+
+		if (invert)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				data[i * 2][j] /= factor;
+			}
+		}
+		else
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				data[i * 2][j] *= factor;
+			}
+		}
+	}
+
+	D0 = vec;
+	D1 = data[0];
+
+	// Recalculating wavelet coefficients.
+	for (int i = 0; i < levels; ++i)
+	{
+		for (int j = 0; j < n ; ++j)
+		{
+			data[i * 2 + 1][j] = D0[j] - D1[j];
+		}
+
+		if (i + 1 < levels);
+		{
+			D0 = data[i * 2];
+			D1 = data[(i + 1) * 2];
+		}
+	}
+}
+
 #ifdef HAAROPMIZATION
 
 void VinisMatrixNormalization(double **mat, uint n, bool standard, bool invert = false);
