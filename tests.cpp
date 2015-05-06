@@ -940,9 +940,9 @@ void fundamentalTest1()
 void fundamentalTest2()
 {
 	double *vec = new double[8];
-	double **data;
+	double **data, *result;
 	interval *intVec = new interval[8];
-	interval **intData;
+	interval **intData, *intResult;
 
 	vec[0] = 1.0; vec[1] = 7.0; vec[2] = 2.0; vec[3] = 6.0;
 	vec[4] = 3.0; vec[5] = 5.0; vec[6] = 4.0; vec[7] = 4.0;
@@ -950,7 +950,9 @@ void fundamentalTest2()
 	for (int i = 0; i < 8; ++i) intVec[i] = interval(vec[i]);
 
 	data = Haar_atrous_Decomposition<double>(vec, 8, 4, true);
+	result =  Haar_atrous_Composition<double>(data, 8, 4);
 	intData = Haar_atrous_Decomposition<interval>(intVec, 8, 4, true);
+	intResult = Haar_atrous_Composition<interval>(intData, 8, 4);
 	
 	cout << endl;
 	cout << "========== Normalized Decomposition" << endl;
@@ -963,11 +965,16 @@ void fundamentalTest2()
 	cout << "---------- Normalized Decomposition" << endl;
 	printVectors<double>(data, 8, 8, 10);
 	cout << endl;
+	cout << "---------- Normalized Composition" << endl;
+	printVectors<double>(&result, 8, 1, 10);
+	cout << endl;
 	cout << "---------- Input" << endl;
 	printVectors<interval>(&intVec, 8, 1, 1);
 	cout << endl;
 	cout << "---------- Normalized Decomposition" << endl;
 	printVectors<interval>(intData, 8, 8, 1);
+	cout << "---------- Normalized Composition" << endl;
+	printVectors<interval>(&intResult, 8, 1, 1);
 	cout << endl;
 
 	cout << endl;
@@ -993,6 +1000,20 @@ void fundamentalTest2()
 	printVectors<double>(data, 8, 8, 10);
 	cout << endl;
 
+	Haar_atrous_Normalization<double>(vec, data, 8, 4, true);
+
+	cout << "---------- Denormalization Step" << endl;
+	printVectors<double>(data, 8, 8, 10);
+	cout << endl;
+
+	delete [] result;
+
+	result = Haar_atrous_Composition<double>(data, 8, 4);
+
+	cout << "---------- Non-Normalized Composition" << endl;
+	printVectors<double>(&result, 8, 1, 10);
+	cout << endl;
+
 	intData = Haar_atrous_Decomposition<interval>(intVec, 8, 4, false);
 
 	cout << "---------- Input" << endl;
@@ -1006,6 +1027,20 @@ void fundamentalTest2()
 
 	cout << "---------- Normalization Step" << endl;
 	printVectors<interval>(intData, 8, 8, 1);
+	cout << endl;
+
+	Haar_atrous_Normalization<interval>(intVec, intData, 8, 4, true);
+
+	cout << "---------- Denormalization Step" << endl;
+	printVectors<interval>(intData, 8, 8, 1);
+	cout << endl;
+
+	delete [] intResult;
+
+	intResult = Haar_atrous_Composition<interval>(intData, 8, 4);
+
+	cout << "---------- Non-Normalized Composition" << endl;
+	printVectors<interval>(&intResult, 8, 1, 1);
 	cout << endl;
 
 }

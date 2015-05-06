@@ -88,6 +88,29 @@ T** Haar_atrous_Decomposition(T *vec, int n, int levels, bool normal)
 }
 
 template <typename T>
+T* Haar_atrous_Composition(T **data, int n, int levels)
+{
+	if (n <= 0 || levels <= 0) return NULL;
+
+	T *result = new T[n];
+
+	for (int i = 0; i < n; ++i)
+	{
+		result[i] = data[levels * 2 - 2][i];
+	}
+
+	for (int i = 0; i < levels; ++i)
+	{
+		for (int j = 0; j < n; ++j)
+		{
+			result[j] += data[i * 2 + 1][j];
+		}
+	}
+
+	return result;
+}
+
+template <typename T>
 void Haar_atrous_Normalization(T *vec, T **data, int n, int levels, bool invert = false)
 {
 	if (n <= 0 || levels <= 0) return;
