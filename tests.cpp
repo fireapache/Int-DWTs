@@ -1,5 +1,55 @@
 #include "tests.h"
 
+int test8(int n, int levels)
+{
+	if (n <= 0 || levels <= 0) return 1;
+
+	interval *intVector = new interval[n];
+	interval *intVec = new interval[n];
+	interval **intData;
+
+	for (int i = 0; i < n; ++i)
+	{
+		intVector[i] = interval((rand() %  2048) - 1024);
+	}
+
+	cout << "==================== Original Algorithms" << endl;
+
+	copyVector(intVector, intVec, n);
+	intData = Haar_atrous_Decomposition(intVec, n, levels, false);
+	delete [] intVec;
+	intVec = Haar_atrous_Composition(intData, n, levels);
+
+	cout << "---------- Non-Normalized:" << '\t' << INT_error(intVec, n) << endl;
+
+	copyVector(intVector, intVec, n);
+	intData = Haar_atrous_Decomposition(intVec, n, levels, true);
+	delete [] intVec;
+	intVec = Haar_atrous_Composition(intData, n, levels);
+
+	cout << "---------- Normalized:" << "\t\t" << INT_error(intVec, n) << endl;
+
+	cout << "==================== Our New Algorithms" << endl;
+
+	copyVector(intVector, intVec, n);
+	intData = Haar_atrous_Decomposition(intVec, n, levels, false);
+	delete [] intVec;
+	intVec = Haar_atrous_Composition(intData, n, levels);
+
+	cout << "---------- Non-Normalized:" << '\t' << INT_error(intVec, n) << endl;
+
+	copyVector(intVector, intVec, n);
+	intData = Haar_atrous_Decomposition(intVec, n, levels, false);
+	Haar_atrous_Normalization(intVec, intData, n, levels);
+	Haar_atrous_Normalization(intVec, intData, n, levels, true);
+	delete [] intVec;
+	intVec = Haar_atrous_Composition(intData, n, levels);
+
+	cout << "---------- Normalized:" << "\t\t" << INT_error(intVec, n) << endl;
+
+	return 0;
+}
+
 int test7(const char *filepath)
 {
 	double **oImg, **fImg = NULL;

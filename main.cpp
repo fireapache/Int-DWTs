@@ -2,9 +2,9 @@
 
 int main(int argc, char **argv)
 {
-	if (argc > 1)
+	if (argc > 2)
 	{
-		fundamentalTest(atoi(argv[1]));
+		test8(atoi(argv[1]), atoi(argv[2]));
 	}
 	else cout << "Enter with a test number" << endl;
 
