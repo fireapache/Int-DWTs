@@ -1155,13 +1155,13 @@ void fundamentalTest3()
 	double **restore;
 	interval **intRestore;
 
-	restore = Haar_atrous_StandardComposition(data, 4, 4, 2);
-	intRestore = Haar_atrous_StandardComposition(intData, 4, 4, 2);
+	restore = Haar_atrous_MatrixComposition(data, 4, 4, 2, true);
+	intRestore = Haar_atrous_MatrixComposition(intData, 4, 4, 2, true);
 
 	printMatrix(restore, 4);
 	printMatrix(intRestore, 4);
 
-	
+
 
 }
 

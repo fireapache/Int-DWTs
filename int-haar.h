@@ -209,6 +209,21 @@ T** Haar_atrous_StandardComposition(T ***data, int n, int m, int levels)
 }
 
 template <typename T>
+T** Haar_atrous_NonStandardComposition(T ***data, int n, int m, int levels)
+{
+	T **result = NULL;
+
+	return result;
+}
+
+template <typename T>
+T** Haar_atrous_MatrixComposition(T ***data, int n, int m, int levels, bool standard)
+{
+	if (standard) return Haar_atrous_StandardComposition(data, n, m, levels);
+	else return Haar_atrous_NonStandardComposition(data, n, m, levels);
+}
+
+template <typename T>
 void Haar_atrous_Normalization(T *vec, T **data, int n, int levels, bool invert = false)
 {
 	if (n <= 0 || levels <= 0) return;
