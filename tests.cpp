@@ -1152,6 +1152,17 @@ void fundamentalTest3()
 	cout << endl;
 	printMatrices(intData, 4, 4, 8, 1);
 
+	double **restore;
+	interval **intRestore;
+
+	restore = Haar_atrous_StandardComposition(data, 4, 4, 2);
+	intRestore = Haar_atrous_StandardComposition(intData, 4, 4, 2);
+
+	printMatrix(restore, 4);
+	printMatrix(intRestore, 4);
+
+	
+
 }
 
 void fundamentalTest(unsigned int n)
