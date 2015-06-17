@@ -1096,17 +1096,7 @@ void fundamentalTest2()
 }
 
 void fundamentalTest3()
-{
-	cout << endl;
-	
-	cout << "==========================================" << endl;
-	cout << "Entrada: \n" << endl;
-	cout << "{5, 6, 1, 2}" << endl;
-	cout << "{4, 2, 5, 5}" << endl;
-	cout << "{3, 1, 7, 1}" << endl;
-	cout << "{6, 3, 5, 1}" << endl;
-	cout << endl;
-	
+{	
 	double **mat = new double*[4];
 	
 	for (int m = 0; m < 4; m++)
@@ -1145,6 +1135,20 @@ void fundamentalTest3()
 	double ***data = NULL;
 	interval ***intData = NULL;
 
+	cout << endl;
+	cout << "// ==================== Standard Transformation" << endl;
+	cout << endl;
+
+	cout << endl;
+	
+	cout << "==========================================" << endl;
+	cout << "Entrada: \n" << endl;
+	cout << "{5, 6, 1, 2}" << endl;
+	cout << "{4, 2, 5, 5}" << endl;
+	cout << "{3, 1, 7, 1}" << endl;
+	cout << "{6, 3, 5, 1}" << endl;
+	cout << endl;
+
 	data = Haar_atrous_MatrixDecomposition(matrix, 4, 4, 2, false, true);
 	intData = Haar_atrous_MatrixDecomposition(intMatrix, 4, 4, 2, false, true);
 
@@ -1158,10 +1162,49 @@ void fundamentalTest3()
 	restore = Haar_atrous_MatrixComposition(data, 4, 4, 2, true);
 	intRestore = Haar_atrous_MatrixComposition(intData, 4, 4, 2, true);
 
+	cout << endl;
+
 	printMatrix(restore, 4);
 	printMatrix(intRestore, 4);
 
+	for (int i = 0; i < 4 * 2; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			delete [] data[i][j];
+			delete [] intData[i][j];
+		}
 
+		delete [] data[i];
+		delete [] intData[i];
+	}
+
+	delete [] data;
+	delete [] intData;
+
+	copyMatrix<double>(mat, matrix, 4);
+	copyMatrix<interval>(intmat, intMatrix, 4);
+
+	cout << endl;
+	cout << "// ==================== Non Standard Transformation" << endl;
+	cout << endl;
+
+	cout << endl;
+	
+	cout << "==========================================" << endl;
+	cout << "Entrada: \n" << endl;
+	cout << "{5, 6, 1, 2}" << endl;
+	cout << "{4, 2, 5, 5}" << endl;
+	cout << "{3, 1, 7, 1}" << endl;
+	cout << "{6, 3, 5, 1}" << endl;
+	cout << endl;
+
+	data = Haar_atrous_MatrixDecomposition(matrix, 4, 4, 2, false, false);
+	intData = Haar_atrous_MatrixDecomposition(intMatrix, 4, 4, 2, false, false);
+
+	printMatrices(data, 4, 4, 8, 10);
+	cout << endl;
+	printMatrices(intData, 4, 4, 8, 1);
 
 }
 

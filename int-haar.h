@@ -166,6 +166,84 @@ template <typename T>
 T*** Haar_atrous_NonStandardDecomposition(T **matrix, int n, int m, int levels, bool normal)
 {
 	T ***result = NULL;
+	T **parcialResult = NULL;
+	T *temp = NULL;
+	T *lastC = NULL;
+	T divisor;
+
+	result = new T**[levels * 4];
+
+	for (int i = 0; i < levels * 4; ++i)
+	{
+		result[i] = new T*[n];
+
+		for (int j = 0; j < n; ++j)
+		{
+			result[i][j] = new T[m];
+		}
+	}
+
+	// Setting normalization factor, if needed.
+	if (normal) divisor = sqrt(T(2.0));
+	else divisor = T(2.0);
+
+	// Will store the input for column transformation.
+	temp = new T[max(n, m)];
+
+	// Create parcial result array for columns tranformation.
+	parcialResult = new T*[2];
+	parcialResult[0] = new T[m];
+	parcialResult[1] = new T[m];
+
+	lastC = matrix[0];
+
+	// Iteration for every level step.
+	for (int i = 0; i < levels; ++i)
+	{
+		// Transform 1 level for every row.
+		for (int j = 0; j < n; ++j)
+		{
+			// Calculating degree and wavelet coefficients.
+			Haar_atrous_DecompositionStep(result[i * 4][j], result[i * 4 + 1][j], lastC, n, divisor);
+
+			lastC = result[i * 4][j];
+		}
+
+		lastC = temp;
+
+		// Transform 1 level for every column.
+		for (int j = 0; j < m; ++j)
+		{
+			// Prepare temp buffer.
+			for (int w = 0; w < n; ++w)
+			{
+				temp[w] = result[i * 4][w][j];
+			}
+
+			// Calculating degree and wavelet coefficients.
+			Haar_atrous_DecompositionStep(parcialResult[0], parcialResult[1], lastC, m, divisor);
+
+			// Put results in the right place.
+			for (int w = 0; w < n; ++w)
+			{
+				result[i * 4 + 2][w][j] = parcialResult[0][w];
+				result[i * 4 + 3][w][j] = parcialResult[1][w];
+			}
+		}
+
+		// Prepare temp buffer for the next iteration.
+		for (int j = 0; j < m; ++j)
+		{
+			temp[j] = result[i * 4 + 2][0][j];
+		}
+	}
+
+	//========== Dealocating memory.
+	delete [] parcialResult[0];
+	delete [] parcialResult[1];
+	delete [] parcialResult;
+
+	delete [] temp;
 
 	return result;
 }
