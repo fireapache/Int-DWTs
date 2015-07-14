@@ -349,6 +349,63 @@ void Haar_atrous_Normalization(T *vec, T **data, int n, int levels, bool invert 
 	}
 }
 
+template <typename T>
+void Haar_atrous_MatrixNormalization(T **matrix, T ***data, int n, int m, int levels, bool invert = false)
+{
+	if (n <= 0 || m <= 0 || levels <= 0) return;
+
+	T factor, **D0, **D1;
+
+	// Normalizing degree coefficients.
+	for (int i = 0; i < levels * 2; ++i)
+	{
+		// Normalization factor rule.
+		factor = pow(T(2.0), T(i + 1) / T(2.0));
+
+		if (invert)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				for (int w = 0; w < m; ++w)
+				{
+					data[i * 2][j][w] /= factor;
+				}
+			}
+		}
+		else
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				for (int w = 0; w < m; ++w)
+				{
+					data[i * 2][j][w] *= factor;
+				}
+			}
+		}
+	}
+
+	D0 = matrix;
+	D1 = data[0];
+
+	// Recalculating wavelet coefficients.
+	for (int i = 0; i < levels * 2; ++i)
+	{
+		for (int j = 0; j < n ; ++j)
+		{
+			for (int w = 0; w < m; ++w)
+			{
+				data[i * 2 + 1][j][w] = D0[j][w] - D1[j][w];
+			}
+		}
+
+		if (i + 1 < levels * 2);
+		{
+			D0 = data[i * 2];
+			D1 = data[(i + 1) * 2];
+		}
+	}
+}
+
 #ifdef HAAROPMIZATION
 
 void VinisMatrixNormalization(double **mat, uint n, bool standard, bool invert = false);

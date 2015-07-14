@@ -126,6 +126,15 @@ void deleteMatrix(T **matrix, uint n)
 }
 
 template <typename T>
+void deleteMatrices(T ***matrices, uint nMatrices, uint n)
+{
+	for (int i = 0; i < nMatrices; ++i)
+	{
+		deleteMatrix<T>(matrices[i], n);
+	}
+}
+
+template <typename T>
 T MSE(T **m1, T **m2, uint n)
 {
 	T result = T();
@@ -145,8 +154,8 @@ EucMSE_data<T> EucMSE(T **m1, T **m2, uint n)
 	EucMSE_data<T> result;
 	T euc;
 
-	result.mse = T();
-	result.euc = T();
+	result.mse = T(0.0);
+	result.euc = T(0.0);
 
 	for (uint i = 0; i < n; ++i)
 	for (uint j = 0; j < n; ++j)
@@ -159,27 +168,31 @@ EucMSE_data<T> EucMSE(T **m1, T **m2, uint n)
 	return result;
 }
 
+EucMSE_data<interval> INT_EucMSE(interval **m1, interval **m2,  uint n);
+
 template <typename T>
 T PSNR(T mse, T max)
 {
-	T result = T();
+	T result = T(0.0);
 
 	result = 10.0 * log10((max * max) / mse);
 
 	return result;
 }
 
+interval INT_PSNR(interval mse, interval max);
+
 template <typename T>
-ImageQuality<T> imageQuality(T **m1, T **m2, T max, uint n)
+ImageQuality<T> imageQuality(T **m1, T **m2, int max, uint n)
 {
 	ImageQuality<T> result;
-    EucMSE_data<double> data;
+    EucMSE_data<T> data;
 
     data = EucMSE<T>(m1, m2, n);
 
     result.mse = data.mse;
     result.euc = data.euc;
-    result.psnr = PSNR<T>(data.mse, max);
+    result.psnr = PSNR<T>(data.mse, T(max));
 
     return result;
 }

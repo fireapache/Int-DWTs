@@ -21,6 +21,7 @@ int test5(float percentage);	// Intervalar and ponctual compression comparison.
 int test6(float percentage);	// Matrix version of test5().
 int test7(const char *filepath);	// Image quality test for ERAD 2015.
 int test8(int n, int levels);	// Quality of the new Haar A-Trous implementarion.
+int test9(int n, int max, int levels); // Quality of new Haar A-Trous 2D results.
 
 void matrixCopy(double **m1, double **m2, int x, int y);
 

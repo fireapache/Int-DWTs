@@ -2,11 +2,11 @@
 
 int main(int argc, char **argv)
 {
-	if (argc > 1)
+	if (argc == 4)
 	{
-		fundamentalTest(atoi(argv[1]));
+		test9(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
 	}
-	else cout << "Enter with a test number" << endl;
+	else cout << "Enter <MatrixOrder> <MaxRandomValue> <LevelsOfTransformation>" << endl;
 
 	return 0;
 }

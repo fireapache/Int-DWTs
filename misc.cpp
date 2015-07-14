@@ -286,6 +286,34 @@ void data_analysis(double **data, uint n, DataAnalysis *analysis)
 	analysis->deviation = deviation;
 }
 
+EucMSE_data<interval> INT_EucMSE(interval **m1, interval **m2,  uint n)
+{
+    EucMSE_data<interval> result;
+    interval euc;
+
+    result.mse = interval(0.0);
+    result.euc = interval(0.0);
+
+    for (uint i = 0; i < n; ++i)
+    for (uint j = 0; j < n; ++j)
+    {
+        result.mse += (m1[i][j] - m2[i][j]) * (m1[i][j] - m2[i][j]);
+        euc = m1[i][j] - m2[i][j];
+        if (Sup(result.euc) < Sup(euc)) result.euc = euc;
+    }
+
+    return result;
+}
+
+interval INT_PSNR(interval mse, interval max)
+{
+    interval result;
+
+    result = interval(10.0) * log10((max * max) / Sup(mse));
+
+    return result;
+}
+
 /*void escrever_imagem_from_greyscale(char *arquivo, double **matriz)
 {
     FILE *imagem;

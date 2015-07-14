@@ -1,5 +1,48 @@
 #include "tests.h"
 
+int test9(int n, int max, int levels)
+{
+	interval **intMatrix = new interval*[n];
+	interval **intMat = new interval*[n];
+	interval ***intData;
+	ImageQuality<interval> imgQuality;
+	EucMSE_data<interval> imgMseEuc;
+
+	for (int i = 0; i < n; i++)
+	{
+		intMatrix[i] = new interval[n];
+		intMat[i] = new interval[n];
+
+		for (int j = 0; j < n; j++)
+		{
+			intMatrix[i][j] = interval(((i + 1) + (j + 1)) % max);
+			intMat[i][j] = interval(((i + 1) + (j + 1)) % max);
+		}
+	}
+
+	cout << "==================== Original Algorithms" << endl;
+
+	copyMatrix(intMatrix, intMat, n);
+	intData = Haar_atrous_MatrixDecomposition(intMat, n, n, levels, true, true);
+	deleteMatrix<interval>(intMat, n);
+	intMat = Haar_atrous_MatrixComposition(intData, n, n, levels, true);
+
+	//imgQuality = imageQuality<interval>(intMat, intMatrix, max, n);
+	imgMseEuc = INT_EucMSE(intMat, intMatrix, n);
+	imgQuality.euc = imgMseEuc.euc;
+	imgQuality.mse = imgMseEuc.mse;
+	imgQuality.psnr = INT_PSNR(imgQuality.mse, interval(max));
+
+	cout << "---------- Standard Normalized:" << '\t' << INT_error(intMat, n, n) << endl;
+	cout << "---------- EUC: " << imgMseEuc.euc << endl;
+	cout << "---------- MSE: " << imgMseEuc.mse << endl;
+	cout << "---------- PSNR: " << imgQuality.psnr << endl;
+	cout << endl;
+
+
+	return 0;
+}
+
 int test8(int n, int levels)
 {
 	if (n <= 0 || levels <= 0) return 1;
