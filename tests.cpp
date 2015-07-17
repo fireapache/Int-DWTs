@@ -1249,6 +1249,245 @@ void fundamentalTest3()
 	cout << endl;
 	printMatrices(intData, 4, 4, 8, 1);
 
+	restore = Haar_atrous_MatrixComposition(data, 4, 4, 2, false);
+	intRestore = Haar_atrous_MatrixComposition(intData, 4, 4, 2, false);
+
+	cout << endl;
+
+	printMatrix(restore, 4);
+	printMatrix(intRestore, 4);
+
+}
+
+void fundamentalTest4()
+{
+	cout << "********************" << endl;
+	cout << "*     This fundamental (4) test is about normalized Haar A-Trous " << endl;
+	cout << "* decomposition and composition. It uses a small 4x4 matrix in order " << endl;
+	cout << "* to help the visualization of the result and further comparison with " << endl;
+	cout << "* its concept." << endl;
+	cout << "********************" << endl;
+	cout << endl;
+
+	double **mat = new double*[4];
+	
+	for (int m = 0; m < 4; m++)
+		mat[m] = new double[4];
+	
+	mat[0][0] = 5; mat[0][1] = 6; mat[0][2] = 1; mat[0][3] = 2;
+	mat[1][0] = 4; mat[1][1] = 2; mat[1][2] = 5; mat[1][3] = 5;
+	mat[2][0] = 3; mat[2][1] = 1; mat[2][2] = 7; mat[2][3] = 1;
+	mat[3][0] = 6; mat[3][1] = 3; mat[3][2] = 5; mat[3][3] = 1;
+
+	interval **intmat = new interval*[4];
+	
+	for (int m = 0; m < 4; m++)
+		intmat[m] = new interval[4];
+	
+	for (int i = 0; i < 4; i++)
+	for (int j = 0; j < 4; j++)
+	{
+		intmat[i][j] = interval(mat[i][j]);
+	}
+	
+	double **matrix = new double*[4];
+	
+	for (int m = 0; m < 4; m++)
+		matrix[m] = new double[4];
+	
+	copyMatrix<double>(mat, matrix, 4);
+
+	interval **intMatrix = new interval*[4];
+	
+	for (int m = 0; m < 4; m++)
+		intMatrix[m] = new interval[4];
+	
+	copyMatrix<interval>(intmat, intMatrix, 4);
+
+	double ***data = NULL;
+	interval ***intData = NULL;
+
+	cout << endl;
+	cout << "// ==================== Original Standard Transformation" << endl;
+	cout << endl;
+
+	cout << endl;
+	
+	cout << "==========================================" << endl;
+	cout << "Entrada: \n" << endl;
+	cout << "{5, 6, 1, 2}" << endl;
+	cout << "{4, 2, 5, 5}" << endl;
+	cout << "{3, 1, 7, 1}" << endl;
+	cout << "{6, 3, 5, 1}" << endl;
+	cout << endl;
+
+	data = Haar_atrous_MatrixDecomposition(matrix, 4, 4, 2, true, true);
+	intData = Haar_atrous_MatrixDecomposition(intMatrix, 4, 4, 2, true, true);
+
+	printMatrices(data, 4, 4, 8, 10);
+	cout << endl;
+	printMatrices(intData, 4, 4, 8, 1);
+
+	double **restore;
+	interval **intRestore;
+
+	restore = Haar_atrous_MatrixComposition(data, 4, 4, 2, true);
+	intRestore = Haar_atrous_MatrixComposition(intData, 4, 4, 2, true);
+
+	cout << endl;
+
+	printMatrix(restore, 4);
+	printMatrix(intRestore, 4);
+
+	for (int i = 0; i < 4 * 2; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			delete [] data[i][j];
+			delete [] intData[i][j];
+		}
+
+		delete [] data[i];
+		delete [] intData[i];
+	}
+
+	delete [] data;
+	delete [] intData;
+
+	cout << endl;
+	cout << "// ==================== New Standard Transformation" << endl;
+	cout << endl;
+
+	data = Haar_atrous_MatrixDecomposition(matrix, 4, 4, 2, false, true);
+	intData = Haar_atrous_MatrixDecomposition(intMatrix, 4, 4, 2, false, true);
+
+	Haar_atrous_MatrixNormalization(matrix, data, 4, 4, 2);
+	Haar_atrous_MatrixNormalization(intMatrix, intData, 4, 4, 2);
+
+	printMatrices(data, 4, 4, 8, 10);
+	cout << endl;
+	printMatrices(intData, 4, 4, 8, 1);
+
+	restore = Haar_atrous_MatrixComposition(data, 4, 4, 2, true);
+	intRestore = Haar_atrous_MatrixComposition(intData, 4, 4, 2, true);
+
+	cout << endl;
+
+	printMatrix(restore, 4);
+	printMatrix(intRestore, 4);
+
+	for (int i = 0; i < 4 * 2; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			delete [] data[i][j];
+			delete [] intData[i][j];
+		}
+
+		delete [] data[i];
+		delete [] intData[i];
+	}
+
+	delete [] data;
+	delete [] intData;
+
+	copyMatrix<double>(mat, matrix, 4);
+	copyMatrix<interval>(intmat, intMatrix, 4);
+
+	cout << endl;
+	cout << "// ==================== Original Non Standard Transformation" << endl;
+	cout << endl;
+
+	cout << endl;
+	
+	cout << "==========================================" << endl;
+	cout << "Entrada: \n" << endl;
+	cout << "{5, 6, 1, 2}" << endl;
+	cout << "{4, 2, 5, 5}" << endl;
+	cout << "{3, 1, 7, 1}" << endl;
+	cout << "{6, 3, 5, 1}" << endl;
+	cout << endl;
+
+	data = Haar_atrous_MatrixDecomposition(matrix, 4, 4, 2, true, false);
+	intData = Haar_atrous_MatrixDecomposition(intMatrix, 4, 4, 2, true, false);
+
+	printMatrices(data, 4, 4, 8, 10);
+	cout << endl;
+	printMatrices(intData, 4, 4, 8, 1);
+
+	restore = Haar_atrous_MatrixComposition(data, 4, 4, 2, false);
+	intRestore = Haar_atrous_MatrixComposition(intData, 4, 4, 2, false);
+
+	cout << endl;
+
+	printMatrix(restore, 4);
+	printMatrix(intRestore, 4);
+
+	for (int i = 0; i < 4 * 2; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			delete [] data[i][j];
+			delete [] intData[i][j];
+		}
+
+		delete [] data[i];
+		delete [] intData[i];
+	}
+
+	delete [] data;
+	delete [] intData;
+
+	copyMatrix<double>(mat, matrix, 4);
+	copyMatrix<interval>(intmat, intMatrix, 4);
+
+	cout << endl;
+	cout << "// ==================== New Non Standard Transformation" << endl;
+	cout << endl;
+
+	cout << endl;
+	
+	cout << "==========================================" << endl;
+	cout << "Entrada: \n" << endl;
+	cout << "{5, 6, 1, 2}" << endl;
+	cout << "{4, 2, 5, 5}" << endl;
+	cout << "{3, 1, 7, 1}" << endl;
+	cout << "{6, 3, 5, 1}" << endl;
+	cout << endl;
+
+	data = Haar_atrous_MatrixDecomposition(matrix, 4, 4, 2, false, false);
+	intData = Haar_atrous_MatrixDecomposition(intMatrix, 4, 4, 2, false, false);
+
+	Haar_atrous_MatrixNormalization(matrix, data, 4, 4, 2);
+	Haar_atrous_MatrixNormalization(intMatrix, intData, 4, 4, 2);
+
+	printMatrices(data, 4, 4, 8, 10);
+	cout << endl;
+	printMatrices(intData, 4, 4, 8, 1);
+
+	restore = Haar_atrous_MatrixComposition(data, 4, 4, 2, false);
+	intRestore = Haar_atrous_MatrixComposition(intData, 4, 4, 2, false);
+
+	cout << endl;
+
+	printMatrix(restore, 4);
+	printMatrix(intRestore, 4);
+
+	for (int i = 0; i < 4 * 2; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			delete [] data[i][j];
+			delete [] intData[i][j];
+		}
+
+		delete [] data[i];
+		delete [] intData[i];
+	}
+
+	delete [] data;
+	delete [] intData;
+
 }
 
 void fundamentalTest(unsigned int n)
@@ -1266,6 +1505,9 @@ void fundamentalTest(unsigned int n)
 			break;
 		case 3:
 			fundamentalTest3();
+			break;
+		case 4:
+			fundamentalTest4();
 			break;
 		default:
 			cout << "\n\tFundamental test " << n << " not found!\n\n";

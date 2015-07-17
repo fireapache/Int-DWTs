@@ -289,7 +289,30 @@ T** Haar_atrous_StandardComposition(T ***data, int n, int m, int levels)
 template <typename T>
 T** Haar_atrous_NonStandardComposition(T ***data, int n, int m, int levels)
 {
-	T **result = NULL;
+	if (n <= 0 || levels <= 0) return NULL;
+
+	T **result = new T*[n];
+
+	for (int i = 0; i < n; ++i)
+	{
+		result[i] = new T[m];
+
+		for (int j = 0; j < m; ++j)
+		{
+			result[i][j] = data[levels * 4 - 2][i][j];
+		}
+	}
+
+	for (int i = 0; i < levels * 4; i += 2)
+	{
+		for (int j = 0; j < n; ++j)
+		{
+			for (int w = 0; w < m; ++w)
+			{
+				result[j][w] += data[i + 1][j][w];
+			}
+		}
+	}
 
 	return result;
 }
