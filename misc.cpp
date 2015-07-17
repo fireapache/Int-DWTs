@@ -297,7 +297,7 @@ EucMSE_data<interval> INT_EucMSE(interval **m1, interval **m2,  uint n)
     for (uint i = 0; i < n; ++i)
     for (uint j = 0; j < n; ++j)
     {
-        result.mse += (m1[i][j] - m2[i][j]) * (m1[i][j] - m2[i][j]);
+        result.mse += pow((m1[i][j] - m2[i][j]), interval(2.0));
         euc = m1[i][j] - m2[i][j];
         if (Sup(result.euc) < Sup(euc)) result.euc = euc;
     }

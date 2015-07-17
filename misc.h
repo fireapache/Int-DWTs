@@ -160,7 +160,7 @@ EucMSE_data<T> EucMSE(T **m1, T **m2, uint n)
 	for (uint i = 0; i < n; ++i)
 	for (uint j = 0; j < n; ++j)
 	{
-		result.mse += (m1[i][j] - m2[i][j]) * (m1[i][j] - m2[i][j]);
+		result.mse += pow(m1[i][j] - m2[i][j], T(2.0));
 		euc = abs(m1[i][j] - m2[i][j]);
 		if (result.euc < euc) result.euc = euc;
 	}
