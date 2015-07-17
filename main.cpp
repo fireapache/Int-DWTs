@@ -2,9 +2,9 @@
 
 int main(int argc, char **argv)
 {
-	if (argc == 4)
+	if (argc == 2)
 	{
-		test9(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
+		fundamentalTest(atoi(argv[1]));
 	}
 	else cout << "Enter <MatrixOrder> <MaxRandomValue> <LevelsOfTransformation>" << endl;
 
