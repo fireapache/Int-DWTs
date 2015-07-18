@@ -1139,7 +1139,15 @@ void fundamentalTest2()
 }
 
 void fundamentalTest3()
-{	
+{
+	cout << "********************" << endl;
+	cout << "*     This fundamental (4) test is about non-normalized Haar A-Trous " << endl;
+	cout << "* decomposition and composition. It uses a small 4x4 matrix in order " << endl;
+	cout << "* to help the visualization of the result and further comparison with " << endl;
+	cout << "* its concept." << endl;
+	cout << "********************" << endl;
+	cout << endl;
+
 	double **mat = new double*[4];
 	
 	for (int m = 0; m < 4; m++)
@@ -1178,6 +1186,9 @@ void fundamentalTest3()
 	double ***data = NULL;
 	interval ***intData = NULL;
 
+	double **restore;
+	interval **intRestore;
+
 	cout << endl;
 	cout << "// ==================== Standard Transformation" << endl;
 	cout << endl;
@@ -1185,7 +1196,7 @@ void fundamentalTest3()
 	cout << endl;
 	
 	cout << "==========================================" << endl;
-	cout << "Entrada: \n" << endl;
+	cout << "Input: \n" << endl;
 	cout << "{5, 6, 1, 2}" << endl;
 	cout << "{4, 2, 5, 5}" << endl;
 	cout << "{3, 1, 7, 1}" << endl;
@@ -1193,22 +1204,34 @@ void fundamentalTest3()
 	cout << endl;
 
 	data = Haar_atrous_MatrixDecomposition(matrix, 4, 4, 2, false, true);
-	intData = Haar_atrous_MatrixDecomposition(intMatrix, 4, 4, 2, false, true);
-
-	printMatrices(data, 4, 4, 8, 10);
-	cout << endl;
-	printMatrices(intData, 4, 4, 8, 1);
-
-	double **restore;
-	interval **intRestore;
-
 	restore = Haar_atrous_MatrixComposition(data, 4, 4, 2, true);
+	intData = Haar_atrous_MatrixDecomposition(intMatrix, 4, 4, 2, false, true);
 	intRestore = Haar_atrous_MatrixComposition(intData, 4, 4, 2, true);
 
+	cout << "=============== Punctual Process:" << endl;
+	cout << endl;
+
+	printMatrices(data, 4, 4, 8, 10);
+
+	cout << endl;
+	cout << "========== Punctual Result of Composition:" << endl;
 	cout << endl;
 
 	printMatrix(restore, 4);
+
+	cout << endl;
+	cout << "=============== Interval Process:" << endl;
+	cout << endl;
+
+	printMatrices(intData, 4, 4, 8, 1);
+
+	cout << endl;
+	cout << "========== Interval Result of Composition:" << endl;
+	cout << endl;
+
 	printMatrix(intRestore, 4);
+
+	cout << endl;
 
 	for (int i = 0; i < 4 * 2; ++i)
 	{
@@ -1235,7 +1258,7 @@ void fundamentalTest3()
 	cout << endl;
 	
 	cout << "==========================================" << endl;
-	cout << "Entrada: \n" << endl;
+	cout << "Input: \n" << endl;
 	cout << "{5, 6, 1, 2}" << endl;
 	cout << "{4, 2, 5, 5}" << endl;
 	cout << "{3, 1, 7, 1}" << endl;
@@ -1243,19 +1266,34 @@ void fundamentalTest3()
 	cout << endl;
 
 	data = Haar_atrous_MatrixDecomposition(matrix, 4, 4, 2, false, false);
-	intData = Haar_atrous_MatrixDecomposition(intMatrix, 4, 4, 2, false, false);
-
-	printMatrices(data, 4, 4, 8, 10);
-	cout << endl;
-	printMatrices(intData, 4, 4, 8, 1);
-
 	restore = Haar_atrous_MatrixComposition(data, 4, 4, 2, false);
+	intData = Haar_atrous_MatrixDecomposition(intMatrix, 4, 4, 2, false, false);
 	intRestore = Haar_atrous_MatrixComposition(intData, 4, 4, 2, false);
 
+	cout << "=============== Punctual Process:" << endl;
+	cout << endl;
+
+	printMatrices(data, 4, 4, 8, 10);
+
+	cout << endl;
+	cout << "========== Punctual Result of Composition:" << endl;
 	cout << endl;
 
 	printMatrix(restore, 4);
+
+	cout << endl;
+	cout << "=============== Interval Process:" << endl;
+	cout << endl;
+
+	printMatrices(intData, 4, 4, 8, 1);
+
+	cout << endl;
+	cout << "========== Interval Result of Composition:" << endl;
+	cout << endl;
+
 	printMatrix(intRestore, 4);
+
+	cout << endl;
 
 }
 
@@ -1307,6 +1345,9 @@ void fundamentalTest4()
 	double ***data = NULL;
 	interval ***intData = NULL;
 
+	double **restore;
+	interval **intRestore;
+
 	cout << endl;
 	cout << "// ==================== Original Standard Transformation" << endl;
 	cout << endl;
@@ -1314,7 +1355,7 @@ void fundamentalTest4()
 	cout << endl;
 	
 	cout << "==========================================" << endl;
-	cout << "Entrada: \n" << endl;
+	cout << "Input: \n" << endl;
 	cout << "{5, 6, 1, 2}" << endl;
 	cout << "{4, 2, 5, 5}" << endl;
 	cout << "{3, 1, 7, 1}" << endl;
@@ -1322,22 +1363,34 @@ void fundamentalTest4()
 	cout << endl;
 
 	data = Haar_atrous_MatrixDecomposition(matrix, 4, 4, 2, true, true);
-	intData = Haar_atrous_MatrixDecomposition(intMatrix, 4, 4, 2, true, true);
-
-	printMatrices(data, 4, 4, 8, 10);
-	cout << endl;
-	printMatrices(intData, 4, 4, 8, 1);
-
-	double **restore;
-	interval **intRestore;
-
 	restore = Haar_atrous_MatrixComposition(data, 4, 4, 2, true);
+	intData = Haar_atrous_MatrixDecomposition(intMatrix, 4, 4, 2, true, true);
 	intRestore = Haar_atrous_MatrixComposition(intData, 4, 4, 2, true);
 
+	cout << "=============== Punctual Process:" << endl;
+	cout << endl;
+
+	printMatrices(data, 4, 4, 8, 10);
+
+	cout << endl;
+	cout << "========== Punctual Result of Composition:" << endl;
 	cout << endl;
 
 	printMatrix(restore, 4);
+
+	cout << endl;
+	cout << "=============== Interval Process:" << endl;
+	cout << endl;
+
+	printMatrices(intData, 4, 4, 8, 1);
+
+	cout << endl;
+	cout << "========== Interval Result of Composition:" << endl;
+	cout << endl;
+
 	printMatrix(intRestore, 4);
+
+	cout << endl;
 
 	for (int i = 0; i < 4 * 2; ++i)
 	{
@@ -1359,22 +1412,37 @@ void fundamentalTest4()
 	cout << endl;
 
 	data = Haar_atrous_MatrixDecomposition(matrix, 4, 4, 2, false, true);
-	intData = Haar_atrous_MatrixDecomposition(intMatrix, 4, 4, 2, false, true);
-
 	Haar_atrous_MatrixNormalization(matrix, data, 4, 4, 2);
-	Haar_atrous_MatrixNormalization(intMatrix, intData, 4, 4, 2);
-
-	printMatrices(data, 4, 4, 8, 10);
-	cout << endl;
-	printMatrices(intData, 4, 4, 8, 1);
-
 	restore = Haar_atrous_MatrixComposition(data, 4, 4, 2, true);
+
+	intData = Haar_atrous_MatrixDecomposition(intMatrix, 4, 4, 2, false, true);
+	Haar_atrous_MatrixNormalization(intMatrix, intData, 4, 4, 2);
 	intRestore = Haar_atrous_MatrixComposition(intData, 4, 4, 2, true);
 
+	cout << "=============== Punctual Process:" << endl;
+	cout << endl;
+
+	printMatrices(data, 4, 4, 8, 10);
+
+	cout << endl;
+	cout << "========== Punctual Result of Composition:" << endl;
 	cout << endl;
 
 	printMatrix(restore, 4);
+
+	cout << endl;
+	cout << "=============== Interval Process:" << endl;
+	cout << endl;
+
+	printMatrices(intData, 4, 4, 8, 1);
+
+	cout << endl;
+	cout << "========== Interval Result of Composition:" << endl;
+	cout << endl;
+
 	printMatrix(intRestore, 4);
+
+	cout << endl;
 
 	for (int i = 0; i < 4 * 2; ++i)
 	{
@@ -1401,7 +1469,7 @@ void fundamentalTest4()
 	cout << endl;
 	
 	cout << "==========================================" << endl;
-	cout << "Entrada: \n" << endl;
+	cout << "Input: \n" << endl;
 	cout << "{5, 6, 1, 2}" << endl;
 	cout << "{4, 2, 5, 5}" << endl;
 	cout << "{3, 1, 7, 1}" << endl;
@@ -1409,19 +1477,34 @@ void fundamentalTest4()
 	cout << endl;
 
 	data = Haar_atrous_MatrixDecomposition(matrix, 4, 4, 2, true, false);
-	intData = Haar_atrous_MatrixDecomposition(intMatrix, 4, 4, 2, true, false);
-
-	printMatrices(data, 4, 4, 8, 10);
-	cout << endl;
-	printMatrices(intData, 4, 4, 8, 1);
-
 	restore = Haar_atrous_MatrixComposition(data, 4, 4, 2, false);
+	intData = Haar_atrous_MatrixDecomposition(intMatrix, 4, 4, 2, true, false);
 	intRestore = Haar_atrous_MatrixComposition(intData, 4, 4, 2, false);
 
+	cout << "=============== Punctual Process:" << endl;
+	cout << endl;
+
+	printMatrices(data, 4, 4, 8, 10);
+
+	cout << endl;
+	cout << "========== Punctual Result of Composition:" << endl;
 	cout << endl;
 
 	printMatrix(restore, 4);
+
+	cout << endl;
+	cout << "=============== Interval Process:" << endl;
+	cout << endl;
+
+	printMatrices(intData, 4, 4, 8, 1);
+
+	cout << endl;
+	cout << "========== Interval Result of Composition:" << endl;
+	cout << endl;
+
 	printMatrix(intRestore, 4);
+
+	cout << endl;
 
 	for (int i = 0; i < 4 * 2; ++i)
 	{
@@ -1448,7 +1531,7 @@ void fundamentalTest4()
 	cout << endl;
 	
 	cout << "==========================================" << endl;
-	cout << "Entrada: \n" << endl;
+	cout << "Input: \n" << endl;
 	cout << "{5, 6, 1, 2}" << endl;
 	cout << "{4, 2, 5, 5}" << endl;
 	cout << "{3, 1, 7, 1}" << endl;
@@ -1456,22 +1539,37 @@ void fundamentalTest4()
 	cout << endl;
 
 	data = Haar_atrous_MatrixDecomposition(matrix, 4, 4, 2, false, false);
-	intData = Haar_atrous_MatrixDecomposition(intMatrix, 4, 4, 2, false, false);
-
 	Haar_atrous_MatrixNormalization(matrix, data, 4, 4, 2);
-	Haar_atrous_MatrixNormalization(intMatrix, intData, 4, 4, 2);
-
-	printMatrices(data, 4, 4, 8, 10);
-	cout << endl;
-	printMatrices(intData, 4, 4, 8, 1);
-
 	restore = Haar_atrous_MatrixComposition(data, 4, 4, 2, false);
+
+	intData = Haar_atrous_MatrixDecomposition(intMatrix, 4, 4, 2, false, false);
+	Haar_atrous_MatrixNormalization(intMatrix, intData, 4, 4, 2);
 	intRestore = Haar_atrous_MatrixComposition(intData, 4, 4, 2, false);
 
+	cout << "=============== Punctual Process:" << endl;
+	cout << endl;
+
+	printMatrices(data, 4, 4, 8, 10);
+
+	cout << endl;
+	cout << "========== Punctual Result of Composition:" << endl;
 	cout << endl;
 
 	printMatrix(restore, 4);
+
+	cout << endl;
+	cout << "=============== Interval Process:" << endl;
+	cout << endl;
+
+	printMatrices(intData, 4, 4, 8, 1);
+
+	cout << endl;
+	cout << "========== Interval Result of Composition:" << endl;
+	cout << endl;
+
 	printMatrix(intRestore, 4);
+
+	cout << endl;
 
 	for (int i = 0; i < 4 * 2; ++i)
 	{
