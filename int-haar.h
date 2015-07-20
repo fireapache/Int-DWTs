@@ -167,6 +167,7 @@ T*** Haar_atrous_NonStandardDecomposition(T **matrix, int n, int m, int levels, 
 {
 	T ***result = NULL;
 	T **parcialResult = NULL;
+	T **lastCMatrix = NULL;
 	T *temp = NULL;
 	T *lastC = NULL;
 	T divisor;
@@ -195,6 +196,7 @@ T*** Haar_atrous_NonStandardDecomposition(T **matrix, int n, int m, int levels, 
 	parcialResult[0] = new T[m];
 	parcialResult[1] = new T[m];
 
+	lastCMatrix = matrix;
 	lastC = matrix[0];
 
 	// Iteration for every level step.
@@ -206,7 +208,7 @@ T*** Haar_atrous_NonStandardDecomposition(T **matrix, int n, int m, int levels, 
 			// Calculating degree and wavelet coefficients.
 			Haar_atrous_DecompositionStep(result[i * 4][j], result[i * 4 + 1][j], lastC, n, divisor);
 
-			lastC = result[i * 4][j];
+			lastC = lastCMatrix[j + 1];
 		}
 
 		lastC = temp;
@@ -236,6 +238,10 @@ T*** Haar_atrous_NonStandardDecomposition(T **matrix, int n, int m, int levels, 
 		{
 			temp[j] = result[i * 4 + 2][0][j];
 		}
+
+		// Setting variables for the next iteration.
+		lastCMatrix = result[i * 4 + 2];
+		lastC = lastCMatrix[0];
 	}
 
 	//========== Dealocating memory.
