@@ -2,11 +2,18 @@
 
 int main(int argc, char **argv)
 {
-	if (argc == 2)
+	if (argc == 3)
 	{
-		fundamentalTest(atoi(argv[1]));
+		for (int i = 0; i < 4; ++i)
+		{
+			test10(argv[1], i, atoi(argv[2]));
+		}
 	}
-	else cout << "Enter <MatrixOrder> <MaxRandomValue> <LevelsOfTransformation>" << endl;
+	else
+	{
+		cout << "Enter <ppmFilePath> <levels>" << endl;
+		cout << endl;
+	}
 
 	return 0;
 }
