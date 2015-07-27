@@ -1,5 +1,115 @@
 #include "tests.h"
 
+int test10(const char *filepath, int type, int levels)
+{
+	double **input = NULL;
+	double ***data = NULL;
+	double **result = NULL;
+	ImageQuality<double> imgQuality;
+	EucMSE_data<double> imgMseEuc;
+	interval **intInput = NULL;
+	interval ***intData = NULL;
+	interval **intResult = NULL;
+	ImageQuality<interval> intImgQuality;
+	EucMSE_data<interval> intImgMseEuc;
+	ImageInfo imgInfo;
+
+	input = carregar_imagem((char*)(filepath), &imgInfo);
+
+	if (input == NULL)
+	{
+		cout << "Error! Can't open file!" << endl;
+		return 1;
+	}
+
+	intInput = new interval*[imgInfo.x];
+
+	for (int i = 0; i < imgInfo.x; ++i)
+	{
+		intInput[i] = new interval[imgInfo.y];
+
+		for (int j = 0; j < imgInfo.y; ++j)
+		{
+			intInput[i][j] = interval(input[i][j]);
+		}
+	}
+
+	if (type == 0)
+	{
+		cout << "========== Original Standard Transform" << endl;
+
+		data = Haar_atrous_MatrixDecomposition(input, imgInfo.x, imgInfo.y, levels, true, true);
+		result = Haar_atrous_MatrixComposition(data, imgInfo.x, imgInfo.y, levels, true);
+
+		intData = Haar_atrous_MatrixDecomposition(intInput, imgInfo.x, imgInfo.y, levels, true, true);
+		intResult = Haar_atrous_MatrixComposition(intData, imgInfo.x, imgInfo.y, levels, true);
+	}
+	else if (type == 1)
+	{
+		cout << "========== New Standard Transform" << endl;
+
+		data = Haar_atrous_MatrixDecomposition(input, imgInfo.x, imgInfo.y, levels, false, true);
+		Haar_atrous_MatrixNormalization(input, data, imgInfo.x, imgInfo.y, levels);
+		result = Haar_atrous_MatrixComposition(data, imgInfo.x, imgInfo.y, levels, true);
+
+		intData = Haar_atrous_MatrixDecomposition(intInput, imgInfo.x, imgInfo.y, levels, true, true);
+		Haar_atrous_MatrixNormalization(intInput, intData, imgInfo.x, imgInfo.y, levels);
+		intResult = Haar_atrous_MatrixComposition(intData, imgInfo.x, imgInfo.y, levels, true);
+	}
+	else if (type == 2)
+	{
+		cout << "========== Original Non Standard Transform" << endl;
+
+		data = Haar_atrous_MatrixDecomposition(input, imgInfo.x, imgInfo.y, levels, true, false);
+		result = Haar_atrous_MatrixComposition(data, imgInfo.x, imgInfo.y, levels, false);
+
+		intData = Haar_atrous_MatrixDecomposition(intInput, imgInfo.x, imgInfo.y, levels, true, false);
+		intResult = Haar_atrous_MatrixComposition(intData, imgInfo.x, imgInfo.y, levels, false);
+	}
+	else if (type == 3)
+	{
+		cout << "========== New Non Standard Transform" << endl;
+
+		data = Haar_atrous_MatrixDecomposition(input, imgInfo.x, imgInfo.y, levels, false, false);
+		Haar_atrous_MatrixNormalization(input, data, imgInfo.x, imgInfo.y, levels);
+		result = Haar_atrous_MatrixComposition(data, imgInfo.x, imgInfo.y, levels, false);
+
+		intData = Haar_atrous_MatrixDecomposition(intInput, imgInfo.x, imgInfo.y, levels, false, false);
+		Haar_atrous_MatrixNormalization(intInput, intData, imgInfo.x, imgInfo.y, levels);
+		intResult = Haar_atrous_MatrixComposition(intData, imgInfo.x, imgInfo.y, levels, false);
+	}
+
+	imgMseEuc = EucMSE(result, input, imgInfo.x);
+	imgQuality.euc = imgMseEuc.euc;
+	imgQuality.mse = imgMseEuc.mse;
+	imgQuality.psnr = PSNR(imgQuality.mse, 255.0);
+
+	intImgMseEuc = INT_EucMSE(intResult, intInput, imgInfo.x);
+	intImgQuality.euc = intImgMseEuc.euc;
+	intImgQuality.mse = intImgMseEuc.mse;
+	intImgQuality.psnr = INT_PSNR(intImgQuality.mse, interval(255.0));
+
+	//escrever_imagem("out.ppm", result, imgInfo);
+
+	cout << "Error:" << '\t' << INT_error(intResult, imgInfo.x, imgInfo.x) << endl;
+	cout << "EUC:" << '\t' << imgMseEuc.euc << '\t' << intImgMseEuc.euc << endl;
+	cout << "MSE: " << '\t' << imgMseEuc.mse << '\t' << intImgMseEuc.mse << endl;
+	cout << "PSNR: " << '\t' << imgQuality.psnr << '\t' << '\t' << intImgQuality.psnr << endl;
+	cout << endl;
+
+	// Dealocates memory.
+	for (int i = 0; i < imgInfo.x; ++i)
+	{
+		delete [] input[i];
+		delete [] intInput[i];
+	}
+
+	delete [] input;
+	delete [] intInput;
+
+	return 0;
+}
+
 int test9(int n, int max, int levels)
 {
 	interval **intMatrix = new interval*[n];
