@@ -22,5 +22,8 @@
 
 *.nfs*
 
+# Text files
+*.txt
+
 # Image Files
 *.ppm
