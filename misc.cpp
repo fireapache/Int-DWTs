@@ -286,7 +286,7 @@ void data_analysis(double **data, uint n, DataAnalysis *analysis)
 	analysis->deviation = deviation;
 }
 
-EucMSE_data<interval> INT_EucMSE(interval **m1, interval **m2,  uint n)
+EucMSE_data<interval> INT_EucMSE(interval **m1, interval **m2,  int n)
 {
     EucMSE_data<interval> result;
     interval euc;
@@ -294,13 +294,15 @@ EucMSE_data<interval> INT_EucMSE(interval **m1, interval **m2,  uint n)
     result.mse = interval(0.0);
     result.euc = interval(0.0);
 
-    for (uint i = 0; i < n; ++i)
-    for (uint j = 0; j < n; ++j)
+    for (int i = 0; i < n; ++i)
+    for (int j = 0; j < n; ++j)
     {
         result.mse += pow((m1[i][j] - m2[i][j]), interval(2.0));
-        euc = m1[i][j] - m2[i][j];
+        euc = abs(m1[i][j] - m2[i][j]);
         if (Sup(result.euc) < Sup(euc)) result.euc = euc;
     }
+
+    result.mse = result.mse / pow(interval(n), interval(2.0));
 
     return result;
 }

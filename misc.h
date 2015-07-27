@@ -165,10 +165,12 @@ EucMSE_data<T> EucMSE(T **m1, T **m2, uint n)
 		if (result.euc < euc) result.euc = euc;
 	}
 
+	result.mse = result.mse / pow(n, T(2.0));
+
 	return result;
 }
 
-EucMSE_data<interval> INT_EucMSE(interval **m1, interval **m2,  uint n);
+EucMSE_data<interval> INT_EucMSE(interval **m1, interval **m2,  int n);
 
 template <typename T>
 T PSNR(T mse, T max)
