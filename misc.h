@@ -177,7 +177,11 @@ T PSNR(T mse, T max)
 {
 	T result = T(0.0);
 
-	result = 10.0 * log10((max * max) / mse);
+	if (mse != T(0.0))
+	{
+		result = 10.0 * log10((max * max) / mse);
+	}
+	else result = T(0.0);
 
 	return result;
 }
