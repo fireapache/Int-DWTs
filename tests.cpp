@@ -1,5 +1,125 @@
 #include "tests.h"
 
+int test11(const char *filepath, int type)
+{
+	double **input = NULL;
+	double **data = NULL;
+	ImageQuality<double> imgQuality;
+	EucMSE_data<double> imgMseEuc;
+	interval **intInput = NULL;
+	interval **intData = NULL;
+	ImageQuality<interval> intImgQuality;
+	EucMSE_data<interval> intImgMseEuc;
+	ImageInfo imgInfo;
+
+	input = carregar_imagem((char*)(filepath), &imgInfo);
+	data = carregar_imagem((char*)(filepath), &imgInfo);
+
+	if (input == NULL)
+	{
+		cout << "Error! Can't open file!" << endl;
+		return 1;
+	}
+
+	intInput = new interval*[imgInfo.x];
+	intData = new interval*[imgInfo.x];
+
+	for (int i = 0; i < imgInfo.x; ++i)
+	{
+		intInput[i] = new interval[imgInfo.y];
+		intData[i] = new interval[imgInfo.y];
+
+		for (int j = 0; j < imgInfo.y; ++j)
+		{
+			intInput[i][j] = interval(input[i][j]);
+			intData[i][j] = interval(data[i][j]);
+		}
+	}
+
+	if (type == 0)
+	{
+		cout << "========== Original Standard Transform" << endl;
+
+		Haar_MatrixDecomposition(data, imgInfo.x, imgInfo.y, true, true);
+		Haar_MatrixComposition(data, imgInfo.x, imgInfo.y, true, true);
+
+		INT_Haar_MatrixDecomposition(intData, imgInfo.x, imgInfo.y, true, true);
+		INT_Haar_MatrixComposition(intData, imgInfo.x, imgInfo.y, true, true);
+	}
+	else if (type == 1)
+	{
+		cout << "========== New Standard Transform" << endl;
+
+		Haar_MatrixDecomposition(data, imgInfo.x, imgInfo.y, false, true);
+		VinisMatrixNormalization(data, imgInfo.x, true);
+		VinisMatrixNormalization(data, imgInfo.x, true, true);
+		Haar_MatrixComposition(data, imgInfo.x, imgInfo.y, false, true);
+
+		INT_Haar_MatrixDecomposition(intData, imgInfo.x, imgInfo.y, false, true);
+		INT_VinisMatrixNormalization(intData, imgInfo.x, true);
+		INT_VinisMatrixNormalization(intData, imgInfo.x, true, true);
+		INT_Haar_MatrixComposition(intData, imgInfo.x, imgInfo.y, false, true);
+	}
+	else if (type == 2)
+	{
+		cout << "========== Original Non Standard Transform" << endl;
+
+		Haar_MatrixDecomposition(data, imgInfo.x, imgInfo.y, true, false);
+		Haar_MatrixComposition(data, imgInfo.x, imgInfo.y, true, false);
+
+		INT_Haar_MatrixDecomposition(intData, imgInfo.x, imgInfo.y, true, false);
+		INT_Haar_MatrixComposition(intData, imgInfo.x, imgInfo.y, true, false);
+	}
+	else if (type == 3)
+	{
+		cout << "========== New Non Standard Transform" << endl;
+
+		Haar_MatrixDecomposition(data, imgInfo.x, imgInfo.y, false, false);
+		VinisMatrixNormalization(data, imgInfo.x, false);
+		VinisMatrixNormalization(data, imgInfo.x, false, true);
+		Haar_MatrixComposition(data, imgInfo.x, imgInfo.y, false, false);
+
+		INT_Haar_MatrixDecomposition(intData, imgInfo.x, imgInfo.y, false, false);
+		INT_VinisMatrixNormalization(intData, imgInfo.x, false);
+		INT_VinisMatrixNormalization(intData, imgInfo.x, false, true);
+		INT_Haar_MatrixComposition(intData, imgInfo.x, imgInfo.y, false, false);
+	}
+
+	imgMseEuc = EucMSE(data, input, imgInfo.x);
+	imgQuality.euc = imgMseEuc.euc;
+	imgQuality.mse = imgMseEuc.mse;
+	imgQuality.psnr = PSNR(imgQuality.mse, 255.0);
+
+	intImgMseEuc = INT_EucMSE(intData, intInput, imgInfo.x);
+	intImgQuality.euc = intImgMseEuc.euc;
+	intImgQuality.mse = intImgMseEuc.mse;
+	intImgQuality.psnr = INT_PSNR(intImgQuality.mse, interval(255.0));
+
+	//escrever_imagem("out.ppm", result, imgInfo);
+
+	cout << "Error:" << '\t' << INT_error(intData, imgInfo.x, imgInfo.x) << endl;
+	cout << "EUC:" << '\t' << imgMseEuc.euc << '\t' << intImgMseEuc.euc << endl;
+	cout << "MSE: " << '\t' << imgMseEuc.mse << '\t' << intImgMseEuc.mse << endl;
+	cout << "PSNR: " << '\t' << imgQuality.psnr << '\t' << '\t' << intImgQuality.psnr << endl;
+	cout << endl;
+
+	// Dealocates memory.
+	for (int i = 0; i < imgInfo.x; ++i)
+	{
+		delete [] input[i];
+		delete [] data[i];
+		delete [] intInput[i];
+		delete [] intData[i];
+	}
+
+	delete [] input;
+	delete [] data;
+	delete [] intInput;
+	delete [] intData;
+
+	return 0;
+}
+
 int test10(const char *filepath, int type, int levels)
 {
 	double **input = NULL;
