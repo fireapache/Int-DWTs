@@ -2,16 +2,16 @@
 
 int main(int argc, char **argv)
 {
-	if (argc == 3)
+	if (argc == 2)
 	{
 		for (int i = 0; i < 4; ++i)
 		{
-			test10(argv[1], i, atoi(argv[2]));
+			test11(argv[1], i);
 		}
 	}
 	else
 	{
-		cout << "Enter <ppmFilePath> <levels>" << endl;
+		cout << "Enter <ppmFilePath>" << endl;
 		cout << endl;
 	}
 
