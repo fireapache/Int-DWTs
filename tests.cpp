@@ -172,7 +172,7 @@ int test10(const char *filepath, int type, int levels)
 		Haar_atrous_MatrixNormalization(input, data, imgInfo.x, imgInfo.y, levels);
 		result = Haar_atrous_MatrixComposition(data, imgInfo.x, imgInfo.y, levels, true);
 
-		intData = Haar_atrous_MatrixDecomposition(intInput, imgInfo.x, imgInfo.y, levels, true, true);
+		intData = Haar_atrous_MatrixDecomposition(intInput, imgInfo.x, imgInfo.y, levels, false, true);
 		Haar_atrous_MatrixNormalization(intInput, intData, imgInfo.x, imgInfo.y, levels);
 		intResult = Haar_atrous_MatrixComposition(intData, imgInfo.x, imgInfo.y, levels, true);
 	}
