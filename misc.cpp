@@ -313,7 +313,7 @@ interval INT_PSNR(interval mse, interval max)
 
     if (mse != interval(0.0))
     {
-        result = interval(10.0) * log10((max * max) / Sup(mse));
+        result = interval(10.0) * log10((max * max) / (Sup(mse) / 2));
     }
     else result = interval(0.0);
 

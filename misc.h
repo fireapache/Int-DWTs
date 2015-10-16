@@ -142,17 +142,36 @@ T MSE(T **m1, T **m2, uint n)
 	for (uint i = 0; i < n; ++i)
 	for (uint j = 0; j < n; ++j)
 	{
-		result += (m1[i][j] - m2[i][j]) * (m1[i][j] - m2[i][j]);
+		result += pow(m1[i][j] - m2[i][j], T(2.0));
 	}
 
-	return result / (n * n);
+	return result / pow(n, T(2.0));
+}
+
+template <typename T>
+EucMSE_data<T> EucMSE(T *vec1, T *vec2, uint n)
+{
+	EucMSE_data<T> result;
+
+	result.mse = T(0.0);
+	result.euc = T(0.0);
+
+	for (uint i = 0; i < n; ++i)
+	{
+		result.mse += pow(vec1[i] - vec2[i], T(2.0));
+		result.euc += pow(vec1[i] - vec2[i], T(2.0));
+	}
+
+	result.mse = result.mse / n;
+	result.euc = sqrt(result.euc);
+
+	return result;
 }
 
 template <typename T>
 EucMSE_data<T> EucMSE(T **m1, T **m2, uint n)
 {
 	EucMSE_data<T> result;
-	T euc;
 
 	result.mse = T(0.0);
 	result.euc = T(0.0);
@@ -161,11 +180,11 @@ EucMSE_data<T> EucMSE(T **m1, T **m2, uint n)
 	for (uint j = 0; j < n; ++j)
 	{
 		result.mse += pow(m1[i][j] - m2[i][j], T(2.0));
-		euc = abs(m1[i][j] - m2[i][j]);
-		if (result.euc < euc) result.euc = euc;
+		result.euc += pow(m1[i][j] - m2[i][j], T(2.0));
 	}
 
 	result.mse = result.mse / pow(n, T(2.0));
+	result.euc = sqrt(result.euc);
 
 	return result;
 }
