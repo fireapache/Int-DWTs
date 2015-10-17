@@ -171,7 +171,7 @@ EucMSE_data<T> EucMSE(T *vec1, T *vec2, uint n)
 template <typename T>
 EucMSE_data<T> EucMSE(T **m1, T **m2, uint n)
 {
-	EucMSE_data<T> result;
+	EucMSE_data<T> result;	
 
 	result.mse = T(0.0);
 	result.euc = T(0.0);
@@ -206,6 +206,21 @@ T PSNR(T mse, T max)
 }
 
 interval INT_PSNR(interval mse, interval max);
+
+template <typename T>
+ImageQuality<T> imageQuality(T *vec1, T *vec2, int max, uint n)
+{
+	ImageQuality<T> result;
+    EucMSE_data<T> data;
+
+    data = EucMSE<T>(vec1, vec2, n);
+
+    result.mse = data.mse;
+    result.euc = data.euc;
+    result.psnr = PSNR<T>(data.mse, T(max));
+
+    return result;
+}
 
 template <typename T>
 ImageQuality<T> imageQuality(T **m1, T **m2, int max, uint n)
