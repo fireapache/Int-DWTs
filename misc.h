@@ -58,11 +58,11 @@ void printVectors(T **vecs, uint n1, uint n2, uint space, bool row = true)
 	if (n1 <= 0 || n2 <= 0 || space <= 0) return;
 
 	if (row)
-	for (int i = 0; i < n2; ++i)
+	for (uint i = 0; i < n2; ++i)
 	{
 		cout << vecs[i][0];
 
-		for (int j = 1; j < n1; ++j)
+		for (uint j = 1; j < n1; ++j)
 		{
 			cout << setw(space) << vecs[i][j];
 		}
@@ -70,11 +70,11 @@ void printVectors(T **vecs, uint n1, uint n2, uint space, bool row = true)
 		cout << endl;
 	}
 	else
-	for (int i = 0; i < n1; ++i)
+	for (uint i = 0; i < n1; ++i)
 	{
 		cout << vecs[0][i];
 
-		for (int j = 1; j < n1; ++j)
+		for (uint j = 1; j < n1; ++j)
 		{
 			cout << setw(space) << vecs[j][i];
 		}
@@ -88,7 +88,7 @@ void printMatrices(T ***mats,  uint n1, uint n2, uint n3, uint space)
 {
 	if (n1 <= 0 || n2 <= 0 || n3 <= 0 || space <= 0) return;
 
-	for (int i = 0; i < n3; ++i)
+	for (uint i = 0; i < n3; ++i)
 	{
 		printVectors(mats[i], n1, n2, space);
 		cout << "====================" << endl;
@@ -98,7 +98,7 @@ void printMatrices(T ***mats,  uint n1, uint n2, uint n3, uint space)
 template <typename T>
 void copyVector(T *v1, T *v2, uint n)
 {
-	for (int i = 0; i < n; i++)
+	for (uint i = 0; i < n; i++)
 	{
 		v2[i] = v1[i];
 	}
@@ -107,8 +107,8 @@ void copyVector(T *v1, T *v2, uint n)
 template <typename T>
 void copyMatrix(T **m1, T **m2, uint n)
 {
-	for (int i = 0; i < n; i++)
-	for (int j = 0; j < n; j++)
+	for (uint i = 0; i < n; i++)
+	for (uint j = 0; j < n; j++)
 	{
 		m2[i][j] = m1[i][j];
 	}
@@ -117,7 +117,7 @@ void copyMatrix(T **m1, T **m2, uint n)
 template <typename T>
 void deleteMatrix(T **matrix, uint n)
 {
-	for (int i = 0; i < n; i++)
+	for (uint i = 0; i < n; i++)
 	{
 		delete [] matrix[i];
 	}
@@ -128,7 +128,7 @@ void deleteMatrix(T **matrix, uint n)
 template <typename T>
 void deleteMatrices(T ***matrices, uint nMatrices, uint n)
 {
-	for (int i = 0; i < nMatrices; ++i)
+	for (uint i = 0; i < nMatrices; ++i)
 	{
 		deleteMatrix<T>(matrices[i], n);
 	}
