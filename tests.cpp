@@ -1,5 +1,116 @@
 #include "tests.h"
 
+void test12Desc()
+{
+	cout << endl;
+	cout << "	* This test is about time mesurement of the " << endl;
+	cout << "	one-dimensional decomposition and calculus " << endl;
+	cout << "	exatitude." << endl;
+	cout << endl;
+}
+
+double test12_OriginalDecomp(double *vec, interval *ivec, int n, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		Haar_Decomposition(vec, n, true);
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		INT_Haar_Decomposition(ivec, n, true);
+
+		cout << "\t\t" << INT_error(ivec, n);
+	}	
+
+	return timer;
+}
+
+int test12(int argc, char **argv)
+{
+	if (argc < 2)
+	{
+		cout << "Error: try \\.tests.exe <int>" << endl;
+		test12Desc();
+		return 1;
+	}
+
+	int n = atoi(argv[1]);
+
+	if (n <= 0)
+	{
+		cout << "Error: size have to be greater than 0" << endl;
+		test12Desc();
+		return 1;
+	}
+
+	double sum, mean, dev, stdDev;
+
+	double *inputVec = new double[n];		// Vectors used as input for all executions.
+	interval *inputiVec = new interval[n];
+
+	double *auxVec = new double[n];			// Auxiliary vectors used for each execution.
+	interval *auxiVec = new interval[n];
+
+	double *times = new double[30];			// Vector to store the time of each execution.
+
+	// Fill input vectors with n random values.
+	for (int i = 0; i < n; ++i)
+	{
+		inputVec[i] = rand() %  n;
+		inputiVec[i] = interval(inputVec[i]);
+	}
+
+	cout << "===== Literature Formulation =====" << endl;
+	cout << endl;
+	cout << "Decomposition: " << '\t';
+	cout << "Time" << '\t';
+	cout << "StdDev" << '\t';
+	cout << "Error" << '\t';
+	cout << "EUC" << '\t';
+	cout << "MSE" << '\t';
+	cout << "PSNR" << endl;
+
+	sum = 0.0;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyVector(inputVec, auxVec, n);
+		copyVector(inputiVec, auxiVec, n);
+		times[i] = test12_OriginalDecomp(auxVec, auxiVec, n, true);
+		sum += times[i];
+	}
+
+	mean = sum / 30.0;
+	dev = 0.0;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		dev += pow(times[i] - mean, 2.0);
+	}
+
+	stdDev = sqrt(sum);
+
+	cout << '\t' << mean;
+	cout << '\t' << stdDev;
+	cout << endl;
+
+	// Deallocating memory.
+	delete [] inputVec;
+	delete [] inputiVec;
+	delete [] auxVec;
+	delete [] auxiVec;
+	delete [] times;
+
+	return 0;
+
+}
+
 int test11(const char *filepath, int type)
 {
 	double **input = NULL;
