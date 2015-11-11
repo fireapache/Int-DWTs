@@ -7,6 +7,36 @@ __int64 counterStart = 0;
 timeval tCounter, tTime;
 #endif
 
+TimeMesurement runTimeMesurement(double *times, uint n)
+{
+    TimeMesurement results;
+    double sum, mean, dev, stdDev;
+
+    sum = 0.0;
+
+    for (uint i = 0; i < n; ++i)
+    {
+        sum += times[i];
+    }
+
+    mean = sum / 30.0;
+    dev = 0.0;
+
+    for (uint i = 0; i < 30; ++i)
+    {
+        dev += pow(times[i] - mean, 2.0);
+    }
+
+    dev = dev / 30.0;
+    stdDev = sqrt(dev);
+
+    results.mean = mean;
+    results.dev = dev;
+    results.stdDev = stdDev;
+
+    return results;
+}
+
 double** carregar_imagem(char *arquivo, ImageInfo *imageInfo)
 {
     char auxc[5];

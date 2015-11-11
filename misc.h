@@ -41,6 +41,13 @@ struct ImageQuality
 	T psnr;
 };
 
+typedef struct TimeMesurement
+{
+	double mean;
+	double dev;
+	double stdDev;
+} TimeMesurement;
+
 void startTimeCounter();
 double getTimeCounter();
 void escrever_imagem(char *arquivo, double **matriz, ImageInfo imgInfo);
@@ -51,6 +58,8 @@ void gnuplot_dat_Wdecomposition(const char *file, double x1, double x2, double *
 void gnuplot_dat_VWdecomposition(const char *file1, const char *file2, double x1, double x2, double *v, int n, int levels, bool normal);
 void data_analysis(double *data, uint n, DataAnalysis *analysis);
 void data_analysis(double **data, uint n, DataAnalysis *analysis);
+
+TimeMesurement runTimeMesurement(double *times, uint n);
 
 template <typename T>
 void printVectors(T **vecs, uint n1, uint n2, uint space, bool row = true)
