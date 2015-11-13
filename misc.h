@@ -61,6 +61,8 @@ void data_analysis(double **data, uint n, DataAnalysis *analysis);
 
 TimeMesurement runTimeMesurement(double *times, uint n);
 
+bool isPowerOfTwo(unsigned int x);
+
 template <typename T>
 void printVectors(T **vecs, uint n1, uint n2, uint space, bool row = true)
 {

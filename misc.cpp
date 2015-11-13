@@ -37,6 +37,11 @@ TimeMesurement runTimeMesurement(double *times, uint n)
     return results;
 }
 
+bool isPowerOfTwo(unsigned int x)
+{
+    return ((x != 0) && ((x & (~x + 1)) == x));
+}
+
 double** carregar_imagem(char *arquivo, ImageInfo *imageInfo)
 {
     char auxc[5];
