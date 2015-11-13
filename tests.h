@@ -31,4 +31,15 @@ int test12(int argc, char **argv);	// 1D cascade execution performance, based on
 
 void matrixCopy(double **m1, double **m2, int x, int y);
 
+typedef struct NewArgs
+{
+	int argc;
+	char **argv;
+} NewArgs;
+
+NewArgs genNewArgs(int argc, char **argv, int takeOut);
+void freeNewArgs(NewArgs& newArgs);
+void listAllTests();
+int testIndexer(int argc, char **argv);
+
 #endif /* TESTS_H */

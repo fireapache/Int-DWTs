@@ -2,7 +2,5 @@
 
 int main(int argc, char **argv)
 {
-	test12(argc, argv);
-
-	return 0;
+	return testIndexer(argc, argv);
 }

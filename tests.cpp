@@ -2203,3 +2203,89 @@ void fundamentalTest(unsigned int n)
 			cout << "\n\tFundamental test " << n << " not found!\n\n";
 	}
 }
+
+NewArgs genNewArgs(int argc, char **argv, int takeOut)
+{
+	NewArgs result;
+
+	result.argc = argc - takeOut;
+	result.argv = (char**)malloc(sizeof(char**) * result.argc);
+
+	for (int i = 0; i < result.argc; ++i)
+	{
+		result.argv[i] = argv[takeOut + i];
+	}
+
+	return result;
+}
+
+void freeNewArgs(NewArgs& newArgs)
+{
+	free(newArgs.argv);
+}
+
+void listAllTests()
+{
+	test12Desc(); test12Param();
+}
+
+
+int testIndexer(int argc, char **argv)
+{
+	int code = 0;
+
+	if (argc < 2)
+	{
+		cout << endl;
+		cout << "	* There is no default procedure for testing, you may " << endl;
+		cout << "	like to list all tests by typing: ./tests.exe -l" << endl;
+		cout << endl;
+		return 1;
+	}
+
+	bool list = false;
+	bool test = false;
+	bool fundTest = false;
+
+	if (strcmp(argv[1], "-l") == 0) list = true;
+	else if (strcmp(argv[1], "-t") == 0) test = true;
+	else if (strcmp(argv[1], "-ft") == 0) fundTest = true;
+
+	if (list)
+	{
+		listAllTests();
+	}
+	else if (test)
+	{
+		if (argc < 3)
+		{
+			cout << endl;
+			cout << "	* You have to tell the test number by typing: " << endl;
+			cout << "	./tests.exe -t <test>" << endl;
+			cout << endl;
+			cout << "	* You can also list all possible tests by typing: " << endl;
+			cout << "	./tests.exe -l" << endl;
+			cout << endl;
+			code = 1;
+		}
+		else
+		{
+			int ntest = atoi(argv[2]);
+			NewArgs newArgs = genNewArgs(argc, argv, 3);
+
+			switch(ntest)
+			{
+				case 1:
+					test12(newArgs.argc, newArgs.argv);
+			}
+
+			freeNewArgs(newArgs);
+		}
+	}
+	else if (fundTest)
+	{
+
+	}
+
+	return code;
+}
