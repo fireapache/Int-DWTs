@@ -29,6 +29,10 @@ void test12Desc();				// Prints the description of test12, which is considered t
 void test12Param();				// Prints all parameters needed to perform test12.
 int test12(int argc, char **argv);	// 1D cascade execution performance, based on test2.
 
+void test13Desc();				// Prints the description of test13, which is considered test 2.
+void test13Param();				// Prints all parameters needed to perform test13.
+int test13(int argc, char **argv);	// 2D cascade execution performance, based on test12.
+
 void matrixCopy(double **m1, double **m2, int x, int y);
 
 typedef struct NewArgs

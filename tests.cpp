@@ -1,5 +1,382 @@
 #include "tests.h"
 
+void test13Desc()
+{
+	cout << endl;
+	cout << "	==================== Test 2 ====================" << endl;
+	cout << endl;
+	cout << "	* This test is about mesurement of time and calculus " << endl;
+	cout << "	exactitude for the two-dimensional Haar Wavelet Transform." << endl;
+}
+
+void test13Param()
+{
+	cout << endl;
+	cout << "	Parameters: <order>" << endl;
+	cout << "	" << endl;
+	cout << "	The <order> of matrix must be an unsigned integer " << endl;
+	cout << "	greater than 0 and also be power of two." << endl;
+	cout << endl;
+}
+
+double test13_OriginalStandardDecomp(double **mat, interval **imat, int n, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		Haar_MatrixDecomposition(mat, n, n, true, true);
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		INT_Haar_MatrixDecomposition(imat, n, n, true, true);
+	}	
+
+	return timer;
+}
+
+double test13_DevelopedStandardDecomp(double **mat, interval **imat, int n, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		Haar_MatrixDecomposition(mat, n, n, false, true);
+		VinisStandardMatrixNormalization(mat, n);
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		INT_Haar_MatrixDecomposition(imat, n, n, false, true);
+		INT_VinisStandardMatrixNormalization(imat, n);
+	}	
+
+	return timer;
+}
+
+double test13_OriginalComp(double **mat, interval **imat, int n, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		Haar_MatrixComposition(mat, n, n, true, true);
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		INT_Haar_MatrixComposition(imat, n, n, true, true);
+	}	
+
+	return timer;
+}
+
+double test13_DevelopedComp(double **mat, interval **imat, int n, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		VinisStandardMatrixNormalization(mat, n, true);
+		Haar_MatrixComposition(mat, n, n, false, true);
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		INT_VinisStandardMatrixNormalization(imat, n, true);
+		INT_Haar_MatrixComposition(imat, n, n, false, true);
+	}	
+
+	return timer;
+}
+
+double test13_OriginalDecompComp(double **mat, interval **imat, int n, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		Haar_MatrixDecomposition(mat, n, n, true, true);
+		Haar_MatrixComposition(mat, n, n, true, true);
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		INT_Haar_MatrixDecomposition(imat, n, n, true, true);
+		INT_Haar_MatrixComposition(imat, n, n, true, true);
+	}	
+
+	return timer;
+}
+
+double test13_DevelopedDecompComp(double **mat, interval **imat, int n, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		Haar_MatrixDecomposition(mat, n, n, false, true);
+		VinisStandardMatrixNormalization(mat, n);
+		VinisStandardMatrixNormalization(mat, n, true);
+		Haar_MatrixComposition(mat, n, n, false, true);
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		INT_Haar_MatrixDecomposition(imat, n, n, false, true);
+		INT_VinisStandardMatrixNormalization(imat, n);
+		INT_VinisStandardMatrixNormalization(imat, n, true);
+		INT_Haar_MatrixComposition(imat, n, n, false, true);
+	}	
+
+	return timer;
+}
+
+int test13(int argc, char **argv)
+{
+	if (argc < 1)
+	{
+		cout << endl;
+		cout << "	ERROR: lack of parameters." << endl;
+		test13Desc();
+		test13Param();
+		return 1;
+	}
+
+	uint n = atoi(argv[0]);
+
+	if (n <= 0)
+	{
+		cout << endl;
+		cout << "	ERROR: <order> has to be greater than 0." << endl;
+		test13Desc();
+		test13Param();
+		return 1;
+	}
+	else if (!isPowerOfTwo(n))
+	{
+		cout << endl;
+		cout << "	ERROR: <order> has to be power of two." << endl;
+		test13Desc();
+		test13Param();
+		return 1;
+	}
+
+	test13Desc();
+	cout << endl;
+	cout << "Computing matrix of order " << n  << "..." << endl;
+	cout << n << " X " << n << " = " << n * n << "..." << endl;
+	cout << endl;
+
+	TimeMesurement timeMesure;
+
+	double **inputMat = new double*[n];		// Matrices used as input for all executions.
+	interval **inputiMat = new interval*[n];
+
+	double **auxMat = new double*[n];		// Auxiliary matrices used for each execution.
+	interval **auxiMat = new interval*[n];
+
+	double *times = new double[30];			// Vector to store the time of each execution.
+
+	// Allocate and fill input matrices with n*n random values.
+	for (uint i = 0; i < n; ++i)
+	{
+		inputMat[i] = new double[n];
+		inputiMat[i] = new interval[n];
+
+		auxMat[i] = new double[n];
+		auxiMat[i] = new interval[n];
+
+		for (uint j = 0; j < n; ++j)
+		{
+			inputMat[i][j] = rand() % n;
+			inputiMat[i][j] = interval(inputMat[i][j]);
+		}
+	}
+
+	cout << "========== Standard Decomposition: " << endl;
+	cout << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyMatrix(inputMat, auxMat, n);
+		times[i] = test13_OriginalStandardDecomp(auxMat, auxiMat, n, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyMatrix(inputiMat, auxiMat, n);
+	test13_OriginalStandardDecomp(auxMat, auxiMat, n, false);
+
+	cout << '\t' << INT_error(auxiMat, n, n);
+	cout << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyMatrix(inputMat, auxMat, n);
+		times[i] = test13_DevelopedStandardDecomp(auxMat, auxiMat, n, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Developed";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyMatrix(inputiMat, auxiMat, n);
+	test13_DevelopedStandardDecomp(auxMat, auxiMat, n, false);
+
+	cout << '\t' << INT_error(auxiMat, n, n);
+	cout << endl;
+
+	cout << endl;
+	cout << "========== Standard Composition: " << endl;
+	cout << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << endl;
+	
+	for (int i = 0; i < 30; ++i)
+	{
+		copyMatrix(inputMat, auxMat, n);
+		times[i] = test13_OriginalComp(auxMat, auxiMat, n, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyMatrix(inputiMat, auxiMat, n);
+	test13_OriginalComp(auxMat, auxiMat, n, false);
+
+	cout << '\t' << INT_error(auxiMat, n, n);
+	cout << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyMatrix(inputMat, auxMat, n);
+		times[i] = test13_DevelopedComp(auxMat, auxiMat, n, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Developed";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyMatrix(inputiMat, auxiMat, n);
+	test13_DevelopedComp(auxMat, auxiMat, n, false);
+
+	cout << '\t' << INT_error(auxiMat, n, n);
+	cout << endl;
+
+	ImageQuality<double> imgQ;
+
+	cout << endl;
+	cout << "========== standard Decomposition & Composition: " << endl;
+	cout << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << "\t\t";
+	cout << "EUC" << "\t\t";
+	cout << "MSE" << "\t\t";
+	cout << "PSNR" << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyMatrix(inputMat, auxMat, n);
+		times[i] = test13_OriginalDecompComp(auxMat, auxiMat, n, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyMatrix(inputiMat, auxiMat, n);
+	test13_OriginalDecompComp(auxMat, auxiMat, n, false);
+
+	cout << '\t' << INT_error(auxiMat, n, n);
+	
+	imgQ = imageQuality(auxMat, inputMat, n, n);
+
+	cout << '\t' << imgQ.euc;
+	cout << '\t' << imgQ.mse;
+	cout << '\t' << imgQ.psnr << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyMatrix(inputMat, auxMat, n);
+		times[i] = test13_DevelopedDecompComp(auxMat, auxiMat, n, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Developed";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyMatrix(inputiMat, auxiMat, n);
+	test13_DevelopedDecompComp(auxMat, auxiMat, n, false);
+
+	cout << '\t' << INT_error(auxiMat, n, n);
+	
+	imgQ = imageQuality(auxMat, inputMat, n, n);
+
+	cout << '\t' << imgQ.euc;
+	cout << '\t' << imgQ.mse;
+	cout << '\t' << imgQ.psnr << endl;
+
+	cout << endl;
+
+	// Deallocating memory.
+
+	for (uint i = 0; i < n; ++i)
+	{
+		delete [] inputMat[n];
+		delete [] inputiMat[n];
+		delete [] auxMat[n];
+		delete [] auxiMat[n];
+	}
+
+	delete [] inputMat;
+	delete [] inputiMat;
+	delete [] auxMat;
+	delete [] auxiMat;
+	delete [] times;
+
+	return 0;
+}
+
 void test12Desc()
 {
 	cout << endl;
@@ -7,9 +384,6 @@ void test12Desc()
 	cout << endl;
 	cout << "	* This test is about mesurement of time and calculus " << endl;
 	cout << "	exactitude for the one-dimensional Haar Wavelet Transform." << endl;
-	cout << endl;
-	cout << "	PS.: Each algorithm is perfomed 30 times." << endl;
-	cout << endl;
 }
 
 void test12Param()
@@ -2226,9 +2600,11 @@ void freeNewArgs(NewArgs& newArgs)
 
 void listAllTests()
 {
-	test12Desc(); test12Param();
-}
+	test12Desc();
+	test13Desc();
 
+	cout << endl;
+}
 
 int testIndexer(int argc, char **argv)
 {
@@ -2277,6 +2653,14 @@ int testIndexer(int argc, char **argv)
 			{
 				case 1:
 					test12(newArgs.argc, newArgs.argv);
+					break;
+				case 2:
+					test13(newArgs.argc, newArgs.argv);
+					break;
+				default:
+					cout << endl;
+					cout << "	There is no test " << ntest << '.' << endl;
+					cout << endl;
 			}
 
 			freeNewArgs(newArgs);
