@@ -3,9 +3,22 @@
 void test12Desc()
 {
 	cout << endl;
-	cout << "	* This test is about time mesurement of the " << endl;
-	cout << "	one-dimensional decomposition and calculus " << endl;
-	cout << "	exatitude." << endl;
+	cout << "	==================== Test 1 ====================" << endl;
+	cout << endl;
+	cout << "	* This test is about mesurement of time and calculus " << endl;
+	cout << "	exactitude for the one-dimensional Haar Wavelet Transform." << endl;
+	cout << endl;
+	cout << "	PS.: Each algorithm is perfomed 30 times." << endl;
+	cout << endl;
+}
+
+void test12Param()
+{
+	cout << endl;
+	cout << "	Parameters: <size>" << endl;
+	cout << "	" << endl;
+	cout << "	<size> must be an unsigned integer greater" << endl;
+	cout << "	than 0 and also be power of two." << endl;
 	cout << endl;
 }
 
@@ -24,8 +37,118 @@ double test12_OriginalDecomp(double *vec, interval *ivec, int n, bool getTime)
 	{
 		// Interval transformation for error calculation.
 		INT_Haar_Decomposition(ivec, n, true);
+	}	
 
-		cout << "\t\t" << INT_error(ivec, n);
+	return timer;
+}
+
+double test12_DevelopedDecomp(double *vec, interval *ivec, int n, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		Haar_Decomposition(vec, n, false);
+		VinisNormalization(vec, n);
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		INT_Haar_Decomposition(ivec, n, false);
+		INT_VinisNormalization(ivec, n);
+	}	
+
+	return timer;
+}
+
+double test12_OriginalComp(double *vec, interval *ivec, int n, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		Haar_Composition(vec, n, true);
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		INT_Haar_Composition(ivec, n, true);
+	}	
+
+	return timer;
+}
+
+double test12_DevelopedComp(double *vec, interval *ivec, int n, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		VinisNormalization(vec, n, true);
+		Haar_Composition(vec, n, false);
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		INT_VinisNormalization(ivec, n, true);
+		INT_Haar_Composition(ivec, n, false);
+	}	
+
+	return timer;
+}
+
+double test12_OriginalDecompComp(double *vec, interval *ivec, int n, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		Haar_Decomposition(vec, n, true);
+		Haar_Composition(vec, n, true);
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		INT_Haar_Decomposition(ivec, n, true);
+		INT_Haar_Composition(ivec, n, true);
+	}	
+
+	return timer;
+}
+
+double test12_DevelopedDecompComp(double *vec, interval *ivec, int n, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		Haar_Decomposition(vec, n, false);
+		VinisNormalization(vec, n);
+		VinisNormalization(vec, n, true);
+		Haar_Composition(vec, n, false);
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		INT_Haar_Decomposition(ivec, n, false);
+		INT_VinisNormalization(ivec, n);
+		INT_VinisNormalization(ivec, n, true);
+		INT_Haar_Composition(ivec, n, false);
 	}	
 
 	return timer;
@@ -33,23 +156,40 @@ double test12_OriginalDecomp(double *vec, interval *ivec, int n, bool getTime)
 
 int test12(int argc, char **argv)
 {
-	if (argc < 2)
+	if (argc < 1)
 	{
-		cout << "Error: try \\.tests.exe <int>" << endl;
+		cout << endl;
+		cout << "	ERROR: lack of parameters." << endl;
 		test12Desc();
+		test12Param();
 		return 1;
 	}
 
-	int n = atoi(argv[1]);
+	uint n = atoi(argv[0]);
 
 	if (n <= 0)
 	{
-		cout << "Error: size have to be greater than 0" << endl;
+		cout << endl;
+		cout << "	ERROR: <size> has to be greater than 0." << endl;
 		test12Desc();
+		test12Param();
+		return 1;
+	}
+	else if (!isPowerOfTwo(n))
+	{
+		cout << endl;
+		cout << "	ERROR: <size> has to be power of two." << endl;
+		test12Desc();
+		test12Param();
 		return 1;
 	}
 
-	double sum, mean, dev, stdDev;
+	test12Desc();
+	cout << endl;
+	cout << "Computing vector of size " << n  << "..." << endl;
+	cout << endl;
+
+	TimeMesurement timeMesure;
 
 	double *inputVec = new double[n];		// Vectors used as input for all executions.
 	interval *inputiVec = new interval[n];
@@ -60,44 +200,155 @@ int test12(int argc, char **argv)
 	double *times = new double[30];			// Vector to store the time of each execution.
 
 	// Fill input vectors with n random values.
-	for (int i = 0; i < n; ++i)
+	for (uint i = 0; i < n; ++i)
 	{
 		inputVec[i] = rand() %  n;
 		inputiVec[i] = interval(inputVec[i]);
 	}
 
-	cout << "===== Literature Formulation =====" << endl;
-	cout << endl;
-	cout << "Decomposition: " << '\t';
-	cout << "Time" << '\t';
-	cout << "StdDev" << '\t';
-	cout << "Error" << '\t';
-	cout << "EUC" << '\t';
-	cout << "MSE" << '\t';
-	cout << "PSNR" << endl;
-
-	sum = 0.0;
+	cout << "========== Decomposition: " << endl;
+	cout << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << endl;
 
 	for (int i = 0; i < 30; ++i)
 	{
 		copyVector(inputVec, auxVec, n);
-		copyVector(inputiVec, auxiVec, n);
 		times[i] = test12_OriginalDecomp(auxVec, auxiVec, n, true);
-		sum += times[i];
 	}
 
-	mean = sum / 30.0;
-	dev = 0.0;
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyVector(inputiVec, auxiVec, n);
+	test12_OriginalDecomp(auxVec, auxiVec, n, false);
+
+	cout << '\t' << INT_error(auxiVec, n);
+	cout << endl;
 
 	for (int i = 0; i < 30; ++i)
 	{
-		dev += pow(times[i] - mean, 2.0);
+		copyVector(inputVec, auxVec, n);
+		times[i] = test12_DevelopedDecomp(auxVec, auxiVec, n, true);
 	}
 
-	stdDev = sqrt(sum);
+	timeMesure = runTimeMesurement(times, 30);
 
-	cout << '\t' << mean;
-	cout << '\t' << stdDev;
+	cout << "Developed";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyVector(inputiVec, auxiVec, n);
+	test12_DevelopedDecomp(auxVec, auxiVec, n, false);
+
+	cout << '\t' << INT_error(auxiVec, n);
+	cout << endl;
+
+	cout << endl;
+	cout << "========== Composition: " << endl;
+	cout << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << endl;
+	
+	for (int i = 0; i < 30; ++i)
+	{
+		copyVector(inputVec, auxVec, n);
+		times[i] = test12_OriginalComp(auxVec, auxiVec, n, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyVector(inputiVec, auxiVec, n);
+	test12_OriginalComp(auxVec, auxiVec, n, false);
+
+	cout << '\t' << INT_error(auxiVec, n);
+	cout << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyVector(inputVec, auxVec, n);
+		times[i] = test12_DevelopedComp(auxVec, auxiVec, n, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Developed";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyVector(inputiVec, auxiVec, n);
+	test12_DevelopedComp(auxVec, auxiVec, n, false);
+
+	cout << '\t' << INT_error(auxiVec, n);
+	cout << endl;
+
+	ImageQuality<double> imgQ;
+
+	cout << endl;
+	cout << "========== Decomposition & Composition: " << endl;
+	cout << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << "\t\t";
+	cout << "EUC" << "\t\t";
+	cout << "MSE" << "\t\t";
+	cout << "PSNR" << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyVector(inputVec, auxVec, n);
+		times[i] = test12_OriginalDecompComp(auxVec, auxiVec, n, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyVector(inputiVec, auxiVec, n);
+	test12_OriginalDecompComp(auxVec, auxiVec, n, false);
+
+	cout << '\t' << INT_error(auxiVec, n);
+	
+	imgQ = imageQuality(auxVec, inputVec, n, n);
+
+	cout << '\t' << imgQ.euc;
+	cout << '\t' << imgQ.mse;
+	cout << '\t' << imgQ.psnr << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyVector(inputVec, auxVec, n);
+		times[i] = test12_DevelopedDecompComp(auxVec, auxiVec, n, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Developed";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyVector(inputiVec, auxiVec, n);
+	test12_DevelopedDecompComp(auxVec, auxiVec, n, false);
+
+	cout << '\t' << INT_error(auxiVec, n);
+	
+	imgQ = imageQuality(auxVec, inputVec, n, n);
+
+	cout << '\t' << imgQ.euc;
+	cout << '\t' << imgQ.mse;
+	cout << '\t' << imgQ.psnr << endl;
+
 	cout << endl;
 
 	// Deallocating memory.

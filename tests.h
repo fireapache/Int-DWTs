@@ -24,6 +24,9 @@ int test8(int n, int levels);	// Quality of the new Haar A-Trous implementarion.
 int test9(int n, int max, int levels); // Quality of new Haar A-Trous 2D results.
 int test10(const char *filepath, int type, int levels);	// Quality test for the new Haar A-Trous 2D (for papers).
 int test11(const char *filepath, int type);	// Quality test for the new Haar Cascade 2D (for papers).
+
+void test12Desc();				// Prints the description of test12, which is considered test 1.
+void test12Param();				// Prints all parameters needed to perform test12.
 int test12(int argc, char **argv);	// 1D cascade execution performance, based on test2.
 
 void matrixCopy(double **m1, double **m2, int x, int y);
