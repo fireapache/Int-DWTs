@@ -19,7 +19,7 @@ void test13Param()
 	cout << endl;
 }
 
-double test13_OriginalStandardDecomp(double **mat, interval **imat, int n, bool getTime)
+double test13_OriginalDecomp(double **mat, interval **imat, int n, bool standard, bool getTime)
 {
 	double timer = 0.0;
 
@@ -39,7 +39,7 @@ double test13_OriginalStandardDecomp(double **mat, interval **imat, int n, bool 
 	return timer;
 }
 
-double test13_DevelopedStandardDecomp(double **mat, interval **imat, int n, bool getTime)
+double test13_DevelopedDecomp(double **mat, interval **imat, int n, bool standard, bool getTime)
 {
 	double timer = 0.0;
 
@@ -61,7 +61,7 @@ double test13_DevelopedStandardDecomp(double **mat, interval **imat, int n, bool
 	return timer;
 }
 
-double test13_OriginalComp(double **mat, interval **imat, int n, bool getTime)
+double test13_OriginalComp(double **mat, interval **imat, int n, bool standard, bool getTime)
 {
 	double timer = 0.0;
 
@@ -81,7 +81,7 @@ double test13_OriginalComp(double **mat, interval **imat, int n, bool getTime)
 	return timer;
 }
 
-double test13_DevelopedComp(double **mat, interval **imat, int n, bool getTime)
+double test13_DevelopedComp(double **mat, interval **imat, int n, bool standard, bool getTime)
 {
 	double timer = 0.0;
 
@@ -103,7 +103,7 @@ double test13_DevelopedComp(double **mat, interval **imat, int n, bool getTime)
 	return timer;
 }
 
-double test13_OriginalDecompComp(double **mat, interval **imat, int n, bool getTime)
+double test13_OriginalDecompComp(double **mat, interval **imat, int n, bool standard, bool getTime)
 {
 	double timer = 0.0;
 
@@ -125,7 +125,7 @@ double test13_OriginalDecompComp(double **mat, interval **imat, int n, bool getT
 	return timer;
 }
 
-double test13_DevelopedDecompComp(double **mat, interval **imat, int n, bool getTime)
+double test13_DevelopedDecompComp(double **mat, interval **imat, int n, bool standard, bool getTime)
 {
 	double timer = 0.0;
 
@@ -149,6 +149,162 @@ double test13_DevelopedDecompComp(double **mat, interval **imat, int n, bool get
 	}	
 
 	return timer;
+}
+
+void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, interval **auxiMat, uint n, bool standard)
+{
+	double *times = new double[30];			// Vector to store the time of each execution.
+	TimeMesurement timeMesure;
+
+	if (standard) cout << "========== Standard Decomposition: " << endl;
+	else cout << "========== Non Standard Decomposition: " << endl;
+	cout << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyMatrix(inputMat, auxMat, n);
+		times[i] = test13_OriginalDecomp(auxMat, auxiMat, n, standard, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyMatrix(inputiMat, auxiMat, n);
+	test13_OriginalDecomp(auxMat, auxiMat, n, standard, false);
+
+	cout << '\t' << INT_error(auxiMat, n, n);
+	cout << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyMatrix(inputMat, auxMat, n);
+		times[i] = test13_DevelopedDecomp(auxMat, auxiMat, n, standard, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Developed";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyMatrix(inputiMat, auxiMat, n);
+	test13_DevelopedDecomp(auxMat, auxiMat, n, standard, false);
+
+	cout << '\t' << INT_error(auxiMat, n, n);
+	cout << endl;
+
+	cout << endl;
+	if (standard) cout << "========== Standard Composition: " << endl;
+	else cout << "========== Non Standard Composition: " << endl;
+	cout << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << endl;
+	
+	for (int i = 0; i < 30; ++i)
+	{
+		copyMatrix(inputMat, auxMat, n);
+		times[i] = test13_OriginalComp(auxMat, auxiMat, n, standard, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyMatrix(inputiMat, auxiMat, n);
+	test13_OriginalComp(auxMat, auxiMat, n, standard, false);
+
+	cout << '\t' << INT_error(auxiMat, n, n);
+	cout << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyMatrix(inputMat, auxMat, n);
+		times[i] = test13_DevelopedComp(auxMat, auxiMat, n, standard, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Developed";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyMatrix(inputiMat, auxiMat, n);
+	test13_DevelopedComp(auxMat, auxiMat, n, standard, false);
+
+	cout << '\t' << INT_error(auxiMat, n, n);
+	cout << endl;
+
+	ImageQuality<double> imgQ;
+
+	cout << endl;
+	if (standard) cout << "========== Standard Decomposition & Composition: " << endl;
+	else cout << "========== Non Standard Decomposition & Composition: " << endl;
+	cout << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << "\t\t";
+	cout << "EUC" << "\t\t";
+	cout << "MSE" << "\t\t";
+	cout << "PSNR" << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyMatrix(inputMat, auxMat, n);
+		times[i] = test13_OriginalDecompComp(auxMat, auxiMat, n, standard, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyMatrix(inputiMat, auxiMat, n);
+	test13_OriginalDecompComp(auxMat, auxiMat, n, standard, false);
+
+	cout << '\t' << INT_error(auxiMat, n, n);
+	
+	imgQ = imageQuality(auxMat, inputMat, n, n);
+
+	cout << '\t' << imgQ.euc;
+	cout << '\t' << imgQ.mse;
+	cout << '\t' << imgQ.psnr << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyMatrix(inputMat, auxMat, n);
+		times[i] = test13_DevelopedDecompComp(auxMat, auxiMat, n, standard, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Developed";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyMatrix(inputiMat, auxiMat, n);
+	test13_DevelopedDecompComp(auxMat, auxiMat, n, standard, false);
+
+	cout << '\t' << INT_error(auxiMat, n, n);
+	
+	imgQ = imageQuality(auxMat, inputMat, n, n);
+
+	cout << '\t' << imgQ.euc;
+	cout << '\t' << imgQ.mse;
+	cout << '\t' << imgQ.psnr << endl;
+
+	cout << endl;
+
+	delete [] times;
 }
 
 int test13(int argc, char **argv)
@@ -187,15 +343,11 @@ int test13(int argc, char **argv)
 	cout << n << " X " << n << " = " << n * n << "..." << endl;
 	cout << endl;
 
-	TimeMesurement timeMesure;
-
 	double **inputMat = new double*[n];		// Matrices used as input for all executions.
 	interval **inputiMat = new interval*[n];
 
 	double **auxMat = new double*[n];		// Auxiliary matrices used for each execution.
 	interval **auxiMat = new interval*[n];
-
-	double *times = new double[30];			// Vector to store the time of each execution.
 
 	// Allocate and fill input matrices with n*n random values.
 	for (uint i = 0; i < n; ++i)
@@ -213,150 +365,8 @@ int test13(int argc, char **argv)
 		}
 	}
 
-	cout << "========== Standard Decomposition: " << endl;
-	cout << "\t\t";
-	cout << "Time" << "\t\t";
-	cout << "StdDev" << "\t\t";
-	cout << "Error" << endl;
-
-	for (int i = 0; i < 30; ++i)
-	{
-		copyMatrix(inputMat, auxMat, n);
-		times[i] = test13_OriginalStandardDecomp(auxMat, auxiMat, n, true);
-	}
-
-	timeMesure = runTimeMesurement(times, 30);
-
-	cout << "Original";
-	cout << '\t' << timeMesure.mean;
-	cout << '\t' << timeMesure.stdDev;
-
-	copyMatrix(inputiMat, auxiMat, n);
-	test13_OriginalStandardDecomp(auxMat, auxiMat, n, false);
-
-	cout << '\t' << INT_error(auxiMat, n, n);
-	cout << endl;
-
-	for (int i = 0; i < 30; ++i)
-	{
-		copyMatrix(inputMat, auxMat, n);
-		times[i] = test13_DevelopedStandardDecomp(auxMat, auxiMat, n, true);
-	}
-
-	timeMesure = runTimeMesurement(times, 30);
-
-	cout << "Developed";
-	cout << '\t' << timeMesure.mean;
-	cout << '\t' << timeMesure.stdDev;
-
-	copyMatrix(inputiMat, auxiMat, n);
-	test13_DevelopedStandardDecomp(auxMat, auxiMat, n, false);
-
-	cout << '\t' << INT_error(auxiMat, n, n);
-	cout << endl;
-
-	cout << endl;
-	cout << "========== Standard Composition: " << endl;
-	cout << "\t\t";
-	cout << "Time" << "\t\t";
-	cout << "StdDev" << "\t\t";
-	cout << "Error" << endl;
-	
-	for (int i = 0; i < 30; ++i)
-	{
-		copyMatrix(inputMat, auxMat, n);
-		times[i] = test13_OriginalComp(auxMat, auxiMat, n, true);
-	}
-
-	timeMesure = runTimeMesurement(times, 30);
-
-	cout << "Original";
-	cout << '\t' << timeMesure.mean;
-	cout << '\t' << timeMesure.stdDev;
-
-	copyMatrix(inputiMat, auxiMat, n);
-	test13_OriginalComp(auxMat, auxiMat, n, false);
-
-	cout << '\t' << INT_error(auxiMat, n, n);
-	cout << endl;
-
-	for (int i = 0; i < 30; ++i)
-	{
-		copyMatrix(inputMat, auxMat, n);
-		times[i] = test13_DevelopedComp(auxMat, auxiMat, n, true);
-	}
-
-	timeMesure = runTimeMesurement(times, 30);
-
-	cout << "Developed";
-	cout << '\t' << timeMesure.mean;
-	cout << '\t' << timeMesure.stdDev;
-
-	copyMatrix(inputiMat, auxiMat, n);
-	test13_DevelopedComp(auxMat, auxiMat, n, false);
-
-	cout << '\t' << INT_error(auxiMat, n, n);
-	cout << endl;
-
-	ImageQuality<double> imgQ;
-
-	cout << endl;
-	cout << "========== standard Decomposition & Composition: " << endl;
-	cout << "\t\t";
-	cout << "Time" << "\t\t";
-	cout << "StdDev" << "\t\t";
-	cout << "Error" << "\t\t";
-	cout << "EUC" << "\t\t";
-	cout << "MSE" << "\t\t";
-	cout << "PSNR" << endl;
-
-	for (int i = 0; i < 30; ++i)
-	{
-		copyMatrix(inputMat, auxMat, n);
-		times[i] = test13_OriginalDecompComp(auxMat, auxiMat, n, true);
-	}
-
-	timeMesure = runTimeMesurement(times, 30);
-
-	cout << "Original";
-	cout << '\t' << timeMesure.mean;
-	cout << '\t' << timeMesure.stdDev;
-
-	copyMatrix(inputiMat, auxiMat, n);
-	test13_OriginalDecompComp(auxMat, auxiMat, n, false);
-
-	cout << '\t' << INT_error(auxiMat, n, n);
-	
-	imgQ = imageQuality(auxMat, inputMat, n, n);
-
-	cout << '\t' << imgQ.euc;
-	cout << '\t' << imgQ.mse;
-	cout << '\t' << imgQ.psnr << endl;
-
-	for (int i = 0; i < 30; ++i)
-	{
-		copyMatrix(inputMat, auxMat, n);
-		times[i] = test13_DevelopedDecompComp(auxMat, auxiMat, n, true);
-	}
-
-	timeMesure = runTimeMesurement(times, 30);
-
-	cout << "Developed";
-	cout << '\t' << timeMesure.mean;
-	cout << '\t' << timeMesure.stdDev;
-
-	copyMatrix(inputiMat, auxiMat, n);
-	test13_DevelopedDecompComp(auxMat, auxiMat, n, false);
-
-	cout << '\t' << INT_error(auxiMat, n, n);
-	
-	imgQ = imageQuality(auxMat, inputMat, n, n);
-
-	cout << '\t' << imgQ.euc;
-	cout << '\t' << imgQ.mse;
-	cout << '\t' << imgQ.psnr << endl;
-
-	cout << endl;
+	test13_Script(inputMat, auxMat, inputiMat, auxiMat, n, true);
+	test13_Script(inputMat, auxMat, inputiMat, auxiMat, n, false);
 
 	// Deallocating memory.
 
@@ -372,7 +382,6 @@ int test13(int argc, char **argv)
 	delete [] inputiMat;
 	delete [] auxMat;
 	delete [] auxiMat;
-	delete [] times;
 
 	return 0;
 }
