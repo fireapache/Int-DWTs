@@ -27,3 +27,8 @@
 
 # Image Files
 *.ppm
+
+# From Visual Studio
+Debug/*
+Release/*
+*.vcxproj*
