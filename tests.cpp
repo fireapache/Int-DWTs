@@ -472,13 +472,13 @@ double test13_OriginalDecomp(double **mat, interval **imat, int n, bool standard
 	{
 		// Get time of execution.
 		startTimeCounter();
-		Haar_MatrixDecomposition(mat, n, n, true, true);
+		Haar_MatrixDecomposition(mat, n, n, true, standard);
 		timer = getTimeCounter();
 	}
 	else
 	{
 		// Interval transformation for error calculation.
-		INT_Haar_MatrixDecomposition(imat, n, n, true, true);
+		INT_Haar_MatrixDecomposition(imat, n, n, true, standard);
 	}	
 
 	return timer;
@@ -492,15 +492,17 @@ double test13_DevelopedDecomp(double **mat, interval **imat, int n, bool standar
 	{
 		// Get time of execution.
 		startTimeCounter();
-		Haar_MatrixDecomposition(mat, n, n, false, true);
-		VinisStandardMatrixNormalization(mat, n);
+		Haar_MatrixDecomposition(mat, n, n, false, standard);
+		if (standard) VinisStandardMatrixNormalization(mat, n);
+		else VinisNonStandardMatrixNormalization(mat, n);
 		timer = getTimeCounter();
 	}
 	else
 	{
 		// Interval transformation for error calculation.
-		INT_Haar_MatrixDecomposition(imat, n, n, false, true);
-		INT_VinisStandardMatrixNormalization(imat, n);
+		INT_Haar_MatrixDecomposition(imat, n, n, false, standard);
+		if (standard) INT_VinisStandardMatrixNormalization(imat, n);
+		else INT_VinisNonStandardMatrixNormalization(imat, n);
 	}	
 
 	return timer;
@@ -514,13 +516,13 @@ double test13_OriginalComp(double **mat, interval **imat, int n, bool standard, 
 	{
 		// Get time of execution.
 		startTimeCounter();
-		Haar_MatrixComposition(mat, n, n, true, true);
+		Haar_MatrixComposition(mat, n, n, true, standard);
 		timer = getTimeCounter();
 	}
 	else
 	{
 		// Interval transformation for error calculation.
-		INT_Haar_MatrixComposition(imat, n, n, true, true);
+		INT_Haar_MatrixComposition(imat, n, n, true, standard);
 	}	
 
 	return timer;
@@ -534,15 +536,17 @@ double test13_DevelopedComp(double **mat, interval **imat, int n, bool standard,
 	{
 		// Get time of execution.
 		startTimeCounter();
-		VinisStandardMatrixNormalization(mat, n, true);
-		Haar_MatrixComposition(mat, n, n, false, true);
+		if (standard) VinisStandardMatrixNormalization(mat, n, true);
+		else VinisNonStandardMatrixNormalization(mat, n, true);
+		Haar_MatrixComposition(mat, n, n, false, standard);
 		timer = getTimeCounter();
 	}
 	else
 	{
 		// Interval transformation for error calculation.
-		INT_VinisStandardMatrixNormalization(imat, n, true);
-		INT_Haar_MatrixComposition(imat, n, n, false, true);
+		if (standard) INT_VinisStandardMatrixNormalization(imat, n, true);
+		else INT_VinisNonStandardMatrixNormalization(imat, n, true);
+		INT_Haar_MatrixComposition(imat, n, n, false, standard);
 	}	
 
 	return timer;
@@ -556,15 +560,15 @@ double test13_OriginalDecompComp(double **mat, interval **imat, int n, bool stan
 	{
 		// Get time of execution.
 		startTimeCounter();
-		Haar_MatrixDecomposition(mat, n, n, true, true);
-		Haar_MatrixComposition(mat, n, n, true, true);
+		Haar_MatrixDecomposition(mat, n, n, true, standard);
+		Haar_MatrixComposition(mat, n, n, true, standard);
 		timer = getTimeCounter();
 	}
 	else
 	{
 		// Interval transformation for error calculation.
-		INT_Haar_MatrixDecomposition(imat, n, n, true, true);
-		INT_Haar_MatrixComposition(imat, n, n, true, true);
+		INT_Haar_MatrixDecomposition(imat, n, n, true, standard);
+		INT_Haar_MatrixComposition(imat, n, n, true, standard);
 	}	
 
 	return timer;
@@ -578,19 +582,39 @@ double test13_DevelopedDecompComp(double **mat, interval **imat, int n, bool sta
 	{
 		// Get time of execution.
 		startTimeCounter();
-		Haar_MatrixDecomposition(mat, n, n, false, true);
-		VinisStandardMatrixNormalization(mat, n);
-		VinisStandardMatrixNormalization(mat, n, true);
-		Haar_MatrixComposition(mat, n, n, false, true);
+		Haar_MatrixDecomposition(mat, n, n, false, standard);
+
+		if (standard)
+		{
+			VinisStandardMatrixNormalization(mat, n);
+			VinisStandardMatrixNormalization(mat, n, true);
+		}
+		else
+		{
+			VinisNonStandardMatrixNormalization(mat, n);
+			VinisNonStandardMatrixNormalization(mat, n, true);
+		}
+
+		Haar_MatrixComposition(mat, n, n, false, standard);
 		timer = getTimeCounter();
 	}
 	else
 	{
 		// Interval transformation for error calculation.
-		INT_Haar_MatrixDecomposition(imat, n, n, false, true);
-		INT_VinisStandardMatrixNormalization(imat, n);
-		INT_VinisStandardMatrixNormalization(imat, n, true);
-		INT_Haar_MatrixComposition(imat, n, n, false, true);
+		INT_Haar_MatrixDecomposition(imat, n, n, false, standard);
+		
+		if (standard)
+		{
+			INT_VinisStandardMatrixNormalization(imat, n);
+			INT_VinisStandardMatrixNormalization(imat, n, true);
+		}
+		else
+		{
+			INT_VinisNonStandardMatrixNormalization(imat, n);
+			INT_VinisNonStandardMatrixNormalization(imat, n, true);
+		}
+
+		INT_Haar_MatrixComposition(imat, n, n, false, standard);
 	}	
 
 	return timer;
