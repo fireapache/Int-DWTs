@@ -1,5 +1,450 @@
 #include "tests.h"
 
+void test14Desc()
+{
+	cout << endl;
+	cout << "	==================== Test 3 ====================" << endl;
+	cout << endl;
+	cout << "	* This test is about mesurement of time and calculus " << endl;
+	cout << "	exactitude for the one-dimensional À-Trous Haar Wavelet " << endl;
+	cout << "	Transform." << endl;
+}
+
+void test14Param()
+{
+	cout << endl;
+	cout << "	Parameters: <size> <levels>" << endl;
+	cout << "	" << endl;
+	cout << "	<size> must be an unsigned integer greater " << endl;
+	cout << "	than 0 and also be power of two." << endl;
+	cout << "	" << endl;
+	cout << "	<levels> must be an unsigned integet and " << endl;
+	cout << "	be also greater than 0." << endl;
+	cout << endl;
+}
+
+real test14_OriginalDecompError(interval *ivec, int n, uint levels)
+{
+	interval **data;
+	real error;
+
+	data = Haar_atrous_Decomposition(ivec, n, levels, true);
+	error = INT_error(data, levels, n);
+	deleteMatrix(data, levels * 2);
+
+	return error;
+}
+
+double test14_OriginalDecomp(double *vec, int n, uint levels)
+{
+	double timer = 0.0;
+	double **data;
+
+	// Get time of execution.
+	startTimeCounter();
+	data = Haar_atrous_Decomposition(vec, n, levels, true);
+	timer = getTimeCounter();
+	
+	deleteMatrix(data, levels * 2);
+
+	return timer;
+}
+
+real test14_DevelopedDecompError(interval *ivec, int n, uint levels)
+{
+	interval **data;
+	real error;
+
+	data = Haar_atrous_Decomposition(ivec, n, levels, false);
+	Haar_atrous_Normalization(ivec, data, n, levels);
+	error = INT_error(data, levels, n);
+	deleteMatrix(data, levels * 2);
+
+	return error;
+}
+
+double test14_DevelopedDecomp(double *vec, int n, uint levels)
+{
+	double timer = 0.0;
+	double **data;
+
+	// Get time of execution.
+	startTimeCounter();
+	data = Haar_atrous_Decomposition(vec, n, levels, false);
+	Haar_atrous_Normalization(vec, data, n, levels);
+	timer = getTimeCounter();
+	
+	deleteMatrix(data, levels * 2);
+
+	return timer;
+}
+
+real test14_OriginalCompError(interval *ivec, uint n, uint levels)
+{
+	interval **data;
+	interval *comp;
+	real result;
+
+	// Get time of execution.
+	data = genRandomMatrix<interval>(levels * 2, n, n);
+	comp = Haar_atrous_Composition(data, n, levels);
+	result = INT_error(comp, n);
+
+	deleteMatrix(data, levels * 2);
+	delete [] comp;
+
+	return result;
+}
+
+double test14_OriginalComp(double *vec, int n, uint levels)
+{
+	double timer = 0.0;
+	double **data;
+	double *result;
+
+	// Get time of execution.
+	data = genRandomMatrix<double>(levels * 2, n, n);
+	startTimeCounter();
+	result = Haar_atrous_Composition(data, n, levels);
+	timer = getTimeCounter();
+
+	deleteMatrix(data, levels * 2);
+	delete [] result;
+
+	return timer;
+}
+
+real test14_DevelopedCompError(interval *ivec, uint n, uint levels)
+{
+	interval **data;
+	interval *comp;
+	real result;
+
+	// Get time of execution.
+	data = genRandomMatrix<interval>(levels * 2, n, n);
+	comp = Haar_atrous_Composition(data, n, levels);
+	result = INT_error(comp, n);
+
+	deleteMatrix(data, levels * 2);
+	delete [] comp;
+
+	return result;
+}
+
+double test14_DevelopedComp(double *vec, int n, uint levels)
+{
+	double timer = 0.0;
+	double **data;
+	double *result;
+
+	// Get time of execution.
+	data = genRandomMatrix<double>(levels * 2, n, n);
+	startTimeCounter();
+	result = Haar_atrous_Composition(data, n, levels);
+	timer = getTimeCounter();
+
+	deleteMatrix(data, levels * 2);
+	delete [] result;
+
+	return timer;
+}
+
+real test14_OriginalDecompCompError(interval *ivec, int n, uint levels)
+{
+	interval **data;
+	interval *comp;
+	real result;
+
+	// Get time of execution.
+	data = Haar_atrous_Decomposition(ivec, n, levels, true);
+	comp = Haar_atrous_Composition(data, n, levels);
+	result = INT_error(comp, n);
+
+	deleteMatrix(data, levels * 2);
+	delete [] comp;
+
+	return result;
+}
+
+double test14_OriginalDecompComp(double *vec, double *&outVec, int n, uint levels, bool out = false)
+{
+	double timer = 0.0;
+	double **data;
+	double *result;
+
+	// Get time of execution.
+	startTimeCounter();
+	data = Haar_atrous_Decomposition(vec, n, levels, true);
+	result = Haar_atrous_Composition(data, n, levels);
+	timer = getTimeCounter();
+
+	deleteMatrix(data, levels * 2);
+
+	if (out) outVec = result;
+	else delete [] result;
+
+	return timer;
+}
+
+real test14_DevelopedDecompCompError(interval *ivec, int n, uint levels)
+{
+	interval **data;
+	interval *comp;
+	real result;
+
+	// Get time of execution.
+	data = Haar_atrous_Decomposition(ivec, n, levels, false);
+	Haar_atrous_Normalization(ivec, data, n, levels);
+	comp = Haar_atrous_Composition(data, n, levels);
+
+	result = INT_error(comp, n);
+
+	deleteMatrix(data, levels * 2);
+	delete [] comp;
+
+	return result;
+}
+
+double test14_DevelopedDecompComp(double *vec, double *&outVec, int n, uint levels, bool out = false)
+{
+	double timer = 0.0;
+	double **data;
+	double *result;
+
+	// Get time of execution.
+	startTimeCounter();
+	data = Haar_atrous_Decomposition(vec, n, levels, false);
+	Haar_atrous_Normalization(vec, data, n, levels);
+	result = Haar_atrous_Composition(data, n, levels);
+	timer = getTimeCounter();
+
+	deleteMatrix(data, levels * 2);
+
+	if (out) outVec = result;
+	else delete [] result;
+
+	return timer;
+}
+
+int test14(int argc, char **argv)
+{
+	if (argc < 2)
+	{
+		cout << endl;
+		cout << "	ERROR: lack of parameters." << endl;
+		test14Desc();
+		test14Param();
+		return 1;
+	}
+
+	uint n = atoi(argv[0]);
+	uint levels = atoi(argv[1]);
+
+	if (n <= 0 || levels <= 0)
+	{
+		cout << endl;
+		cout << "	ERROR: <size> and <levels> have to be greater than 0." << endl;
+		test14Desc();
+		test14Param();
+		return 1;
+	}
+	else if (!isPowerOfTwo(n))
+	{
+		cout << endl;
+		cout << "	ERROR: <size> has to be power of two." << endl;
+		test14Desc();
+		test14Param();
+		return 1;
+	}
+
+	test14Desc();
+	cout << endl;
+	cout << "Computing " << levels << " levels for a vector of size " << n  << "..." << endl;
+	cout << endl;
+
+	TimeMesurement timeMesure;
+
+	double *inputVec = new double[n];		// Vectors used as input for all executions.
+	interval *inputiVec = new interval[n];
+
+	double *auxVec = new double[n];			// Auxiliary vectors used for each execution.
+	interval *auxiVec = new interval[n];
+
+	double *times = new double[30];			// Vector to store the time of each execution.
+
+	real error;
+
+	// Fill input vectors with n random values.
+	for (uint i = 0; i < n; ++i)
+	{
+		inputVec[i] = rand() %  n;
+		inputiVec[i] = interval(inputVec[i]);
+	}
+
+	cout << "========== Decomposition: " << endl;
+	cout << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyVector(inputVec, auxVec, n);
+		times[i] = test14_OriginalDecomp(auxVec, n, levels);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyVector(inputiVec, auxiVec, n);
+	error = test14_OriginalDecompError(auxiVec, n, levels);
+
+	cout << '\t' << error;
+	cout << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyVector(inputVec, auxVec, n);
+		times[i] = test14_DevelopedDecomp(auxVec, n, levels);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Developed";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyVector(inputiVec, auxiVec, n);
+	error = test14_DevelopedDecompError(auxiVec, n, levels);
+
+	cout << '\t' << error;
+	cout << endl;
+
+	cout << endl;
+	cout << "========== Composition: " << endl;
+	cout << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << endl;
+	
+	for (int i = 0; i < 30; ++i)
+	{
+		copyVector(inputVec, auxVec, n);
+		times[i] = test14_OriginalComp(auxVec, n, levels);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyVector(inputiVec, auxiVec, n);
+	error = test14_OriginalCompError(auxiVec, n, levels);
+
+	cout << '\t' << error;
+	cout << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyVector(inputVec, auxVec, n);
+		times[i] = test14_DevelopedComp(auxVec, n, levels);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Developed";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyVector(inputiVec, auxiVec, n);
+	error = test14_DevelopedCompError(auxiVec, n, levels);
+
+	cout << '\t' << error;
+	cout << endl;
+
+	ImageQuality<double> imgQ;
+	double *result;
+
+	cout << endl;
+	cout << "========== Decomposition & Composition: " << endl;
+	cout << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << "\t\t";
+	cout << "EUC" << "\t\t";
+	cout << "MSE" << "\t\t";
+	cout << "PSNR" << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyVector(inputVec, auxVec, n);
+		times[i] = test14_OriginalDecompComp(auxVec, result, n, levels);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyVector(inputiVec, auxiVec, n);
+	error = test14_OriginalDecompCompError(auxiVec, n, levels);
+
+	cout << '\t' << error;
+	
+	test14_OriginalDecompComp(inputVec, result, n, levels, true);
+
+	imgQ = imageQuality(result, inputVec, n, n);
+
+	delete [] result;
+
+	cout << '\t' << imgQ.euc;
+	cout << '\t' << imgQ.mse;
+	cout << '\t' << imgQ.psnr << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyVector(inputVec, auxVec, n);
+		times[i] = test14_DevelopedDecompComp(auxVec, result, n, levels);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Developed";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyVector(inputiVec, auxiVec, n);
+	error = test14_DevelopedDecompCompError(auxiVec, n, levels);
+
+	cout << '\t' << error;
+	
+	test14_DevelopedDecompComp(inputVec, result, n, levels, true);
+
+	imgQ = imageQuality(result, inputVec, n, n);
+
+	delete [] result;
+
+	cout << '\t' << imgQ.euc;
+	cout << '\t' << imgQ.mse;
+	cout << '\t' << imgQ.psnr << endl;
+
+	cout << endl;
+
+	// Deallocating memory.
+	delete [] inputVec;
+	delete [] inputiVec;
+	delete [] auxVec;
+	delete [] auxiVec;
+	delete [] times;
+
+	return 0;
+}
+
 void test13Desc()
 {
 	cout << endl;
@@ -2611,6 +3056,7 @@ void listAllTests()
 {
 	test12Desc();
 	test13Desc();
+	test14Desc();
 
 	cout << endl;
 }
@@ -2665,6 +3111,9 @@ int testIndexer(int argc, char **argv)
 					break;
 				case 2:
 					test13(newArgs.argc, newArgs.argv);
+					break;
+				case 3:
+					test14(newArgs.argc, newArgs.argv);
 					break;
 				default:
 					cout << endl;
