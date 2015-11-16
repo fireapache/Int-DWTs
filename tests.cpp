@@ -3150,7 +3150,23 @@ int testIndexer(int argc, char **argv)
 	}
 	else if (fundTest)
 	{
+		if (argc < 3)
+		{
+			cout << endl;
+			cout << "	* You have to tell the test number by typing: " << endl;
+			cout << "	./tests.exe -ft <test>" << endl;
+			cout << endl;
+			cout << "	* You can also list all possible tests by typing: " << endl;
+			cout << "	./tests.exe -l" << endl;
+			cout << endl;
+			code = 1;
+		}
+		else
+		{
+			uint ntest = atoi(argv[2]);
 
+			fundamentalTest(ntest);
+		}
 	}
 
 	return code;
