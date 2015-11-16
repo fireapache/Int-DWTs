@@ -370,7 +370,7 @@ void Haar_atrous_Normalization(T *vec, T **data, int n, int levels, bool invert 
 			data[i * 2 + 1][j] = D0[j] - D1[j];
 		}
 
-		if (i + 1 < levels);
+		if (i + 1 < levels)
 		{
 			D0 = data[i * 2];
 			D1 = data[(i + 1) * 2];
@@ -427,7 +427,7 @@ void Haar_atrous_MatrixNormalization(T **matrix, T ***data, int n, int m, int le
 			}
 		}
 
-		if (i + 1 < levels * 2);
+		if (i + 1 < levels * 2)
 		{
 			D0 = data[i * 2];
 			D1 = data[(i + 1) * 2];
