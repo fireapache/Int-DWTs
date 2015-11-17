@@ -5,11 +5,14 @@
 
 #include <iostream>
 #include <cmath>
-#include <interval.hpp>
 #include "common.h"
 
 using namespace std;
+
+#ifndef WIN32
+#include <interval.hpp>
 using namespace cxsc;
+#endif
 
 #define HAAR_COMPRESS_ERROR 0.0000000001
 
