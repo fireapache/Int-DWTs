@@ -22,5 +22,13 @@
 
 *.nfs*
 
+# Text files
+*.txt
+
 # Image Files
 *.ppm
+
+# From Visual Studio
+Debug/*
+Release/*
+*.vcxproj*

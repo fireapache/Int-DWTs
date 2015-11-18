@@ -1,6 +1,6 @@
 #include "int-haar.h"
 
-void VinisNormalization(double *vec, uint n)
+void VinisNormalization(double *vec, uint n, bool invert)
 {
 	uint levels = log2(n);
 	
@@ -13,12 +13,16 @@ void VinisNormalization(double *vec, uint n)
 		
 		uint fim    = (uint)pow(2.0, (double)(level + 1));
 		
+		if (invert)
+		for (uint i = inicio; i < fim; i++)
+			vec[i] /= pow(2.0, - (double)level / 2.0);
+		else
 		for (uint i = inicio; i < fim; i++)
 			vec[i] *= pow(2.0, - (double)level / 2.0);
 	}
 }
 
-void INT_VinisNormalization(interval *vec, uint n)
+void INT_VinisNormalization(interval *vec, uint n, bool invert)
 {
 	uint levels = (uint)log2((double)(n));
 	interval div;
@@ -41,8 +45,10 @@ void INT_VinisNormalization(interval *vec, uint n)
 			}
 			else				div = interval((int)(level));
 
-			if (div != interval(0))
-				vec[i] /= div;
+			if (div == interval(0)) continue;
+
+			if (invert) vec[i] *= div;
+			else vec[i] /= div;
 		}
 	}
 }
@@ -149,12 +155,17 @@ void VinisNonStandardMatrixNormalization(double **matrix, uint n, bool invert)
         start = (uint)div;
         limit = (uint)pow(2.0, (double)i + 1);
 
-        for (uint l = 0; l < limit / 2; l++)
+        if (invert)
         {
+        	for (uint l = 0; l < limit / 2; l++)
             for (uint c = start; c < limit; c++)
-            {
+                matrix[l][c] *= div;
+        }
+        else
+        {
+        	for (uint l = 0; l < limit / 2; l++)
+            for (uint c = start; c < limit; c++)
                 matrix[l][c] /= div;
-            }
         }
 
         if (invert)
@@ -188,12 +199,17 @@ void INT_VinisNonStandardMatrixNormalization(interval **matrix, uint n, bool inv
         start = (uint)pow(2.0, (double)i);
         limit = (uint)pow(2.0, (double)i + 1);
 
-        for (uint l = 0; l < limit / 2; l++)
+        if (invert)
         {
+        	for (uint l = 0; l < limit / 2; l++)
             for (uint c = start; c < limit; c++)
-            {
+                matrix[l][c] *= div;
+        }
+        else
+        {
+        	for (uint l = 0; l < limit / 2; l++)
+            for (uint c = start; c < limit; c++)
                 matrix[l][c] /= div;
-            }
         }
 
         if (invert)

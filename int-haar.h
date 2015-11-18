@@ -5,11 +5,14 @@
 
 #include <iostream>
 #include <cmath>
-#include <interval.hpp>
 #include "common.h"
 
 using namespace std;
+
+#ifndef WIN32
+#include <interval.hpp>
 using namespace cxsc;
+#endif
 
 #define HAAR_COMPRESS_ERROR 0.0000000001
 
@@ -33,11 +36,413 @@ void Haar_NonStandardDecomposition(double **matrix, int rows, int cols, bool nor
 void Haar_StandardComposition(double **matrix, int rows, int cols, bool normal);
 void Haar_StandardDecomposition(double **matrix, int rows, int cols, bool normal);
 
+template <typename T>
+void Haar_atrous_DecompositionStep(T *C, T *D, T *lastC, int n, T divisor)
+{
+	for (int j = 0; j < n - 1; ++j)
+	{
+		C[j] = (lastC[j] + lastC[j + 1]) / divisor;
+		D[j] = lastC[j] - C[j];
+	}
+
+	C[n - 1] = (lastC[n - 1] + lastC[0]) / divisor;
+	D[n - 1] = lastC[n - 1] - C[n - 1];
+}
+
+template <typename T>
+T** Haar_atrous_Decomposition(T *vec, int n, int levels, bool normal)
+{
+	if (n <= 0 || levels <= 0) return NULL;
+
+	T **data = new T*[levels * 2];
+	T *lastC;
+	T divisor;
+
+	for (int i = 0; i < levels * 2; ++i)
+	{
+		data[i] = new T[n];
+	}
+
+	// Setting normalization factor, if needed.
+	if (normal) divisor = sqrt(T(2.0));
+	else divisor = T(2.0);
+
+	lastC = vec;
+
+	// Calculating degree and wavelet coefficients.
+	for (int i = 0; i < levels; ++i)
+	{
+		Haar_atrous_DecompositionStep(data[i * 2], data[i * 2 + 1], lastC, n, divisor);
+
+		lastC = data[i * 2];
+	}
+
+	return data;
+}
+
+template <typename T>
+T* Haar_atrous_Composition(T **data, int n, int levels)
+{
+	if (n <= 0 || levels <= 0) return NULL;
+
+	T *result = new T[n];
+
+	for (int i = 0; i < n; ++i)
+	{
+		result[i] = data[levels * 2 - 2][i];
+	}
+
+	for (int i = 0; i < levels; ++i)
+	{
+		for (int j = 0; j < n; ++j)
+		{
+			result[j] += data[i * 2 + 1][j];
+		}
+	}
+
+	return result;
+}
+
+template <typename T>
+T*** Haar_atrous_StandardDecomposition(T **matrix, int n, int m, int levels, bool normal)
+{
+	T ***result = NULL;
+	T ** parcialResult = NULL;
+	T *temp = NULL;
+
+	result = new T**[levels * 4];
+
+	for (int i = 0; i < levels * 4; ++i)
+	{
+		result[i] = new T*[n];
+	}
+
+	for (int i = levels * 2; i < levels * 4; ++i)
+	{
+		for (int j = 0; j < n; ++j)
+		{
+			result[i][j] = new T[m];
+		}
+	}
+
+	// Transform all rows and store in results.
+	for (int i = 0; i < n; ++i)
+	{
+		parcialResult = Haar_atrous_Decomposition(matrix[i], m, levels, normal);
+
+		for (int j = 0; j < levels; ++j)
+		{
+			result[j * 2][i] = parcialResult[j * 2];
+			result[j * 2 + 1][i] = parcialResult[j * 2 + 1];
+		}
+	}
+
+	// Will store the input for column transformation.
+	temp = new T[max(n, m)];
+
+	// Transform all columns and store in results.
+	for (int i = 0; i < m; ++i)
+	{
+		for (int w = 0; w < n; ++w)
+		{
+			temp[w] = result[levels * 2 - 2][w][i];
+		}
+
+		parcialResult = Haar_atrous_Decomposition(temp, n, levels, normal);
+
+		for (int j = 0; j < levels; ++j)
+		{
+			for (int w = 0; w < n; ++w)
+			{
+				result[levels * 2 + j * 2][w][i] = parcialResult[j * 2][w];
+				result[levels * 2 + j * 2 + 1][w][i] = parcialResult[j * 2 + 1][w];
+			}
+		}
+	}
+
+	delete [] temp;
+
+	return result;
+}
+
+template <typename T>
+T*** Haar_atrous_NonStandardDecomposition(T **matrix, int n, int m, int levels, bool normal)
+{
+	T ***result = NULL;
+	T **parcialResult = NULL;
+	T **lastCMatrix = NULL;
+	T *temp = NULL;
+	T *lastC = NULL;
+	T divisor;
+
+	result = new T**[levels * 4];
+
+	for (int i = 0; i < levels * 4; ++i)
+	{
+		result[i] = new T*[n];
+
+		for (int j = 0; j < n; ++j)
+		{
+			result[i][j] = new T[m];
+		}
+	}
+
+	// Setting normalization factor, if needed.
+	if (normal) divisor = sqrt(T(2.0));
+	else divisor = T(2.0);
+
+	// Will store the input for column transformation.
+	temp = new T[max(n, m)];
+
+	// Create parcial result array for columns tranformation.
+	parcialResult = new T*[2];
+	parcialResult[0] = new T[m];
+	parcialResult[1] = new T[m];
+
+	lastCMatrix = matrix;
+	lastC = matrix[0];
+
+	// Iteration for every level step.
+	for (int i = 0; i < levels; ++i)
+	{
+		// Transform 1 level for every row.
+		for (int j = 0; j < n; ++j)
+		{
+			// Calculating degree and wavelet coefficients.
+			Haar_atrous_DecompositionStep(result[i * 4][j], result[i * 4 + 1][j], lastC, n, divisor);
+
+			lastC = lastCMatrix[j + 1];
+		}
+
+		lastC = temp;
+
+		// Transform 1 level for every column.
+		for (int j = 0; j < m; ++j)
+		{
+			// Prepare temp buffer.
+			for (int w = 0; w < n; ++w)
+			{
+				temp[w] = result[i * 4][w][j];
+			}
+
+			// Calculating degree and wavelet coefficients.
+			Haar_atrous_DecompositionStep(parcialResult[0], parcialResult[1], lastC, m, divisor);
+
+			// Put results in the right place.
+			for (int w = 0; w < n; ++w)
+			{
+				result[i * 4 + 2][w][j] = parcialResult[0][w];
+				result[i * 4 + 3][w][j] = parcialResult[1][w];
+			}
+		}
+
+		// Prepare temp buffer for the next iteration.
+		for (int j = 0; j < m; ++j)
+		{
+			temp[j] = result[i * 4 + 2][0][j];
+		}
+
+		// Setting variables for the next iteration.
+		lastCMatrix = result[i * 4 + 2];
+		lastC = lastCMatrix[0];
+	}
+
+	//========== Dealocating memory.
+	delete [] parcialResult[0];
+	delete [] parcialResult[1];
+	delete [] parcialResult;
+
+	delete [] temp;
+
+	return result;
+}
+
+template <typename T>
+T*** Haar_atrous_MatrixDecomposition(T **matrix, int n, int m, int levels, bool normal, bool standard)
+{
+	if (standard) return Haar_atrous_StandardDecomposition(matrix, n, m, levels, normal);
+	else return Haar_atrous_NonStandardDecomposition(matrix, n, m, levels, normal);
+}
+
+template <typename T>
+T** Haar_atrous_StandardComposition(T ***data, int n, int m, int levels)
+{
+	if (n <= 0 || levels <= 0) return NULL;
+
+	T **result = new T*[n];
+
+	for (int i = 0; i < n; ++i)
+	{
+		result[i] = new T[m];
+
+		for (int j = 0; j < m; ++j)
+		{
+			result[i][j] = data[levels * 4 - 2][i][j];
+		}
+	}
+
+	for (int i = 0; i < levels * 4; i += 2)
+	{
+		for (int j = 0; j < n; ++j)
+		{
+			for (int w = 0; w < m; ++w)
+			{
+				result[j][w] += data[i + 1][j][w];
+			}
+		}
+	}
+
+	return result;
+}
+
+template <typename T>
+T** Haar_atrous_NonStandardComposition(T ***data, int n, int m, int levels)
+{
+	if (n <= 0 || levels <= 0) return NULL;
+
+	T **result = new T*[n];
+
+	for (int i = 0; i < n; ++i)
+	{
+		result[i] = new T[m];
+
+		for (int j = 0; j < m; ++j)
+		{
+			result[i][j] = data[levels * 4 - 2][i][j];
+		}
+	}
+
+	for (int i = 0; i < levels * 4; i += 2)
+	{
+		for (int j = 0; j < n; ++j)
+		{
+			for (int w = 0; w < m; ++w)
+			{
+				result[j][w] += data[i + 1][j][w];
+			}
+		}
+	}
+
+	return result;
+}
+
+template <typename T>
+T** Haar_atrous_MatrixComposition(T ***data, int n, int m, int levels, bool standard)
+{
+	if (standard) return Haar_atrous_StandardComposition(data, n, m, levels);
+	else return Haar_atrous_NonStandardComposition(data, n, m, levels);
+}
+
+template <typename T>
+void Haar_atrous_Normalization(T *vec, T **data, int n, int levels, bool invert = false)
+{
+	if (n <= 0 || levels <= 0) return;
+
+	T factor, *D0, *D1;
+
+	// Normalizing degree coefficients.
+	for (int i = 0; i < levels; ++i)
+	{
+		// Normalization factor rule.
+		factor = pow(T(2.0), T(i + 1) / T(2.0));
+
+		if (invert)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				data[i * 2][j] /= factor;
+			}
+		}
+		else
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				data[i * 2][j] *= factor;
+			}
+		}
+	}
+
+	D0 = vec;
+	D1 = data[0];
+
+	// Recalculating wavelet coefficients.
+	for (int i = 0; i < levels; ++i)
+	{
+		for (int j = 0; j < n ; ++j)
+		{
+			data[i * 2 + 1][j] = D0[j] - D1[j];
+		}
+
+		if (i + 1 < levels)
+		{
+			D0 = data[i * 2];
+			D1 = data[(i + 1) * 2];
+		}
+	}
+}
+
+template <typename T>
+void Haar_atrous_MatrixNormalization(T **matrix, T ***data, int n, int m, int levels, bool invert = false)
+{
+	if (n <= 0 || m <= 0 || levels <= 0) return;
+
+	T factor, **D0, **D1;
+
+	// Normalizing degree coefficients.
+	for (int i = 0; i < levels * 2; ++i)
+	{
+		// Normalization factor rule.
+		factor = pow(T(2.0), T(i + 1) / T(2.0));
+
+		if (invert)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				for (int w = 0; w < m; ++w)
+				{
+					data[i * 2][j][w] /= factor;
+				}
+			}
+		}
+		else
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				for (int w = 0; w < m; ++w)
+				{
+					data[i * 2][j][w] *= factor;
+				}
+			}
+		}
+	}
+
+	D0 = matrix;
+	D1 = data[0];
+
+	// Recalculating wavelet coefficients.
+	for (int i = 0; i < levels * 2; ++i)
+	{
+		for (int j = 0; j < n ; ++j)
+		{
+			for (int w = 0; w < m; ++w)
+			{
+				data[i * 2 + 1][j][w] = D0[j][w] - D1[j][w];
+			}
+		}
+
+		if (i + 1 < levels * 2)
+		{
+			D0 = data[i * 2];
+			D1 = data[(i + 1) * 2];
+		}
+	}
+}
+
 #ifdef HAAROPMIZATION
 
 void VinisMatrixNormalization(double **mat, uint n, bool standard, bool invert = false);
 void VinisNonStandardMatrixNormalization(double **matrix, uint n, bool invert = false);
-void VinisNormalization(double *vec, uint n);
+void VinisNormalization(double *vec, uint n, bool invert = false);
 void VinisStandardMatrixNormalization(double **mat, uint n, bool invert = false);
 
 #endif /* HAAROPMIZATION */
@@ -61,7 +466,7 @@ void INT_Haar_Matrix_Compression(interval **matrix, int n, float percentage);
 
 void INT_VinisMatrixNormalization(interval **mat, uint n, bool standard, bool invert = false);
 void INT_VinisNonStandardMatrixNormalization(interval **matrix, uint n, bool invert = false);
-void INT_VinisNormalization(interval *vec, uint n);
+void INT_VinisNormalization(interval *vec, uint n, bool invert = false);
 void INT_VinisStandardMatrixNormalization(interval **mat, uint n, bool invert = false);
 
 #endif /* HAAROPMIZATION */

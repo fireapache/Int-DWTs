@@ -7,6 +7,41 @@ __int64 counterStart = 0;
 timeval tCounter, tTime;
 #endif
 
+TimeMesurement runTimeMesurement(double *times, uint n)
+{
+    TimeMesurement results;
+    double sum, mean, dev, stdDev;
+
+    sum = 0.0;
+
+    for (uint i = 0; i < n; ++i)
+    {
+        sum += times[i];
+    }
+
+    mean = sum / 30.0;
+    dev = 0.0;
+
+    for (uint i = 0; i < 30; ++i)
+    {
+        dev += pow(times[i] - mean, 2.0);
+    }
+
+    dev = dev / 30.0;
+    stdDev = sqrt(dev);
+
+    results.mean = mean;
+    results.dev = dev;
+    results.stdDev = stdDev;
+
+    return results;
+}
+
+bool isPowerOfTwo(unsigned int x)
+{
+    return ((x != 0) && ((x & (~x + 1)) == x));
+}
+
 double** carregar_imagem(char *arquivo, ImageInfo *imageInfo)
 {
     char auxc[5];
@@ -259,6 +294,65 @@ void data_analysis(double *data, uint n, DataAnalysis *analysis)
 
 	analysis->mean = mean;
 	analysis->deviation = deviation;
+}
+
+void data_analysis(double **data, uint n, DataAnalysis *analysis)
+{
+	double mean, sum = 0.0, deviation;
+
+	for (uint i = 0; i < n; i++)
+	for (uint j = 0; j < n; j++)
+	{
+		sum += data[i][j];
+	}
+
+	mean = sum / (double)(n);
+	sum = 0.0;
+
+	for (uint i = 0; i < n; i++)
+	for (uint j = 0; j < n; j++)
+	{
+		sum += (data[i][j] - mean) * (data[i][j] - mean);
+	}
+
+	deviation = sqrt(sum / (double)(n));
+
+	analysis->mean = mean;
+	analysis->deviation = deviation;
+}
+
+EucMSE_data<interval> INT_EucMSE(interval **m1, interval **m2,  int n)
+{
+    EucMSE_data<interval> result;
+    interval euc;
+
+    result.mse = interval(0.0);
+    result.euc = interval(0.0);
+
+    for (int i = 0; i < n; ++i)
+    for (int j = 0; j < n; ++j)
+    {
+        result.mse += pow((m1[i][j] - m2[i][j]), interval(2.0));
+        euc = abs(m1[i][j] - m2[i][j]);
+        if (Sup(result.euc) < Sup(euc)) result.euc = euc;
+    }
+
+    result.mse = result.mse / pow(interval(n), interval(2.0));
+
+    return result;
+}
+
+interval INT_PSNR(interval mse, interval max)
+{
+    interval result;
+
+    if (mse != interval(0.0))
+    {
+        result = interval(10.0) * log10((max * max) / (Sup(mse) / 2));
+    }
+    else result = interval(0.0);
+
+    return result;
 }
 
 /*void escrever_imagem_from_greyscale(char *arquivo, double **matriz)
