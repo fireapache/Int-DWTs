@@ -25,10 +25,10 @@ void test15Param()
 
 real test15_ProcessError(interval **imat, int n, uint levels, uint opt, bool standard, bool old)
 {
-	interval ***data;
-	interval **comp;
-	real error;
-
+	interval ***data = NULL;
+	interval **comp = NULL;
+	real error = real(0);
+#ifndef WIN32
 	if (opt == 0)
 	{
 		data = Haar_atrous_MatrixDecomposition(imat, n, n, levels, old, standard);
@@ -57,7 +57,7 @@ real test15_ProcessError(interval **imat, int n, uint levels, uint opt, bool sta
 		deleteMatrices(data, levels * 4, n);
 		deleteMatrix(comp, n);
 	}
-
+#endif
 	return error;
 }
 
@@ -79,7 +79,7 @@ double test15_Process(double **mat, int n, uint levels, uint opt, bool standard,
 		data = genRandomMatrices<double>(levels * 4, n, n, n);
 		comp = Haar_atrous_MatrixComposition(data, n, n, levels, standard);
 	}
-	else
+	else if (opt == 2)
 	{
 		data = Haar_atrous_MatrixDecomposition(mat, n, n, levels, old, standard);
 		if (!old) Haar_atrous_MatrixNormalization(mat, data, n, n, levels);
@@ -89,15 +89,8 @@ double test15_Process(double **mat, int n, uint levels, uint opt, bool standard,
 	time = getTimeCounter();
 	outMat = comp;
 
-	if (opt == 0 || opt == 2)
-	{
-		deleteMatrices(data, levels * 4, n);
-	}
-	else
-	{
-		deleteMatrices(data, levels * 4, n);
-		deleteMatrix(comp, n);
-	}
+	if (data != NULL) deleteMatrices(data, levels * 4, n);
+	if (opt != 2 && comp != NULL) deleteMatrix(comp, n);
 
 	return time;
 }
@@ -204,7 +197,7 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 	for (int i = 0; i < 30; ++i)
 	{
 		times[i] = test15_Process(inputMat, n, levels, 2, standard, true, comp);
-		delete [] comp;
+		deleteMatrix(comp, n);
 	}
 
 	timeMesure = runTimeMesurement(times, 30);
@@ -230,7 +223,7 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 	for (int i = 0; i < 30; ++i)
 	{
 		times[i] = test15_Process(inputMat, n, levels, 2, standard, false, comp);
-		delete [] comp;
+		deleteMatrix(comp, n);
 	}
 
 	timeMesure = runTimeMesurement(times, 30);
