@@ -167,6 +167,8 @@ void deleteMatrices(T ***matrices, uint nMatrices, uint n)
 	{
 		deleteMatrix<T>(matrices[i], n);
 	}
+
+	delete [] matrices;
 }
 
 template <typename T>
