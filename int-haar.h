@@ -474,6 +474,7 @@ void INT_VinisStandardMatrixNormalization(interval **mat, uint n, bool invert = 
 real INT_diameter(interval x);
 real INT_error(interval *x, int n);
 real INT_error(interval **x, int linhas, int colunas);
+real INT_error(interval ***m, uint mat, uint row, uint col);
 
 #endif /* INTHAAR */
 

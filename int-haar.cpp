@@ -821,6 +821,20 @@ real INT_error(interval **x, int linhas, int colunas)
 	return r;
 }
 
+real INT_error(interval ***m, uint mat, uint row, uint col)
+{
+	real result = real(0), aux;
+
+	for (uint i = 0; i < mat; ++i)
+	{
+		aux = INT_error(m[i], row, col);
+
+		if (aux > result) result = aux;
+	}
+
+	return result;
+}
+
 void INT_Haar_Compression(interval *vec, int n, float percentage)
 {
 	interval t, tMax, tMin, s, e, temp;

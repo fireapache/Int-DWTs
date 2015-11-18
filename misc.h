@@ -88,6 +88,34 @@ T** genRandomMatrix(uint rows, uint cols, uint max)
 }
 
 template <typename T>
+T*** genRandomMatrices(uint mats, uint rows, uint cols, uint max)
+{
+	T ***result;
+	double r;
+
+	result = new T**[mats];
+
+	for (uint i = 0; i < mats; ++i)
+	{
+		result[i] = new T*[rows];
+
+		for (uint j = 0; j < rows; ++j)
+		{
+			result[i][j] = new T[cols];
+	
+			for (uint w = 0; w < cols; ++w)
+			{
+				r = rand() % max;
+				result[i][j][w] = T(r);
+			}
+		}
+	}
+
+	return result;
+
+}
+
+template <typename T>
 void printVectors(T **vecs, uint n1, uint n2, uint space, bool row = true)
 {
 	if (n1 <= 0 || n2 <= 0 || space <= 0) return;
@@ -167,6 +195,8 @@ void deleteMatrices(T ***matrices, uint nMatrices, uint n)
 	{
 		deleteMatrix<T>(matrices[i], n);
 	}
+
+	delete [] matrices;
 }
 
 template <typename T>
