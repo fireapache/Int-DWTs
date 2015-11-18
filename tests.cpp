@@ -1,5 +1,343 @@
 #include "tests.h"
 
+void test15Desc()
+{
+	cout << endl;
+	cout << "	==================== Test 4 ====================" << endl;
+	cout << endl;
+	cout << "	* This test is about mesurement of time and calculus " << endl;
+	cout << "	exactitude for the two-dimensional À-Trous Haar Wavelet " << endl;
+	cout << "	Transform." << endl;
+}
+
+void test15Param()
+{
+	cout << endl;
+	cout << "	Parameters: <order> <levels>" << endl;
+	cout << "	" << endl;
+	cout << "	<order> must be an unsigned integer greater " << endl;
+	cout << "	than 0 and also be power of two." << endl;
+	cout << "	" << endl;
+	cout << "	<levels> must be an unsigned integet and " << endl;
+	cout << "	be also greater than 0." << endl;
+	cout << endl;
+}
+
+real test15_ProcessError(interval **imat, int n, uint levels, uint opt, bool standard, bool old)
+{
+	interval ***data;
+	interval **comp;
+	real error;
+
+	if (opt == 0)
+	{
+		data = Haar_atrous_MatrixDecomposition(imat, n, n, levels, old, standard);
+		if (!old) Haar_atrous_MatrixNormalization(imat, data, n, n, levels);
+	}
+	else if (opt == 1)
+	{
+		data = genRandomMatrices<interval>(levels * 4, n, n, n);
+		comp = Haar_atrous_MatrixComposition(data, n, n, levels, standard);
+	}
+	else
+	{
+		data = Haar_atrous_MatrixDecomposition(imat, n, n, levels, old, standard);
+		if (!old) Haar_atrous_MatrixNormalization(imat, data, n, n, levels);
+		comp = Haar_atrous_MatrixComposition(data, n, n, levels, standard);
+	}
+
+	if (opt == 0)
+	{
+		error = INT_error(data, levels * 4, n, n);
+		deleteMatrices(data, levels * 4, n);
+	}
+	else
+	{
+		error = INT_error(comp, n, n);
+		deleteMatrices(data, levels * 4, n);
+		deleteMatrix(comp, n);
+	}
+
+	return error;
+}
+
+double test15_Process(double **mat, int n, uint levels, uint opt, bool standard, bool old, double **&outMat)
+{
+	double ***data = NULL;
+	double **comp = NULL;
+	double time;
+
+	startTimeCounter();
+
+	if (opt == 0)
+	{
+		data = Haar_atrous_MatrixDecomposition(mat, n, n, levels, old, standard);
+		if (!old) Haar_atrous_MatrixNormalization(mat, data, n, n, levels);
+	}
+	else if (opt == 1)
+	{
+		data = genRandomMatrices<double>(levels * 4, n, n, n);
+		comp = Haar_atrous_MatrixComposition(data, n, n, levels, standard);
+	}
+	else
+	{
+		data = Haar_atrous_MatrixDecomposition(mat, n, n, levels, old, standard);
+		if (!old) Haar_atrous_MatrixNormalization(mat, data, n, n, levels);
+		comp = Haar_atrous_MatrixComposition(data, n, n, levels, standard);
+	}
+
+	time = getTimeCounter();
+	outMat = comp;
+
+	if (opt == 0 || opt == 2)
+	{
+		deleteMatrices(data, levels * 4, n);
+	}
+	else
+	{
+		deleteMatrices(data, levels * 4, n);
+		deleteMatrix(comp, n);
+	}
+
+	return time;
+}
+
+void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels, bool standard)
+{
+	double **comp;
+	double *times = new double[30];			// Vector to store the time of each execution.
+	real error;
+	TimeMesurement timeMesure;
+
+	if (standard) cout << "========== Standard Decomposition: " << endl;
+	else cout << "========== Non Standard Decomposition: " << endl;
+	cout << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		times[i] = test15_Process(inputMat, n, levels, 0, standard, true, comp);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	error = test15_ProcessError(inputiMat, n, levels, 0, standard, true);
+
+	cout << '\t' << error;
+	cout << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		times[i] = test15_Process(inputMat, n, levels, 0, standard, false, comp);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Developed";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	error = test15_ProcessError(inputiMat, n, levels, 0, standard, false);
+
+	cout << '\t' << error;
+	cout << endl;
+
+	cout << endl;
+	if (standard) cout << "========== Standard Composition: " << endl;
+	else cout << "========== Non Standard Composition: " << endl;
+	cout << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << endl;
+	
+	for (int i = 0; i < 30; ++i)
+	{
+		times[i] = test15_Process(inputMat, n, levels, 1, standard, true, comp);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	error = test15_ProcessError(inputiMat, n, levels, 1, standard, true);
+
+	cout << '\t' << error;
+	cout << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		times[i] = test15_Process(inputMat, n, levels, 1, standard, false, comp);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Developed";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	error = test15_ProcessError(inputiMat, n, levels, 1, standard, false);
+
+	cout << '\t' << error;
+	cout << endl;
+
+	ImageQuality<double> imgQ;
+
+	cout << endl;
+	if (standard) cout << "========== Standard Decomposition & Composition: " << endl;
+	else cout << "========== Non Standard Decomposition & Composition: " << endl;
+	cout << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << "\t\t";
+	cout << "EUC" << "\t\t";
+	cout << "MSE" << "\t\t";
+	cout << "PSNR" << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		times[i] = test15_Process(inputMat, n, levels, 2, standard, true, comp);
+		delete [] comp;
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	error = test15_ProcessError(inputiMat, n, levels, 2, standard, true);
+
+	cout << '\t' << error;
+	
+	test15_Process(inputMat, n, levels, 2, standard, true, comp);
+
+	imgQ = imageQuality(comp, inputMat, n, n);
+
+	delete [] comp;
+
+	cout << '\t' << imgQ.euc;
+	cout << '\t' << imgQ.mse;
+	cout << '\t' << imgQ.psnr << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		times[i] = test15_Process(inputMat, n, levels, 2, standard, false, comp);
+		delete [] comp;
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Developed";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	error = test15_ProcessError(inputiMat, n, levels, 2, standard, false);
+
+	cout << '\t' << error;
+	
+	test15_Process(inputMat, n, levels, 2, standard, false, comp);
+
+	imgQ = imageQuality(comp, inputMat, n, n);
+	
+	delete [] comp;
+
+	cout << '\t' << imgQ.euc;
+	cout << '\t' << imgQ.mse;
+	cout << '\t' << imgQ.psnr << endl;
+
+	cout << endl;
+
+	delete [] times;
+}
+
+int test15(int argc, char **argv)
+{
+	if (argc < 2)
+	{
+		cout << endl;
+		cout << "	ERROR: lack of parameters." << endl;
+		test15Desc();
+		test15Param();
+		return 1;
+	}
+
+	uint n = atoi(argv[0]);
+	uint levels = atoi(argv[1]);
+
+	if (n <= 0 || levels <= 0)
+	{
+		cout << endl;
+		cout << "	ERROR: <order> and <levels> have to be greater than 0." << endl;
+		test15Desc();
+		test15Param();
+		return 1;
+	}
+	else if (!isPowerOfTwo(n))
+	{
+		cout << endl;
+		cout << "	ERROR: <order> has to be power of two." << endl;
+		test15Desc();
+		test15Param();
+		return 1;
+	}
+
+	test15Desc();
+	cout << endl;
+	cout << "Computing " << levels << "levels of a matrix of order " << n  << "..." << endl;
+	cout << n << " X " << n << " = " << n * n << "..." << endl;
+	cout << endl;
+
+	double **inputMat = new double*[n];		// Matrices used as input for all executions.
+	interval **inputiMat = new interval*[n];
+
+	double **auxMat = new double*[n];		// Auxiliary matrices used for each execution.
+	interval **auxiMat = new interval*[n];
+
+	// Allocate and fill input matrices with n*n random values.
+	for (uint i = 0; i < n; ++i)
+	{
+		inputMat[i] = new double[n];
+		inputiMat[i] = new interval[n];
+
+		auxMat[i] = new double[n];
+		auxiMat[i] = new interval[n];
+
+		for (uint j = 0; j < n; ++j)
+		{
+			inputMat[i][j] = rand() % n;
+			inputiMat[i][j] = interval(inputMat[i][j]);
+		}
+	}
+
+	test15_Script(inputMat, inputiMat, n, levels, true);
+	test15_Script(inputMat, inputiMat, n, levels, false);
+
+	// Deallocating memory.
+
+	for (uint i = 0; i < n; ++i)
+	{
+		delete [] inputMat[n];
+		delete [] inputiMat[n];
+		delete [] auxMat[n];
+		delete [] auxiMat[n];
+	}
+
+	delete [] inputMat;
+	delete [] inputiMat;
+	delete [] auxMat;
+	delete [] auxiMat;
+
+	return 0;
+}
+
 void test14Desc()
 {
 	cout << endl;
@@ -3081,6 +3419,7 @@ void listAllTests()
 	test12Desc();
 	test13Desc();
 	test14Desc();
+	test15Desc();
 
 	cout << endl;
 }
@@ -3138,6 +3477,9 @@ int testIndexer(int argc, char **argv)
 					break;
 				case 3:
 					test14(newArgs.argc, newArgs.argv);
+					break;
+				case 4:
+					test15(newArgs.argc, newArgs.argv);
 					break;
 				default:
 					cout << endl;
