@@ -158,6 +158,9 @@ T*** Haar_atrous_StandardDecomposition(T **matrix, int n, int m, int levels, boo
 				result[levels * 2 + j * 2 + 1][w][i] = parcialResult[j * 2 + 1][w];
 			}
 		}
+
+		deleteMatrix(parcialResult, levels * 2);
+
 	}
 
 	delete [] temp;
