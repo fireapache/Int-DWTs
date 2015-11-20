@@ -1,0 +1,39 @@
+
+	==================== Test 2 ====================
+
+	* This test is about mesurement of time and calculus 
+	exactitude for the two-dimensional Haar Wavelet Transform.
+
+Computing matrix of order 1024...
+1024 X 1024 = 1048576...
+
+========== Standard Decomposition: 
+		Time		StdDev		Error
+Original	0.0498059	0.00165441	6.082246E-012
+Developed	0.0443343	0.00203959	1.065814E-014
+
+========== Standard Composition: 
+		Time		StdDev		Error
+Original	0.0558483	0.00158507	1.443550E-008
+Developed	0.0341321	0.002759	9.313226E-010
+
+========== Standard Decomposition & Composition: 
+		Time		StdDev		Error		EUC		MSE		PSNR
+Original	0.105519	0.00226186	2.519300E-010	1.51185e-009	2.1798e-024	296.822
+Developed	0.0796046	0.00450897	4.320100E-012	2.17089e-012	4.49444e-030	353.679
+
+========== Non Standard Decomposition: 
+		Time		StdDev		Error
+Original	0.0426782	0.00207305	5.513812E-012
+Developed	0.0371576	0.00189226	0.000000
+
+========== Non Standard Composition: 
+		Time		StdDev		Error
+Original	0.0690354	0.00407618	4.656613E-009
+Developed	0.052501	0.00377231	0.000000
+
+========== Non Standard Decomposition & Composition: 
+		Time		StdDev		Error		EUC		MSE		PSNR
+Original	0.111298	0.00606601	9.720225E-011	1.41052e-009	1.8974e-024	297.424
+Developed	0.0911203	0.00625474	0.000000	0.000000	0.000000	0.000000
+

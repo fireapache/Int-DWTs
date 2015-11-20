@@ -1,0 +1,40 @@
+
+	==================== Test 4 ====================
+
+	* This test is about mesurement of time and calculus 
+	exactitude for the two-dimensional À-Trous Haar Wavelet 
+	Transform.
+
+Computing 4levels of a matrix of order 1024...
+1024 X 1024 = 1048576...
+
+========== Standard Decomposition: 
+		Time		StdDev		Error
+Original	0.179035	0.00635899	9.822543E-011
+Developed	0.212338	0.00659189	7.275958E-012
+
+========== Standard Composition: 
+		Time		StdDev		Error
+Original	0.327291	0.00506325	0.000000
+Developed	0.317583	0.00760844	0.000000
+
+========== Standard Decomposition & Composition: 
+		Time		StdDev		Error		EUC		MSE		PSNR
+Original	0.18877		0.00703837	3.028617E-010	7.71416e-010	5.67515e-025	302.666
+Developed	0.225165	0.00625787	3.819878E-011	3.63874e-010	1.2627e-025	309.193
+
+========== Non Standard Decomposition: 
+		Time		StdDev		Error
+Original	0.156612	0.00839412	9.822543E-011
+Developed	0.192826	0.0101733	7.275958E-012
+
+========== Non Standard Composition: 
+		Time		StdDev		Error
+Original	0.314185	0.00300782	0.000000
+Developed	0.309781	0.00491363	0.000000
+
+========== Non Standard Decomposition & Composition: 
+		Time		StdDev		Error		EUC		MSE		PSNR
+Original	0.19395		0.0183007	3.083187E-010	7.77518e-010	5.76529e-025	302.598
+Developed	0.218264	0.00970578	3.819878E-011	3.81969e-010	1.39142e-025	308.771
+
