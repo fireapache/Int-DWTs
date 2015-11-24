@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 n_groups = 3
 
-fig, ax = plt.subplots(nrows=2)
+fig, ax = plt.subplots(nrows=2, sharex=True)
 
 index = np.arange(n_groups)
 bar_width = 0.35
@@ -23,8 +23,8 @@ std_ori = (0.00165441, 0.00158507, 0.00226186)
 developed = (0.0443343, 0.0341321, 0.0796046)
 std_dev = (0.00203959, 0.002759, 0.00450897)
 
-plt.ylabel('Times')
-plt.title('Times of methods for the decimated 1D HWT')
+plt.ylabel('Time')
+plt.title('Decimated Standard 2D HWT')
 plt.xticks(index + bar_width, ('Decomposition', 'Composition', 'Decomp & Comp'))
 
 rects1 = ax[0].bar(index, original, bar_width,
@@ -32,6 +32,7 @@ rects1 = ax[0].bar(index, original, bar_width,
                  color='b',
                  yerr=std_ori,
                  error_kw=error_config,
+                 capsize=6.0,
                  label='Original')
 
 rects2 = ax[0].bar(index + bar_width, developed, bar_width,
@@ -49,9 +50,9 @@ originalError = (6.082246E-012, 1.443550E-008, 2.519300E-010)
 developedError = (1.065814E-014, 9.313226E-010, 4.320100E-012)
 
 plt.ylabel('Error')
-plt.title('Calculation errors of the decimated 1D HWT')
 plt.xticks(index + bar_width, ('Decomposition', 'Composition', 'Decomp & Comp'))
-plt.ylim([0,7.000000E-008])
+plt.ylim([1.000000E-015,7.000000E-007])
+plt.yscale('log')
 
 rectError1 = ax[1].bar(index, originalError, bar_width,
                  alpha=opacity,
@@ -60,7 +61,7 @@ rectError1 = ax[1].bar(index, originalError, bar_width,
                  error_kw=error_config,
                  label='Original')
 
-rectError2 = ax[1].bar(index, developedError, bar_width,
+rectError2 = ax[1].bar(index + bar_width, developedError, bar_width,
                  alpha=opacity,
                  color='r',
                  #yerr=std_ori,
