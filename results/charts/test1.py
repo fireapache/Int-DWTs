@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 n_groups = 3
 
-fig, ax = plt.subplots(nrows=2, sharex=True)
+fig, ax = plt.subplots(nrows=3, sharex=True, figsize=(5, 6))
 
 index = np.arange(n_groups)
 bar_width = 0.35
@@ -42,7 +42,7 @@ rects2 = ax[0].bar(index + bar_width, developed, bar_width,
                  error_kw=error_config,
                  label='Developed')
 
-plt.legend(loc='upper left')
+plt.legend(loc='upper left', prop={'size':11})
 
 plt.sca(ax[1])
 
