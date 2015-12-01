@@ -7,7 +7,17 @@ import matplotlib.pyplot as plt
 
 n_groups = 3
 
-fig, ax = plt.subplots(nrows=3, sharex=True, figsize=(5, 6))
+# fig, ax = plt.subplots(nrows=3, sharex=True, figsize=(5, 6))
+fig = plt.figure(figsize=(5, 6))
+fig.subplots_adjust(hspace=0.01)
+
+ax = []
+
+ax.append(fig.add_subplot(311))
+ax.append(fig.add_subplot(312))
+ax.append(fig.add_subplot(337))
+ax.append(fig.add_subplot(338))
+ax.append(fig.add_subplot(339))
 
 index = np.arange(n_groups)
 bar_width = 0.35
@@ -26,6 +36,7 @@ std_dev = (4.34346e-005, 2.91344e-005, 5.13007e-005)
 plt.ylabel('Time')
 plt.title('Decimated 1D HWT')
 plt.xticks(index + bar_width, ('Decomposition', 'Composition', 'Decomp & Comp'))
+ax[0].xaxis.set_visible(False)
 
 rects1 = ax[0].bar(index, original, bar_width,
                  alpha=opacity,
