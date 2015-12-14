@@ -29,11 +29,11 @@ error_config = {'ecolor': '0.3'}
 
 plt.sca(ax[0])
 
-original = (0.00109071, 0.00125803, 0.00236344)
-std_ori = (3.71057e-005, 4.4377e-005, 0.000101865)
+original = (0.0245939, 0.0340239, 0.059096)
+std_ori = (0.000209161, 0.000253392, 0.000793561)
 
-developed = (0.000805147, 0.00079437, 0.00157319)
-std_dev = (4.34346e-005, 2.91344e-005, 5.13007e-005)
+developed = (0.0148007, 0.0138133, 0.0290752)
+std_dev = (0.000340802, 0.000191053, 0.000613658)
 
 plt.ylabel('Time')
 plt.title('Decimated 1D HWT')
@@ -83,12 +83,12 @@ rectError2 = ax[1].bar(index + bar_width, developedError, bar_width,
 
 plt.sca(ax[2])
 
-oriEUC = (9.21961e-009)
-devEUC = (5.93178e-011)
+oriEUC = (4.45549e-08)
+devEUC = (2.35419e-10)
 
 plt.ylabel('EUC')
 plt.xticks(np.arange(0))
-plt.ylim([1.000000E-012,7.000000E-008])
+plt.ylim([1.000000E-011,1.000000E-006])
 plt.yscale('log')
 
 rectEUC1 = ax[2].bar(1, oriEUC, bar_width,
@@ -107,10 +107,10 @@ rectEUC2 = ax[2].bar(1, devEUC, bar_width,
 
 plt.sca(ax[3])
 
-oriMSE = (1.29702e-021)
-devMSE = (5.36896e-026)
+oriMSE = (1.89317e-21)
+devMSE = (5.28547e-26)
 
-ylim = [1.000000E-027,7.000000E-021]
+ylim = [1.000000E-027,1.000000E-019]
 
 plt.ylabel('MSE')
 plt.xticks(np.arange(0))
@@ -133,10 +133,10 @@ rectMSE2 = ax[3].bar(1, devMSE, bar_width,
 
 plt.sca(ax[4])
 
-oriPSNR = (305.2)
-devPSNR = (349.031)
+oriPSNR = (327.64)
+devPSNR = (373.181)
 
-ylim = [280,360]
+ylim = [310,390]
 
 plt.ylabel('PSNR')
 plt.xticks(np.arange(0))
