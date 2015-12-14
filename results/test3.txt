@@ -5,20 +5,20 @@
 	exactitude for the one-dimensional À-Trous Haar Wavelet 
 	Transform.
 
-Computing 4 levels for a vector of size 65536...
+Computing 4 levels for a vector of size 1048576...
 
 ========== Decomposition: 
 		Time		StdDev		Error
-Original	0.00154292	0.000123006	1.891749E-010
-Developed	0.00195723	7.71919e-005	5.820766E-011
+Original	0.0273379	0.000339537	0
+Developed	0.0415496	0.000298855	0
 
 ========== Composition: 
 		Time		StdDev		Error
-Original	0.000443668	1.57083e-005	0.000000
-Developed	0.000456063	7.54541e-005	0.000000
+Original	0.0115317	7.12352e-05	0
+Developed	0.0115378	9.94945e-05	0
 
 ========== Decomposition & Composition: 
 		Time		StdDev		Error		EUC		MSE		PSNR
-Original	0.00200258	0.000140022	2.124580E-009	1.19877e-009	2.19278e-023	322.92
-Developed	0.00264747	0.00034877	4.074536E-010	5.43224e-010	4.50275e-024	329.795
+Original	0.0383284	0.000255277	0	4.7575e-09	2.15852e-23	347.07
+Developed	0.0523903	0.000295155	0	2.16581e-09	4.47342e-24	353.906
 
