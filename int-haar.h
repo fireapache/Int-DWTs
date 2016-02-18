@@ -158,6 +158,14 @@ T*** Haar_atrous_StandardDecomposition(T **matrix, int n, int m, int levels, boo
 				result[levels * 2 + j * 2 + 1][w][i] = parcialResult[j * 2 + 1][w];
 			}
 		}
+
+		for (int j = 0; j < levels * 2; ++j)
+		{
+			delete [] parcialResult[j];
+		}
+
+		delete [] parcialResult;
+
 	}
 
 	delete [] temp;
@@ -474,6 +482,7 @@ void INT_VinisStandardMatrixNormalization(interval **mat, uint n, bool invert = 
 real INT_diameter(interval x);
 real INT_error(interval *x, int n);
 real INT_error(interval **x, int linhas, int colunas);
+real INT_error(interval ***m, uint mat, uint row, uint col);
 
 #endif /* INTHAAR */
 

@@ -1,0 +1,24 @@
+
+	==================== Test 3 ====================
+
+	* This test is about mesurement of time and calculus 
+	exactitude for the one-dimensional À-Trous Haar Wavelet 
+	Transform.
+
+Computing 4 levels for a vector of size 1048576...
+
+========== Decomposition: 
+		Time		StdDev		Error
+Original	0.0273379	0.000339537	0
+Developed	0.0415496	0.000298855	0
+
+========== Composition: 
+		Time		StdDev		Error
+Original	0.0115317	7.12352e-05	0
+Developed	0.0115378	9.94945e-05	0
+
+========== Decomposition & Composition: 
+		Time		StdDev		Error		EUC		MSE		PSNR
+Original	0.0383284	0.000255277	0	4.7575e-09	2.15852e-23	347.07
+Developed	0.0523903	0.000295155	0	2.16581e-09	4.47342e-24	353.906
+

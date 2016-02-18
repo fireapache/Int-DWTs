@@ -1,0 +1,23 @@
+
+	==================== Test 1 ====================
+
+	* This test is about mesurement of time and calculus 
+	exactitude for the one-dimensional Haar Wavelet Transform.
+
+Computing vector of size 1048576...
+
+========== Decomposition: 
+		Time		StdDev		Error
+Original	0.0245939	0.000209161	0
+Developed	0.0148007	0.000340802	0
+
+========== Composition: 
+		Time		StdDev		Error
+Original	0.0340239	0.000253392	0
+Developed	0.0138133	0.000191053	0
+
+========== Decomposition & Composition: 
+		Time		StdDev		Error		EUC		MSE		PSNR
+Original	0.059096	0.000793561	0	4.45549e-08	1.89317e-21	327.64
+Developed	0.0290752	0.000613658	0	2.35419e-10	5.28547e-26	373.181
+
