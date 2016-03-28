@@ -6,11 +6,16 @@
 #
 
 # define the C compiler to use
-CC = clang++
+CC = nvcc
+
+SEQ_CC = clang++
+PAR_CC = nvcc
+
+EMPTY =
 
 # define any compile-time flags
-CFLAGS = -Wall
-DEBUGCFLAGS = -g -Wall
+CFLAGS =
+DEBUGCFLAGS = -g
 
 # define any directories containing header files other than /usr/include
 #
@@ -27,7 +32,7 @@ LFLAGS = -L $(HOME)/cxsc/lib
 LIBS = -lcxsc -lm
 
 # define the C source files
-SRCS = int-dwts.cpp int-haar.cpp misc.cpp main.cpp tests.cpp
+SRCS = int-dwts.cpp int-haar.cpp misc.cpp main.cpp tests.cpp int-haar-cuda.cpp
 
 # define the C object files 
 #
@@ -48,14 +53,28 @@ MAIN = tests.exe
 # deleting dependencies appended to the file from 'make depend'
 #
 
+#
+# Selects the compiler to be used...
+#
+
+ifdef SEQ
+CC = $(SEQ_CC)
+else
+CC = $(PAR_CC)
+endif
+
 .PHONY: depend clean
 
-tests: $(MAIN)
+all: compile message
+
+compile: $(MAIN)
+
+message:
 	@echo  
 	@echo	Int-DWTs library has been compiled
 	@echo  
 
-$(MAIN): $(OBJS) 
+$(MAIN): $(OBJS)
 	$(CC) $(DEBUGCFLAGS) $(INCLUDES) -o $(MAIN) $(OBJS) $(LFLAGS) $(LIBS)
 
 # this is a suffix replacement rule for building .o's from .c's
@@ -68,7 +87,7 @@ $(MAIN): $(OBJS)
 clean:
 	$(RM) *.o *~ $(MAIN)
 
-rebuild: clean tests
+rebuild: clean all
 
 depend: $(SRCS)
 	makedepend $(INCLUDES) $^
