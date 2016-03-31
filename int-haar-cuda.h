@@ -4,7 +4,16 @@
 
 #include <cuda_runtime.h>
 
-void __global__ CUDA_Haar_Decomp(double *vec, int n, bool normal);
-void __device__ CUDA_Haar_DecompStep(double *vec, int n, bool normal);
+template <typename T>
+__global__ void CUDA_Haar_Decomp(T *vec, int n, bool normal)
+{
+	vec[0] = T(69.5);
+}
+
+template <typename T>
+__device__ void CUDA_Haar_DecompStep(T *vec, int n, bool normal)
+{
+	
+}
 
 #endif

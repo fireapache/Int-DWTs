@@ -32,17 +32,19 @@ LFLAGS = -L $(HOME)/cxsc/lib
 LIBS = -lcxsc -lm
 
 # define the C source files
-SRCS = int-dwts.cpp int-haar.cpp misc.cpp main.cpp tests.cpp int-haar-cuda.cpp
+CSRCS = int-dwts.cpp int-haar.cpp misc.cpp main.cpp tests.cpp
+CUDASRCS = int-haar-cuda.cu cuda-tests.cu
 
 # define the C object files 
 #
 # This uses Suffix Replacement within a macro:
 #   $(name:string1=string2)
 #         For each word in 'name' replace 'string1' with 'string2'
-# Below we are replacing the suffix .c of all words in the macro SRCS
+# Below we are replacing the suffix .c of all words in the macro CSRCS
 # with the .o suffix
 #
-OBJS = $(SRCS:.cpp=.o)
+COBJS = $(CSRCS:.cpp=.o)
+CUDAOBJS = $(CUDASRCS:.cu=.o)
 
 # define the executable file 
 MAIN = tests.exe
@@ -74,22 +76,36 @@ message:
 	@echo	Int-DWTs library has been compiled
 	@echo  
 
-$(MAIN): $(OBJS)
-	$(CC) $(DEBUGCFLAGS) $(INCLUDES) -o $(MAIN) $(OBJS) $(LFLAGS) $(LIBS)
+$(MAIN): $(COBJS) CUDAOBJS
+	$(CC) $(DEBUGCFLAGS) $(INCLUDES) -o $(MAIN) $(COBJS) $(CUDAOBJS) $(LFLAGS) $(LIBS)
+
+################################
 
 # this is a suffix replacement rule for building .o's from .c's
 # it uses automatic variables $<: the name of the prerequisite of
 # the rule(a .c file) and $@: the name of the target of the rule (a .o file) 
 # (see the gnu make manual section about automatic variables)
 .cpp.o:
-	$(CC) $(DEBUGCFLAGS) $(INCLUDES) -c $<  -o $@
+	$(CC) $(DEBUGCFLAGS) $(INCLUDES) -c $< -o $@
+
+################################
+
+CUDAOBJS: $(CUDAOBJS)
+
+cuda-tests.o: cuda-tests.cu
+	$(CC) $(DEBUGCFLAGS) $(INCLUDES) -c $< -o $@
+
+int-haar-cuda.o: int-haar-cuda.cu
+	$(CC) $(DEBUGCFLAGS) $(INCLUDES) -c $< -o $@
+
+################################
 
 clean:
 	$(RM) *.o *~ $(MAIN)
 
 rebuild: clean all
 
-depend: $(SRCS)
+depend: $(CSRCS) $(CUDASRCS)
 	makedepend $(INCLUDES) $^
 
 # DO NOT DELETE THIS LINE -- make depend needs it
