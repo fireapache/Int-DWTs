@@ -4,57 +4,22 @@
 
 int test16()
 {
-	cudaError_t err = cudaSuccess;
-	int n = 1024;
-	int size = sizeof(double) * n;
-
+	int n = 4;
 	double *h_vec = new double[n];
-	double *d_vec = NULL;
 
-	err = cudaMalloc((void**)&d_vec, size);
+	h_vec[0] = 9.0;
+	h_vec[1] = 7.0;
+	h_vec[2] = 5.0;
+	h_vec[3] = 3.0;
 
-	if (err != cudaSuccess)
-    {
-        cout << "Failed to allocate device vector!" << endl;
-        exit(EXIT_FAILURE);
-    }
-
-    err = cudaMemcpy(d_vec, h_vec, size, cudaMemcpyHostToDevice);
-
-    if (err != cudaSuccess)
-    {
-        cout << "Failed to copy vector A from host to device!" << endl;
-        exit(EXIT_FAILURE);
-    }
-
-	int threads = 256;
-	int blocks = n / threads;
-
-	CUDA_Haar_Decomp <<< threads, blocks >>> (d_vec, n, true);
-
-	cudaDeviceSynchronize();
-
-	err = cudaMemcpy(h_vec, d_vec, size, cudaMemcpyDeviceToHost);
-
-	if (err != cudaSuccess)
-    {
-        cout << "Failed to copy vector C from device to host!" << endl;
-        exit(EXIT_FAILURE);
-    }
-
-    cudaFree(d_vec);
+	CUDA_Haar_Decomp(h_vec, n, false);
 
     cout << h_vec[0] << endl;
+    cout << h_vec[1] << endl;
+    cout << h_vec[2] << endl;
+    cout << h_vec[3] << endl;
 
     delete [] h_vec;
-
-    err = cudaDeviceReset();
-
-    if (err != cudaSuccess)
-    {
-        cout << "Failed to deinitialize the device!" << endl;
-        exit(EXIT_FAILURE);
-    }
 
 	return 0;
 }
