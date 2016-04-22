@@ -9,7 +9,7 @@
 CC = nvcc
 
 SEQ_CC = clang++
-PAR_CC = nvcc
+PAR_CC = nvcc -G
 
 EMPTY =
 
