@@ -100,11 +100,12 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 	double **comp;
 	double *times = new double[30];			// Vector to store the time of each execution.
 	real error;
-	TimeMesurement timeMesure;
+	TimeMesurement timeMesure, oldMesure;
 
 	if (standard) cout << "========== Standard Decomposition: " << endl;
 	else cout << "========== Non Standard Decomposition: " << endl;
 	cout << "\t\t";
+	cout << "Speedup" << "\t\t";
 	cout << "Time" << "\t\t";
 	cout << "StdDev" << "\t\t";
 	cout << "Error" << endl;
@@ -117,6 +118,7 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 	timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Original";
+	cout << "\t\t";
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -133,6 +135,7 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 	timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Developed";
+	cout << '\t' << speedupCalc(timeMesure.mean, oldMesure.mean) << '\t';
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -145,6 +148,7 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 	if (standard) cout << "========== Standard Composition: " << endl;
 	else cout << "========== Non Standard Composition: " << endl;
 	cout << "\t\t";
+	cout << "Speedup" << "\t\t";
 	cout << "Time" << "\t\t";
 	cout << "StdDev" << "\t\t";
 	cout << "Error" << endl;
@@ -154,9 +158,10 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 		times[i] = test15_Process(inputMat, n, levels, 1, standard, true, comp);
 	}
 
-	timeMesure = runTimeMesurement(times, 30);
+	oldMesure = timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Original";
+	cout << "\t\t";
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -173,6 +178,7 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 	timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Developed";
+	cout << '\t' << speedupCalc(timeMesure.mean, oldMesure.mean) << '\t';
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -181,12 +187,13 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 	cout << '\t' << error;
 	cout << endl;
 
-	ImageQuality<double> imgQ;
+	ImageQuality<double> imgQ, oldImgQ;
 
 	cout << endl;
 	if (standard) cout << "========== Standard Decomposition & Composition: " << endl;
 	else cout << "========== Non Standard Decomposition & Composition: " << endl;
 	cout << "\t\t";
+	cout << "Speedup" << "\t\t";
 	cout << "Time" << "\t\t";
 	cout << "StdDev" << "\t\t";
 	cout << "Error" << "\t\t";
@@ -200,9 +207,10 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 		deleteMatrix(comp, n);
 	}
 
-	timeMesure = runTimeMesurement(times, 30);
+	oldMesure = timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Original";
+	cout << "\t\t";
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -212,7 +220,7 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 	
 	test15_Process(inputMat, n, levels, 2, standard, true, comp);
 
-	imgQ = imageQuality(comp, inputMat, n, n);
+	oldImgQ = imgQ = imageQuality(comp, inputMat, n, n);
 
 	delete [] comp;
 
@@ -229,6 +237,7 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 	timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Developed";
+	cout << '\t' << speedupCalc(timeMesure.mean, oldMesure.mean) << '\t';
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -245,6 +254,14 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 	cout << '\t' << imgQ.euc;
 	cout << '\t' << imgQ.mse;
 	cout << '\t' << imgQ.psnr << endl;
+
+	cout << endl;
+	cout << "Quality gain (%)" << endl;
+	cout << endl;
+
+	cout << "EUC" << "\t\t" << relativeGain(imgQ.euc, oldImgQ.euc) << endl;
+	cout << "MSE" << "\t\t" << relativeGain(imgQ.mse, oldImgQ.mse) << endl;
+	cout << "PSNR" << "\t\t" << -relativeGain(imgQ.psnr, oldImgQ.psnr) << endl;
 
 	cout << endl;
 
@@ -593,7 +610,7 @@ int test14(int argc, char **argv)
 	cout << "Computing " << levels << " levels for a vector of size " << n  << "..." << endl;
 	cout << endl;
 
-	TimeMesurement timeMesure;
+	TimeMesurement timeMesure, oldMesure;
 
 	double *inputVec = new double[n];		// Vectors used as input for all executions.
 	interval *inputiVec = new interval[n];
@@ -614,6 +631,7 @@ int test14(int argc, char **argv)
 
 	cout << "========== Decomposition: " << endl;
 	cout << "\t\t";
+	cout << "Speedup" << "\t\t";
 	cout << "Time" << "\t\t";
 	cout << "StdDev" << "\t\t";
 	cout << "Error" << endl;
@@ -624,9 +642,10 @@ int test14(int argc, char **argv)
 		times[i] = test14_OriginalDecomp(auxVec, n, levels);
 	}
 
-	timeMesure = runTimeMesurement(times, 30);
+	oldMesure = timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Original";
+	cout << "\t\t";
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -645,6 +664,7 @@ int test14(int argc, char **argv)
 	timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Developed";
+	cout << '\t' << speedupCalc(timeMesure.mean, oldMesure.mean) << '\t';
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -657,6 +677,7 @@ int test14(int argc, char **argv)
 	cout << endl;
 	cout << "========== Composition: " << endl;
 	cout << "\t\t";
+	cout << "Speedup" << "\t\t";
 	cout << "Time" << "\t\t";
 	cout << "StdDev" << "\t\t";
 	cout << "Error" << endl;
@@ -667,9 +688,10 @@ int test14(int argc, char **argv)
 		times[i] = test14_OriginalComp(auxVec, n, levels);
 	}
 
-	timeMesure = runTimeMesurement(times, 30);
+	oldMesure = timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Original";
+	cout << "\t\t";
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -688,6 +710,7 @@ int test14(int argc, char **argv)
 	timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Developed";
+	cout << '\t' << speedupCalc(timeMesure.mean, oldMesure.mean) << '\t';
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -697,12 +720,13 @@ int test14(int argc, char **argv)
 	cout << '\t' << error;
 	cout << endl;
 
-	ImageQuality<double> imgQ;
+	ImageQuality<double> imgQ, oldImgQ;
 	double *result;
 
 	cout << endl;
 	cout << "========== Decomposition & Composition: " << endl;
 	cout << "\t\t";
+	cout << "Speedup" << "\t\t";
 	cout << "Time" << "\t\t";
 	cout << "StdDev" << "\t\t";
 	cout << "Error" << "\t\t";
@@ -716,9 +740,10 @@ int test14(int argc, char **argv)
 		times[i] = test14_OriginalDecompComp(auxVec, result, n, levels);
 	}
 
-	timeMesure = runTimeMesurement(times, 30);
+	oldMesure = timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Original";
+	cout << "\t\t";
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -729,7 +754,7 @@ int test14(int argc, char **argv)
 	
 	test14_OriginalDecompComp(inputVec, result, n, levels, true);
 
-	imgQ = imageQuality(result, inputVec, n, n);
+	oldImgQ = imgQ = imageQuality(result, inputVec, n, n);
 
 	delete [] result;
 
@@ -746,6 +771,7 @@ int test14(int argc, char **argv)
 	timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Developed";
+	cout << '\t' << speedupCalc(timeMesure.mean, oldMesure.mean) << '\t';
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -763,6 +789,14 @@ int test14(int argc, char **argv)
 	cout << '\t' << imgQ.euc;
 	cout << '\t' << imgQ.mse;
 	cout << '\t' << imgQ.psnr << endl;
+
+	cout << endl;
+	cout << "Quality gain (%)" << endl;
+	cout << endl;
+
+	cout << "EUC" << "\t\t" << relativeGain(imgQ.euc, oldImgQ.euc) << endl;
+	cout << "MSE" << "\t\t" << relativeGain(imgQ.mse, oldImgQ.mse) << endl;
+	cout << "PSNR" << "\t\t" << -relativeGain(imgQ.psnr, oldImgQ.psnr) << endl;
 
 	cout << endl;
 
@@ -954,11 +988,12 @@ double test13_DevelopedDecompComp(double **mat, interval **imat, int n, bool sta
 void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, interval **auxiMat, uint n, bool standard)
 {
 	double *times = new double[30];			// Vector to store the time of each execution.
-	TimeMesurement timeMesure;
+	TimeMesurement timeMesure, oldMesure;
 
 	if (standard) cout << "========== Standard Decomposition: " << endl;
 	else cout << "========== Non Standard Decomposition: " << endl;
 	cout << "\t\t";
+	cout << "Speedup" << "\t\t";
 	cout << "Time" << "\t\t";
 	cout << "StdDev" << "\t\t";
 	cout << "Error" << endl;
@@ -969,9 +1004,10 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 		times[i] = test13_OriginalDecomp(auxMat, auxiMat, n, standard, true);
 	}
 
-	timeMesure = runTimeMesurement(times, 30);
+	oldMesure = timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Original";
+	cout << "\t\t";
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -990,6 +1026,7 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 	timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Developed";
+	cout << '\t' << speedupCalc(timeMesure.mean, oldMesure.mean) << '\t';
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -1003,6 +1040,7 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 	if (standard) cout << "========== Standard Composition: " << endl;
 	else cout << "========== Non Standard Composition: " << endl;
 	cout << "\t\t";
+	cout << "Speedup" << "\t\t";
 	cout << "Time" << "\t\t";
 	cout << "StdDev" << "\t\t";
 	cout << "Error" << endl;
@@ -1013,9 +1051,10 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 		times[i] = test13_OriginalComp(auxMat, auxiMat, n, standard, true);
 	}
 
-	timeMesure = runTimeMesurement(times, 30);
+	oldMesure = timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Original";
+	cout << "\t\t";
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -1034,6 +1073,7 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 	timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Developed";
+	cout << '\t' << speedupCalc(timeMesure.mean, oldMesure.mean) << '\t';
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -1043,12 +1083,13 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 	cout << '\t' << INT_error(auxiMat, n, n);
 	cout << endl;
 
-	ImageQuality<double> imgQ;
+	ImageQuality<double> imgQ, oldImgQ;
 
 	cout << endl;
 	if (standard) cout << "========== Standard Decomposition & Composition: " << endl;
 	else cout << "========== Non Standard Decomposition & Composition: " << endl;
 	cout << "\t\t";
+	cout << "Speedup" << "\t\t";
 	cout << "Time" << "\t\t";
 	cout << "StdDev" << "\t\t";
 	cout << "Error" << "\t\t";
@@ -1062,9 +1103,10 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 		times[i] = test13_OriginalDecompComp(auxMat, auxiMat, n, standard, true);
 	}
 
-	timeMesure = runTimeMesurement(times, 30);
+	oldMesure = timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Original";
+	cout << "\t\t";
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -1073,7 +1115,7 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 
 	cout << '\t' << INT_error(auxiMat, n, n);
 	
-	imgQ = imageQuality(auxMat, inputMat, n, n);
+	oldImgQ = imgQ = imageQuality(auxMat, inputMat, n, n);
 
 	cout << '\t' << imgQ.euc;
 	cout << '\t' << imgQ.mse;
@@ -1088,6 +1130,7 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 	timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Developed";
+	cout << '\t' << speedupCalc(timeMesure.mean, oldMesure.mean) << '\t';
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -1101,6 +1144,14 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 	cout << '\t' << imgQ.euc;
 	cout << '\t' << imgQ.mse;
 	cout << '\t' << imgQ.psnr << endl;
+
+	cout << endl;
+	cout << "Quality gain (%)" << endl;
+	cout << endl;
+
+	cout << "EUC" << "\t\t" << relativeGain(imgQ.euc, oldImgQ.euc) << endl;
+	cout << "MSE" << "\t\t" << relativeGain(imgQ.mse, oldImgQ.mse) << endl;
+	cout << "PSNR" << "\t\t" << -relativeGain(imgQ.psnr, oldImgQ.psnr) << endl;
 
 	cout << endl;
 
@@ -1172,10 +1223,10 @@ int test13(int argc, char **argv)
 
 	for (uint i = 0; i < n; ++i)
 	{
-		delete [] inputMat[n];
-		delete [] inputiMat[n];
-		delete [] auxMat[n];
-		delete [] auxiMat[n];
+		delete [] inputMat[i];
+		delete [] inputiMat[i];
+		delete [] auxMat[i];
+		delete [] auxiMat[i];
 	}
 
 	delete [] inputMat;
@@ -1372,7 +1423,7 @@ int test12(int argc, char **argv)
 	cout << "Computing vector of size " << n  << "..." << endl;
 	cout << endl;
 
-	TimeMesurement timeMesure;
+	TimeMesurement timeMesure, oldMesure;
 
 	double *inputVec = new double[n];		// Vectors used as input for all executions.
 	interval *inputiVec = new interval[n];
@@ -1391,6 +1442,7 @@ int test12(int argc, char **argv)
 
 	cout << "========== Decomposition: " << endl;
 	cout << "\t\t";
+	cout << "Speedup" << "\t\t";
 	cout << "Time" << "\t\t";
 	cout << "StdDev" << "\t\t";
 	cout << "Error" << endl;
@@ -1401,9 +1453,10 @@ int test12(int argc, char **argv)
 		times[i] = test12_OriginalDecomp(auxVec, auxiVec, n, true);
 	}
 
-	timeMesure = runTimeMesurement(times, 30);
+	oldMesure = timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Original";
+	cout << "\t\t";
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -1422,7 +1475,8 @@ int test12(int argc, char **argv)
 	timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Developed";
-	cout << '\t' << timeMesure.mean;
+	cout << '\t' << speedupCalc(timeMesure.mean, oldMesure.mean);
+	cout << "\t\t" << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
 	copyVector(inputiVec, auxiVec, n);
@@ -1434,6 +1488,7 @@ int test12(int argc, char **argv)
 	cout << endl;
 	cout << "========== Composition: " << endl;
 	cout << "\t\t";
+	cout << "Speedup" << "\t\t";
 	cout << "Time" << "\t\t";
 	cout << "StdDev" << "\t\t";
 	cout << "Error" << endl;
@@ -1444,9 +1499,10 @@ int test12(int argc, char **argv)
 		times[i] = test12_OriginalComp(auxVec, auxiVec, n, true);
 	}
 
-	timeMesure = runTimeMesurement(times, 30);
+	oldMesure = timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Original";
+	cout << "\t\t";
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -1465,7 +1521,8 @@ int test12(int argc, char **argv)
 	timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Developed";
-	cout << '\t' << timeMesure.mean;
+	cout << '\t' << speedupCalc(timeMesure.mean, oldMesure.mean);
+	cout << "\t\t" << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
 	copyVector(inputiVec, auxiVec, n);
@@ -1474,11 +1531,12 @@ int test12(int argc, char **argv)
 	cout << '\t' << INT_error(auxiVec, n);
 	cout << endl;
 
-	ImageQuality<double> imgQ;
+	ImageQuality<double> imgQ, oldImgQ;
 
 	cout << endl;
 	cout << "========== Decomposition & Composition: " << endl;
 	cout << "\t\t";
+	cout << "Speedup" << "\t\t";
 	cout << "Time" << "\t\t";
 	cout << "StdDev" << "\t\t";
 	cout << "Error" << "\t\t";
@@ -1492,9 +1550,10 @@ int test12(int argc, char **argv)
 		times[i] = test12_OriginalDecompComp(auxVec, auxiVec, n, true);
 	}
 
-	timeMesure = runTimeMesurement(times, 30);
+	oldMesure = timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Original";
+	cout << "\t\t";
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
@@ -1503,7 +1562,7 @@ int test12(int argc, char **argv)
 
 	cout << '\t' << INT_error(auxiVec, n);
 	
-	imgQ = imageQuality(auxVec, inputVec, n, n);
+	oldImgQ = imgQ = imageQuality(auxVec, inputVec, n, n);
 
 	cout << '\t' << imgQ.euc;
 	cout << '\t' << imgQ.mse;
@@ -1518,7 +1577,8 @@ int test12(int argc, char **argv)
 	timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Developed";
-	cout << '\t' << timeMesure.mean;
+	cout << '\t' << speedupCalc(timeMesure.mean, oldMesure.mean);
+	cout << "\t\t" << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
 	copyVector(inputiVec, auxiVec, n);
@@ -1531,6 +1591,14 @@ int test12(int argc, char **argv)
 	cout << '\t' << imgQ.euc;
 	cout << '\t' << imgQ.mse;
 	cout << '\t' << imgQ.psnr << endl;
+
+	cout << endl;
+	cout << "Quality gain (%)" << endl;
+	cout << endl;
+
+	cout << "EUC" << "\t\t" << relativeGain(imgQ.euc, oldImgQ.euc) << endl;
+	cout << "MSE" << "\t\t" << relativeGain(imgQ.mse, oldImgQ.mse) << endl;
+	cout << "PSNR" << "\t\t" << -relativeGain(imgQ.psnr, oldImgQ.psnr) << endl;
 
 	cout << endl;
 
