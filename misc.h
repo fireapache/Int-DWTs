@@ -333,4 +333,18 @@ void printMatrix(T **mat, int n)
 	cout << endl;
 }
 
+// Speedup of A over B.
+template <typename T>
+T speedupCalc(T A, T B)
+{
+	return T(100) * (T(1) - A / B);
+}
+
+// Relative gain of A over B
+template <typename T>
+T relativeGain(T A, T B)
+{
+	return (B - A) / B * T(100);
+}
+
 #endif /* MISC_H */
