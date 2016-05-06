@@ -3,6 +3,6 @@
 
 int main(int argc, char **argv)
 {
-	//return testIndexer(argc, argv);
-	test16();
+	return testIndexer(argc, argv);
+	//test16();
 }
