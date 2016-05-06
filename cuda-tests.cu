@@ -24,4 +24,17 @@ int test16()
 	return 0;
 }
 
+#else
+
+void notSupported()
+{
+	cout << "This test should have been compiled using NVCC!" << endl;
+}
+
+int test16()
+{
+	notSupported();
+	return 0;
+}
+
 #endif
