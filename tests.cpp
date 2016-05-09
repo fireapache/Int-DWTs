@@ -99,7 +99,7 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 {
 	double **comp;
 	double *times = new double[30];			// Vector to store the time of each execution.
-	real error;
+	real error, oldError;
 	TimeMesurement timeMesure, oldMesure;
 
 	if (standard) cout << "========== Standard Decomposition: " << endl;
@@ -108,7 +108,8 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 	cout << "Speedup" << "\t\t";
 	cout << "Time" << "\t\t";
 	cout << "StdDev" << "\t\t";
-	cout << "Error" << endl;
+	cout << "Error" << "\t\t";
+	cout << "Error (%)" << endl;
 
 	for (int i = 0; i < 30; ++i)
 	{
@@ -122,9 +123,9 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
-	error = test15_ProcessError(inputiMat, n, levels, 0, standard, true);
+	oldError = test15_ProcessError(inputiMat, n, levels, 0, standard, true);
 
-	cout << '\t' << error;
+	cout << '\t' << oldError;
 	cout << endl;
 
 	for (int i = 0; i < 30; ++i)
@@ -142,6 +143,7 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 	error = test15_ProcessError(inputiMat, n, levels, 0, standard, false);
 
 	cout << '\t' << error;
+	cout << '\t' << relativeGain(error, oldError);
 	cout << endl;
 
 	cout << endl;
@@ -165,9 +167,9 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
-	error = test15_ProcessError(inputiMat, n, levels, 1, standard, true);
+	oldError = test15_ProcessError(inputiMat, n, levels, 1, standard, true);
 
-	cout << '\t' << error;
+	cout << '\t' << oldError;
 	cout << endl;
 
 	for (int i = 0; i < 30; ++i)
@@ -185,6 +187,7 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 	error = test15_ProcessError(inputiMat, n, levels, 1, standard, false);
 
 	cout << '\t' << error;
+	cout << '\t' << relativeGain(error, oldError);
 	cout << endl;
 
 	ImageQuality<double> imgQ, oldImgQ;
@@ -214,9 +217,9 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 	cout << '\t' << timeMesure.mean;
 	cout << '\t' << timeMesure.stdDev;
 
-	error = test15_ProcessError(inputiMat, n, levels, 2, standard, true);
+	oldError = test15_ProcessError(inputiMat, n, levels, 2, standard, true);
 
-	cout << '\t' << error;
+	cout << '\t' << oldError;
 	
 	test15_Process(inputMat, n, levels, 2, standard, true, comp);
 
@@ -262,6 +265,7 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 	cout << "EUC" << "\t\t" << relativeGain(imgQ.euc, oldImgQ.euc) << endl;
 	cout << "MSE" << "\t\t" << relativeGain(imgQ.mse, oldImgQ.mse) << endl;
 	cout << "PSNR" << "\t\t" << -relativeGain(imgQ.psnr, oldImgQ.psnr) << endl;
+	cout << "Error" << "\t\t" << relativeGain(error, oldError) << endl;
 
 	cout << endl;
 
@@ -620,7 +624,7 @@ int test14(int argc, char **argv)
 
 	double *times = new double[30];			// Vector to store the time of each execution.
 
-	real error;
+	real error, oldError;
 
 	// Fill input vectors with n random values.
 	for (uint i = 0; i < n; ++i)
@@ -634,7 +638,8 @@ int test14(int argc, char **argv)
 	cout << "Speedup" << "\t\t";
 	cout << "Time" << "\t\t";
 	cout << "StdDev" << "\t\t";
-	cout << "Error" << endl;
+	cout << "Error" << "\t\t";
+	cout << "Error (%)" << endl;
 
 	for (int i = 0; i < 30; ++i)
 	{
@@ -650,9 +655,9 @@ int test14(int argc, char **argv)
 	cout << '\t' << timeMesure.stdDev;
 
 	copyVector(inputiVec, auxiVec, n);
-	error = test14_OriginalDecompError(auxiVec, n, levels);
+	oldError = test14_OriginalDecompError(auxiVec, n, levels);
 
-	cout << '\t' << error;
+	cout << '\t' << oldError;
 	cout << endl;
 
 	for (int i = 0; i < 30; ++i)
@@ -672,6 +677,7 @@ int test14(int argc, char **argv)
 	error = test14_DevelopedDecompError(auxiVec, n, levels);
 
 	cout << '\t' << error;
+	cout << '\t' << relativeGain(error, oldError);
 	cout << endl;
 
 	cout << endl;
@@ -680,7 +686,8 @@ int test14(int argc, char **argv)
 	cout << "Speedup" << "\t\t";
 	cout << "Time" << "\t\t";
 	cout << "StdDev" << "\t\t";
-	cout << "Error" << endl;
+	cout << "Error" << "\t\t";
+	cout << "Error (%)" << endl;
 	
 	for (int i = 0; i < 30; ++i)
 	{
@@ -696,9 +703,9 @@ int test14(int argc, char **argv)
 	cout << '\t' << timeMesure.stdDev;
 
 	copyVector(inputiVec, auxiVec, n);
-	error = test14_OriginalCompError(auxiVec, n, levels);
+	oldError = test14_OriginalCompError(auxiVec, n, levels);
 
-	cout << '\t' << error;
+	cout << '\t' << oldError;
 	cout << endl;
 
 	for (int i = 0; i < 30; ++i)
@@ -718,6 +725,7 @@ int test14(int argc, char **argv)
 	error = test14_DevelopedCompError(auxiVec, n, levels);
 
 	cout << '\t' << error;
+	cout << '\t' << relativeGain(error, oldError);
 	cout << endl;
 
 	ImageQuality<double> imgQ, oldImgQ;
@@ -748,9 +756,9 @@ int test14(int argc, char **argv)
 	cout << '\t' << timeMesure.stdDev;
 
 	copyVector(inputiVec, auxiVec, n);
-	error = test14_OriginalDecompCompError(auxiVec, n, levels);
+	oldError = test14_OriginalDecompCompError(auxiVec, n, levels);
 
-	cout << '\t' << error;
+	cout << '\t' << oldError;
 	
 	test14_OriginalDecompComp(inputVec, result, n, levels, true);
 
@@ -797,6 +805,7 @@ int test14(int argc, char **argv)
 	cout << "EUC" << "\t\t" << relativeGain(imgQ.euc, oldImgQ.euc) << endl;
 	cout << "MSE" << "\t\t" << relativeGain(imgQ.mse, oldImgQ.mse) << endl;
 	cout << "PSNR" << "\t\t" << -relativeGain(imgQ.psnr, oldImgQ.psnr) << endl;
+	cout << "Error" << "\t\t" << relativeGain(error, oldError) << endl;
 
 	cout << endl;
 
@@ -989,6 +998,7 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 {
 	double *times = new double[30];			// Vector to store the time of each execution.
 	TimeMesurement timeMesure, oldMesure;
+	real error, oldError;
 
 	if (standard) cout << "========== Standard Decomposition: " << endl;
 	else cout << "========== Non Standard Decomposition: " << endl;
@@ -996,7 +1006,8 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 	cout << "Speedup" << "\t\t";
 	cout << "Time" << "\t\t";
 	cout << "StdDev" << "\t\t";
-	cout << "Error" << endl;
+	cout << "Error" << "\t\t";
+	cout << "Error (%)" << endl;
 
 	for (int i = 0; i < 30; ++i)
 	{
@@ -1014,7 +1025,9 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 	copyMatrix(inputiMat, auxiMat, n);
 	test13_OriginalDecomp(auxMat, auxiMat, n, standard, false);
 
-	cout << '\t' << INT_error(auxiMat, n, n);
+	oldError = INT_error(auxiMat, n, n);
+
+	cout << '\t' << oldError;
 	cout << endl;
 
 	for (int i = 0; i < 30; ++i)
@@ -1033,7 +1046,10 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 	copyMatrix(inputiMat, auxiMat, n);
 	test13_DevelopedDecomp(auxMat, auxiMat, n, standard, false);
 
-	cout << '\t' << INT_error(auxiMat, n, n);
+	error = INT_error(auxiMat, n, n);
+
+	cout << '\t' << error;
+	cout << '\t' << relativeGain(error, oldError);
 	cout << endl;
 
 	cout << endl;
@@ -1043,7 +1059,8 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 	cout << "Speedup" << "\t\t";
 	cout << "Time" << "\t\t";
 	cout << "StdDev" << "\t\t";
-	cout << "Error" << endl;
+	cout << "Error" << "\t\t";
+	cout << "Error (%)" << endl;
 	
 	for (int i = 0; i < 30; ++i)
 	{
@@ -1061,7 +1078,9 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 	copyMatrix(inputiMat, auxiMat, n);
 	test13_OriginalComp(auxMat, auxiMat, n, standard, false);
 
-	cout << '\t' << INT_error(auxiMat, n, n);
+	oldError = INT_error(auxiMat, n, n);
+
+	cout << '\t' << oldError;
 	cout << endl;
 
 	for (int i = 0; i < 30; ++i)
@@ -1080,7 +1099,10 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 	copyMatrix(inputiMat, auxiMat, n);
 	test13_DevelopedComp(auxMat, auxiMat, n, standard, false);
 
-	cout << '\t' << INT_error(auxiMat, n, n);
+	error = INT_error(auxiMat, n, n);
+
+	cout << '\t' << error;
+	cout << '\t' << relativeGain(error, oldError);
 	cout << endl;
 
 	ImageQuality<double> imgQ, oldImgQ;
@@ -1113,7 +1135,9 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 	copyMatrix(inputiMat, auxiMat, n);
 	test13_OriginalDecompComp(auxMat, auxiMat, n, standard, false);
 
-	cout << '\t' << INT_error(auxiMat, n, n);
+	oldError = INT_error(auxiMat, n, n);
+
+	cout << '\t' << oldError;
 	
 	oldImgQ = imgQ = imageQuality(auxMat, inputMat, n, n);
 
@@ -1137,7 +1161,9 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 	copyMatrix(inputiMat, auxiMat, n);
 	test13_DevelopedDecompComp(auxMat, auxiMat, n, standard, false);
 
-	cout << '\t' << INT_error(auxiMat, n, n);
+	error = INT_error(auxiMat, n, n);
+
+	cout << '\t' << error;
 	
 	imgQ = imageQuality(auxMat, inputMat, n, n);
 
@@ -1152,6 +1178,7 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 	cout << "EUC" << "\t\t" << relativeGain(imgQ.euc, oldImgQ.euc) << endl;
 	cout << "MSE" << "\t\t" << relativeGain(imgQ.mse, oldImgQ.mse) << endl;
 	cout << "PSNR" << "\t\t" << -relativeGain(imgQ.psnr, oldImgQ.psnr) << endl;
+	cout << "Error" << "\t\t" << relativeGain(error, oldError) << endl;
 
 	cout << endl;
 
@@ -1423,6 +1450,8 @@ int test12(int argc, char **argv)
 	cout << "Computing vector of size " << n  << "..." << endl;
 	cout << endl;
 
+	real error, oldError;
+
 	TimeMesurement timeMesure, oldMesure;
 
 	double *inputVec = new double[n];		// Vectors used as input for all executions.
@@ -1445,7 +1474,8 @@ int test12(int argc, char **argv)
 	cout << "Speedup" << "\t\t";
 	cout << "Time" << "\t\t";
 	cout << "StdDev" << "\t\t";
-	cout << "Error" << endl;
+	cout << "Error" << "\t\t";
+	cout << "Error (%)" << endl;
 
 	for (int i = 0; i < 30; ++i)
 	{
@@ -1463,7 +1493,9 @@ int test12(int argc, char **argv)
 	copyVector(inputiVec, auxiVec, n);
 	test12_OriginalDecomp(auxVec, auxiVec, n, false);
 
-	cout << '\t' << INT_error(auxiVec, n);
+	oldError = INT_error(auxiVec, n);
+
+	cout << '\t' << oldError;
 	cout << endl;
 
 	for (int i = 0; i < 30; ++i)
@@ -1482,7 +1514,10 @@ int test12(int argc, char **argv)
 	copyVector(inputiVec, auxiVec, n);
 	test12_DevelopedDecomp(auxVec, auxiVec, n, false);
 
-	cout << '\t' << INT_error(auxiVec, n);
+	error = INT_error(auxiVec, n);
+
+	cout << '\t' << error;
+	cout << '\t' << relativeGain(error, oldError);
 	cout << endl;
 
 	cout << endl;
@@ -1491,7 +1526,8 @@ int test12(int argc, char **argv)
 	cout << "Speedup" << "\t\t";
 	cout << "Time" << "\t\t";
 	cout << "StdDev" << "\t\t";
-	cout << "Error" << endl;
+	cout << "Error" << "\t\t";
+	cout << "Error (%)" << endl;
 	
 	for (int i = 0; i < 30; ++i)
 	{
@@ -1509,7 +1545,9 @@ int test12(int argc, char **argv)
 	copyVector(inputiVec, auxiVec, n);
 	test12_OriginalComp(auxVec, auxiVec, n, false);
 
-	cout << '\t' << INT_error(auxiVec, n);
+	oldError = INT_error(auxiVec, n);
+
+	cout << '\t' << oldError;
 	cout << endl;
 
 	for (int i = 0; i < 30; ++i)
@@ -1528,7 +1566,10 @@ int test12(int argc, char **argv)
 	copyVector(inputiVec, auxiVec, n);
 	test12_DevelopedComp(auxVec, auxiVec, n, false);
 
-	cout << '\t' << INT_error(auxiVec, n);
+	error = INT_error(auxiVec, n);
+
+	cout << '\t' << error;
+	cout << '\t' << relativeGain(error, oldError);
 	cout << endl;
 
 	ImageQuality<double> imgQ, oldImgQ;
@@ -1560,8 +1601,10 @@ int test12(int argc, char **argv)
 	copyVector(inputiVec, auxiVec, n);
 	test12_OriginalDecompComp(auxVec, auxiVec, n, false);
 
-	cout << '\t' << INT_error(auxiVec, n);
+	oldError = INT_error(auxiVec, n);
 	
+	cout << '\t' << oldError;
+
 	oldImgQ = imgQ = imageQuality(auxVec, inputVec, n, n);
 
 	cout << '\t' << imgQ.euc;
@@ -1584,7 +1627,9 @@ int test12(int argc, char **argv)
 	copyVector(inputiVec, auxiVec, n);
 	test12_DevelopedDecompComp(auxVec, auxiVec, n, false);
 
-	cout << '\t' << INT_error(auxiVec, n);
+	error = INT_error(auxiVec, n);
+
+	cout << '\t' << error;
 	
 	imgQ = imageQuality(auxVec, inputVec, n, n);
 
@@ -1599,6 +1644,7 @@ int test12(int argc, char **argv)
 	cout << "EUC" << "\t\t" << relativeGain(imgQ.euc, oldImgQ.euc) << endl;
 	cout << "MSE" << "\t\t" << relativeGain(imgQ.mse, oldImgQ.mse) << endl;
 	cout << "PSNR" << "\t\t" << -relativeGain(imgQ.psnr, oldImgQ.psnr) << endl;
+	cout << "Error" << "\t\t" << relativeGain(error, oldError) << endl;
 
 	cout << endl;
 
