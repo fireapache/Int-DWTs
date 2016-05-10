@@ -38,14 +38,14 @@ plt.sca(ax[0])
 developed = (9.86479, 27.1989, 23.4807)
 std_dev = (0.0, 0.0, 0.0)
 
-plt.ylabel('Speedup (%)')
-plt.title('Decimated 1D HWT')
+plt.ylabel('Performance (%)')
+plt.title('Decimated 2D Non-Standard HWT')
 plt.xticks(index, ('Decomposition', 'Composition', 'Decomp & Comp'))
 plt.grid(True)
 # plt.ylim([0.0,110.0])
 # ax[0].xaxis.set_visible(False)
 
-Speedup = ax[0].bar(index, developed, bar_width,
+Performance = ax[0].bar(index, developed, bar_width,
                  alpha=opacity,
                  color=colors1,
                  yerr=std_dev,
@@ -61,7 +61,7 @@ plt.sca(ax[1])
 
 developedError = (100.0, 100.0, 100.0)
 
-plt.ylabel('Error Gain (%)')
+plt.ylabel('Acurracy Gain (%)')
 plt.xticks(index, ('Decomposition', 'Composition', 'Decomp & Comp'))
 plt.grid(True)
 plt.ylim([0.0,110.0])
@@ -76,7 +76,7 @@ Errors = ax[1].bar(index, developedError, bar_width,
 
 plt.sca(ax[2])
 
-developedError = (100.0, 100.0, 100.0)
+MetricResults = (100.0, 100.0, 100.0)
 
 plt.ylabel('Metrics Gain (%)')
 plt.xticks(index, ('EUC', 'MSE', 'PSNR'))
@@ -84,7 +84,7 @@ plt.grid(True)
 plt.ylim([0.0,110.0])
 plt.xlim([min(index) - 0.5, max(index) + 0.5])
 
-Metrics = ax[2].bar(index, developedError, bar_width,
+Metrics = ax[2].bar(index, MetricResults, bar_width,
                  alpha=opacity,
                  color=colors2,
                  #yerr=std_ori,
