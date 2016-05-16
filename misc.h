@@ -288,6 +288,35 @@ ImageQuality<T> imageQuality(T *vec1, T *vec2, int max, uint n)
 }
 
 template <typename T>
+T maxValue(T *vec, uint n)
+{
+	T ref = vec[0];
+
+	for (uint i = 0; i < n; i++)
+	{
+		if (ref < vec[i])
+		{
+			ref = vec[i];
+		}
+	}
+}
+
+template <typename T>
+T maxValue(T **mat, uint n, uint m)
+{
+	T ref = mat[0][0];
+
+	for (uint i = 0; i < n; i++)
+	for (uint j = 0; j < m; j++)
+	{
+		if (ref < mat[i][j])
+		{
+			ref = mat[i][j];
+		}
+	}
+}
+
+template <typename T>
 ImageQuality<T> imageQuality(T **m1, T **m2, int max, uint n)
 {
 	ImageQuality<T> result;
