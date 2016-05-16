@@ -299,6 +299,8 @@ T maxValue(T *vec, uint n)
 			ref = vec[i];
 		}
 	}
+
+	return ref;
 }
 
 template <typename T>
@@ -314,6 +316,8 @@ T maxValue(T **mat, uint n, uint m)
 			ref = mat[i][j];
 		}
 	}
+
+	return ref;
 }
 
 template <typename T>
