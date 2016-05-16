@@ -223,7 +223,9 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 	
 	test15_Process(inputMat, n, levels, 2, standard, true, comp);
 
-	oldImgQ = imgQ = imageQuality(comp, inputMat, n, n);
+	double oldMax = maxValue(comp, n, n);
+
+	oldImgQ = imgQ = imageQuality(comp, inputMat, oldMax, n);
 
 	delete [] comp;
 
@@ -250,7 +252,9 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 	
 	test15_Process(inputMat, n, levels, 2, standard, false, comp);
 
-	imgQ = imageQuality(comp, inputMat, n, n);
+	double max = maxValue(comp, n, n);
+
+	imgQ = imageQuality(comp, inputMat, max, n);
 	
 	delete [] comp;
 
@@ -762,7 +766,9 @@ int test14(int argc, char **argv)
 	
 	test14_OriginalDecompComp(inputVec, result, n, levels, true);
 
-	oldImgQ = imgQ = imageQuality(result, inputVec, n, n);
+	double oldMax = maxValue(result, n);
+
+	oldImgQ = imgQ = imageQuality(result, inputVec, oldMax, n);
 
 	delete [] result;
 
@@ -790,7 +796,9 @@ int test14(int argc, char **argv)
 	
 	test14_DevelopedDecompComp(inputVec, result, n, levels, true);
 
-	imgQ = imageQuality(result, inputVec, n, n);
+	double max = maxValue(result, n);
+
+	imgQ = imageQuality(result, inputVec, max, n);
 
 	delete [] result;
 
@@ -1139,7 +1147,9 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 
 	cout << '\t' << oldError;
 	
-	oldImgQ = imgQ = imageQuality(auxMat, inputMat, n, n);
+	double oldMax = maxValue(auxMat, n, n);
+
+	oldImgQ = imgQ = imageQuality(auxMat, inputMat, oldMax, n);
 
 	cout << '\t' << imgQ.euc;
 	cout << '\t' << imgQ.mse;
@@ -1165,7 +1175,9 @@ void test13_Script(double **inputMat, double **auxMat, interval **inputiMat, int
 
 	cout << '\t' << error;
 	
-	imgQ = imageQuality(auxMat, inputMat, n, n);
+	double max = maxValue(auxMat, n, n);
+
+	imgQ = imageQuality(auxMat, inputMat, max, n);
 
 	cout << '\t' << imgQ.euc;
 	cout << '\t' << imgQ.mse;
@@ -1605,7 +1617,9 @@ int test12(int argc, char **argv)
 	
 	cout << '\t' << oldError;
 
-	oldImgQ = imgQ = imageQuality(auxVec, inputVec, n, n);
+	double oldMax = maxValue(auxVec, n);
+
+	oldImgQ = imgQ = imageQuality(auxVec, inputVec, oldMax, n);
 
 	cout << '\t' << imgQ.euc;
 	cout << '\t' << imgQ.mse;
@@ -1631,6 +1645,8 @@ int test12(int argc, char **argv)
 
 	cout << '\t' << error;
 	
+	double max = maxValue(auxVec, n);
+
 	imgQ = imageQuality(auxVec, inputVec, n, n);
 
 	cout << '\t' << imgQ.euc;
