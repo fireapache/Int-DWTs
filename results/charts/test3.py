@@ -35,7 +35,7 @@ error_config = {'ecolor': '0.3'}
 
 plt.sca(ax[0])
 
-developed = (-66.4137, -1.04421, -41.2366)
+developed = (-51.9857, 0.760146, -32.9086)
 std_dev = (0.0, 0.0, 0.0)
 
 plt.ylabel('Performance (%)')
@@ -61,7 +61,7 @@ plt.sca(ax[1])
 
 developedError = (69.230769, 0.000000, 81.081081)
 
-plt.ylabel('Acurracy Gain (%)')
+plt.ylabel('Acurracy (%)')
 plt.xticks(index, ('Decomposition', 'Composition', 'Decomp & Comp'))
 plt.grid(True)
 plt.ylim([0.0,110.0])
@@ -76,12 +76,12 @@ Errors = ax[1].bar(index, developedError, bar_width,
 
 plt.sca(ax[2])
 
-MetricResults = (54.4759, 79.2756, 1.96939)
+MetricResults = (54.4759, 79.2756, 2.15643)
 
-plt.ylabel('Metrics Gain (%)')
+plt.ylabel('Metrics (%)')
 plt.xticks(index, ('EUC', 'MSE', 'PSNR'))
 plt.grid(True)
-plt.ylim([0.0,85.0])
+plt.ylim([0.0,110.0])
 plt.xlim([min(index) - 0.5, max(index) + 0.5])
 
 Metrics = ax[2].bar(index, MetricResults, bar_width,

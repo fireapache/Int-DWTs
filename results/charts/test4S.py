@@ -35,7 +35,7 @@ error_config = {'ecolor': '0.3'}
 
 plt.sca(ax[0])
 
-developed = (-17.6183, 7.77116, -18.8359)
+developed = (-13.8033, 5.00734, -13.0497)
 std_dev = (0.0, 0.0, 0.0)
 
 plt.ylabel('Performance (%)')
@@ -77,7 +77,7 @@ Errors = ax[1].bar(index, developedError, bar_width,
 
 plt.sca(ax[2])
 
-MetricResults = (50.8733, 75.8657, 2.04022)
+MetricResults = (50.8733, 75.8657, 2.15648)
 
 plt.ylabel('Metrics Gain (%)')
 plt.xticks(index, ('EUC', 'MSE', 'PSNR'))

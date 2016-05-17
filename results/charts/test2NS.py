@@ -35,14 +35,14 @@ error_config = {'ecolor': '0.3'}
 
 plt.sca(ax[0])
 
-developed = (9.86479, 27.1989, 23.4807)
+developed = (25.2438, 39.0357, 35.0265)
 std_dev = (0.0, 0.0, 0.0)
 
 plt.ylabel('Performance (%)')
 plt.title('Decimated 2D Non-Standard HWT')
 plt.xticks(index, ('Decomposition', 'Composition', 'Decomp & Comp'))
 plt.grid(True)
-# plt.ylim([0.0,110.0])
+plt.ylim([0.0,50.0])
 # ax[0].xaxis.set_visible(False)
 
 Performance = ax[0].bar(index, developed, bar_width,
@@ -61,7 +61,7 @@ plt.sca(ax[1])
 
 developedError = (100.0, 100.0, 100.0)
 
-plt.ylabel('Acurracy Gain (%)')
+plt.ylabel('Acurracy (%)')
 plt.xticks(index, ('Decomposition', 'Composition', 'Decomp & Comp'))
 plt.grid(True)
 plt.ylim([0.0,110.0])
@@ -76,9 +76,9 @@ Errors = ax[1].bar(index, developedError, bar_width,
 
 plt.sca(ax[2])
 
-MetricResults = (100.0, 100.0, 100.0)
+MetricResults = (100.0, 100.0, 0.0)
 
-plt.ylabel('Metrics Gain (%)')
+plt.ylabel('Metrics (%)')
 plt.xticks(index, ('EUC', 'MSE', 'PSNR'))
 plt.grid(True)
 plt.ylim([0.0,110.0])
