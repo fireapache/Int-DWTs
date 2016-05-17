@@ -1,4 +1,4 @@
-
+﻿
 	==================== Test 4 ====================
 
 	* This test is about mesurement of time and calculus 
@@ -9,32 +9,46 @@ Computing 4levels of a matrix of order 1024...
 1024 X 1024 = 1048576...
 
 ========== Standard Decomposition: 
-		Time		StdDev		Error
-Original	0.179035	0.00635899	9.822543E-011
-Developed	0.212338	0.00659189	7.275958E-012
+		Speedup		Time		StdDev		Error		Error (%)
+Original			0.191156	0.00523552	9.822543E-011
+Developed	-17.6183	0.224835	0.00417382	7.275958E-012	92.592593
 
 ========== Standard Composition: 
-		Time		StdDev		Error
-Original	0.327291	0.00506325	0.000000
-Developed	0.317583	0.00760844	0.000000
+		Speedup		Time		StdDev		Error
+Original			0.304747	0.00848385	0.000000
+Developed	7.77116		0.281065	0.0115187	0.000000	0.000000
 
 ========== Standard Decomposition & Composition: 
-		Time		StdDev		Error		EUC		MSE		PSNR
-Original	0.18877		0.00703837	3.028617E-010	7.71416e-010	5.67515e-025	302.666
-Developed	0.225165	0.00625787	3.819878E-011	3.63874e-010	1.2627e-025	309.193
+		Speedup		Time		StdDev		Error		EUC		MSE		PSNR
+Original			0.19448		0.0113177	3.028617E-010	7.71416e-010	5.67515e-025	302.666
+Developed	-18.8359	0.231113	0.00794955	3.819878E-011	3.63874e-010	1.2627e-025	309.193
+
+Quality gain (%)
+
+EUC		52.8304
+MSE		77.7503
+PSNR		2.15642
+Error		87.387387
 
 ========== Non Standard Decomposition: 
-		Time		StdDev		Error
-Original	0.156612	0.00839412	9.822543E-011
-Developed	0.192826	0.0101733	7.275958E-012
+		Speedup		Time		StdDev		Error		Error (%)
+Original			0.163632	0.00694018	9.822543E-011
+Developed	-27.0197	0.207845	0.00810363	7.275958E-012	92.592593
 
 ========== Non Standard Composition: 
-		Time		StdDev		Error
-Original	0.314185	0.00300782	0.000000
-Developed	0.309781	0.00491363	0.000000
+		Speedup		Time		StdDev		Error
+Original			0.282628	0.00384672	0.000000
+Developed	1.04999		0.27966		0.00287186	0.000000	0.000000
 
 ========== Non Standard Decomposition & Composition: 
-		Time		StdDev		Error		EUC		MSE		PSNR
-Original	0.19395		0.0183007	3.083187E-010	7.77518e-010	5.76529e-025	302.598
-Developed	0.218264	0.00970578	3.819878E-011	3.81969e-010	1.39142e-025	308.771
+		Speedup		Time		StdDev		Error		EUC		MSE		PSNR
+Original			0.187934	0.00670096	3.083187E-010	7.77518e-010	5.76529e-025	302.598
+Developed	-20.8122	0.227047	0.00753718	3.819878E-011	3.81969e-010	1.39142e-025	308.771
+
+Quality gain (%)
+
+EUC		50.8733
+MSE		75.8657
+PSNR		2.04022
+Error		87.610619
 

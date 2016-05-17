@@ -1,4 +1,4 @@
-
+﻿
 	==================== Test 3 ====================
 
 	* This test is about mesurement of time and calculus 
@@ -8,17 +8,24 @@
 Computing 4 levels for a vector of size 1048576...
 
 ========== Decomposition: 
-		Time		StdDev		Error
-Original	0.0273379	0.000339537	0
-Developed	0.0415496	0.000298855	0
+		Speedup		Time		StdDev		Error		Error (%)
+Original			0.0297942	0.00154581	3.026798E-009
+Developed	-66.4137	0.0495816	0.00160466	9.313226E-010	69.230769
 
 ========== Composition: 
-		Time		StdDev		Error
-Original	0.0115317	7.12352e-05	0
-Developed	0.0115378	9.94945e-05	0
+		Speedup		Time		StdDev		Error		Error (%)
+Original			0.0125662	0.000318382	0.000000
+Developed	-1.04421	0.0126974	0.000347128	0.000000	0.000000
 
 ========== Decomposition & Composition: 
-		Time		StdDev		Error		EUC		MSE		PSNR
-Original	0.0383284	0.000255277	0	4.7575e-09	2.15852e-23	347.07
-Developed	0.0523903	0.000295155	0	2.16581e-09	4.47342e-24	353.906
+		Speedup		Time		StdDev		Error		EUC		MSE		PSNR
+Original			0.0448627	0.00146088	3.445894E-008	4.7575e-009	2.15852e-023	347.07
+Developed	-41.2366	0.0633626	0.00169581	6.519258E-009	2.16581e-009	4.47342e-024	353.906
+
+Quality gain (%)
+
+EUC		54.4759
+MSE		79.2756
+PSNR		1.96939
+Error		81.081081
 
