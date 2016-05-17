@@ -116,7 +116,7 @@ void test15_Script(double **inputMat, interval **inputiMat, uint n, uint levels,
 		times[i] = test15_Process(inputMat, n, levels, 0, standard, true, comp);
 	}
 
-	timeMesure = runTimeMesurement(times, 30);
+	oldMesure = timeMesure = runTimeMesurement(times, 30);
 
 	cout << "Original";
 	cout << "\t\t";
