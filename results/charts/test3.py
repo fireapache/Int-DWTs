@@ -54,6 +54,7 @@ Performance = ax[0].bar(index, developed, bar_width,
                  align='center')
 
 plt.xlim([min(index) - 0.5, max(index) + 0.5])
+plt.axhline(y=0, xmin=min(index) - 0.5, xmax=max(index) + 0.5, color='black')
 
 # plt.legend(loc='upper left', prop={'size':11})
 
