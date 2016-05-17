@@ -62,7 +62,7 @@ plt.sca(ax[1])
 
 developedError = (92.592593, 0.000000, 87.387387)
 
-plt.ylabel('Acurracy Gain (%)')
+plt.ylabel('Accuracy (%)')
 plt.xticks(index, ('Decomposition', 'Composition', 'Decomp & Comp'))
 plt.grid(True)
 plt.ylim([0.0,110.0])
@@ -79,7 +79,7 @@ plt.sca(ax[2])
 
 MetricResults = (50.8733, 75.8657, 2.15648)
 
-plt.ylabel('Metrics Gain (%)')
+plt.ylabel('Metrics (%)')
 plt.xticks(index, ('EUC', 'MSE', 'PSNR'))
 plt.grid(True)
 plt.ylim([0.0,85.0])

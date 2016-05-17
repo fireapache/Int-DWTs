@@ -62,7 +62,7 @@ plt.sca(ax[1])
 
 developedError = (69.230769, 0.000000, 81.081081)
 
-plt.ylabel('Acurracy (%)')
+plt.ylabel('Accuracy (%)')
 plt.xticks(index, ('Decomposition', 'Composition', 'Decomp & Comp'))
 plt.grid(True)
 plt.ylim([0.0,110.0])
