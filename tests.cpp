@@ -3493,6 +3493,66 @@ void fundamentalTest4()
 
 }
 
+void fundamentalTest5()
+{
+	cout << "********************" << endl;
+	cout << "*     This fundamental (5) test is about the normalized Daubechies (db2)" << endl;
+	cout << "* decomposition and composition steps. It uses a 8 long vector in order " << endl;
+	cout << "* to help the visualization of the result and further comparison with " << endl;
+	cout << "* its concept." << endl;
+	cout << "********************" << endl;
+	cout << endl;
+
+	double *vec = new double[8];
+
+	vec[0] = 9.0;
+	vec[1] = 7.0;
+	vec[2] = 3.0;
+	vec[3] = 5.0;
+	vec[4] = 11.0;
+	vec[5] = 6.0;
+	vec[6] = 2.0;
+	vec[7] = 1.0;
+
+	cout << "Input:" << endl;
+	cout << endl;
+	printVector(vec, 8);
+	cout << endl;
+	cout << "From the literature:" << endl;
+	cout << endl;
+
+	Daub_Domposition(vec, 8, true);
+	printVector(vec, 8);
+	Daub_Composition(vec, 8, true);
+	printVector(vec, 8);
+
+	cout << endl;
+	cout << "Developed:" << endl;
+	cout << endl;
+
+	vec[0] = 9.0;
+	vec[1] = 7.0;
+	vec[2] = 3.0;
+	vec[3] = 5.0;
+	vec[4] = 11.0;
+	vec[5] = 6.0;
+	vec[6] = 2.0;
+	vec[7] = 1.0;
+
+	Daub_Domposition(vec, 8, false);
+	printVector(vec, 8);
+	Daub_Normalization(vec, 8);
+	printVector(vec, 8);
+	
+	Daub_Composition(vec, 8, true);
+	printVector(vec, 8);
+	
+
+	cout << endl;
+
+	delete [] vec;
+}
+
 void fundamentalTest(unsigned int n)
 {
 	switch(n)
@@ -3511,6 +3571,9 @@ void fundamentalTest(unsigned int n)
 			break;
 		case 4:
 			fundamentalTest4();
+			break;
+		case 5:
+			fundamentalTest5();
 			break;
 		default:
 			cout << "\n\tFundamental test " << n << " not found!\n\n";

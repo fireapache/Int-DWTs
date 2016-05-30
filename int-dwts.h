@@ -3,6 +3,7 @@
 
 #include "int-haar.h"
 #include "int-haar-cuda.h"
+#include "int-daub.h"
 
 #define INTDWTS
 
