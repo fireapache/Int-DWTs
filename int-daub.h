@@ -12,16 +12,16 @@ using namespace cxsc;
 #endif
 
 template <typename T>
-void Daub_Domposition(T *vec, uint n, bool normal)
+void Daub_Decomposition(T *vec, uint n, bool normal)
 {
 	for (uint size = n; size >= 4; size >>= 1)
 	{
-		Daub_DompositionStep(vec, size, normal);
+		Daub_DecompositionStep(vec, size, normal);
 	}
 }
 
 template <typename T>
-void Daub_DompositionStep(T *v, uint n, bool normal)
+void Daub_DecompositionStep(T *v, uint n, bool normal)
 {
 	if (n < 4) return;
 
