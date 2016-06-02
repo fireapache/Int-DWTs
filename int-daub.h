@@ -121,3 +121,292 @@ void Daub_Normalization(T *vec, uint n, bool invert = false)
 			vec[i] /= factor;
 	}
 }
+
+template <typename T>
+void Daub_StandardDecomposition(T *mat, uint rows, uint cols, bool normal)
+{
+	double *temp_row = new double[cols];
+	double *temp_col = new double[rows];
+
+	for (uint i = 0; i < rows; i++)
+	{
+		for (uint j = 0; j < cols; j++)
+			temp_row[j] = mat[i][j];
+
+		Daub_Decomposition(temp_row, cols, normal);
+
+		for (uint j = 0; j < cols; j++)
+			mat[i][j] = temp_row[j];
+	}
+
+	//if (normal) cout << "Normalized ";
+	//cout << "Decomposition (rows):" << endl;
+	//cout << endl;
+	//printMatrix(mat, rows);
+	//cout << endl;
+
+	for (uint i = 0; i < cols; i++)
+	{
+		for (uint j = 0; j < rows; j++)
+			temp_col[j] = mat[j][i];
+
+		Daub_Decomposition(temp_col, rows, normal);
+
+		for (uint j = 0; j < rows; j++)
+			mat[j][i] = temp_col[j];
+	}
+
+	//if (normal) cout << "Normalized ";
+	//cout << "Decomposition (columns):" << endl;
+	//cout << endl;
+	//printMatrix(mat, rows);
+	//cout << endl;
+
+	delete[] temp_row;
+	delete[] temp_col;
+}
+
+template <typename T>
+void Daub_StandardComposition(T *mat, uint rows, uint cols, bool normal)
+{
+	double *temp_row = new double[cols];
+	double *temp_col = new double[rows];
+
+	for (uint i = 0; i < cols; i++)
+	{
+		for (uint j = 0; j < rows; j++)
+			temp_col[j] = mat[j][i];
+
+		Daub_Composition(temp_col, rows, normal);
+
+		for (uint j = 0; j < rows; j++)
+			mat[j][i] = temp_col[j];
+	}
+
+	//if (normal) cout << "Normalized ";
+	//cout << "Composition (columns):" << endl;
+	//cout << endl;
+	//printMatrix(mat, rows);
+	//cout << endl;
+
+	for (uint i = 0; i < rows; i++)
+	{
+		for (uint j = 0; j < cols; j++)
+			temp_row[j] = mat[i][j];
+
+		Daub_Composition(temp_row, cols, normal);
+
+		for (uint j = 0; j < cols; j++)
+			mat[i][j] = temp_row[j];
+	}
+
+	//if (normal) cout << "Normalized ";
+	//cout << "Composition (rows):" << endl;
+	//cout << endl;
+	//printMatrix(mat, rows);
+	//cout << endl;
+
+	delete[] temp_row;
+	delete[] temp_col;
+}
+
+template <typename T>
+void Daub_StandardNormalization(T **mat, uint n, bool invert = false)
+{
+	uint levels = (uint)log2(n);
+	T factor;
+
+	for (uint levelR = 1; levelR < levels; levelR++)
+	{
+		uint startR;
+
+		if (levelR == 1)	startR = 0;
+		else        		startR = (uint)pow(2.0, (double)(levelR));
+
+		uint endR = (uint)pow(2.0, (double)(levelR + 1));
+
+		for (uint row = startR; row < endR; row++)
+		{
+			for (uint levelC = 1; levelC < levels; levelC++)
+			{
+				uint startC;
+
+				if (levelC == 1)	startC = 0;
+				else        		startC = (uint)pow(2.0, (double)(levelC));
+
+				uint endC = (uint)pow(2.0, (double)(levelC + 1));
+
+				for (uint c = startC; c < endC; c++)
+				{
+					uint levelSum = (2 * levels - levelR - levelC);
+
+					if (levelSum & 1)
+					{
+						if (levelSum > 2)	factor = T((int)(levelSum)-1) * sqrt(T(2));
+						else				factor = sqrt(T(2));
+					}
+					else					factor = T((int)(levelSum));
+
+					if (factor != T(0))
+					{
+						if (invert)	mat[row][c] *= factor;
+						else 		mat[row][c] /= factor;
+					}
+				}
+			}
+		}
+	}
+}
+
+template <typename T>
+void Daub_NonStandardDecomposition(T **mat, uint rows, uint cols, bool normal)
+{
+	uint h = rows, w = cols;
+	T *temp_row = new T[cols];
+	T *temp_col = new T[rows];
+
+	while (w >= 4 || h >= 4)
+	{
+		if (w >= 4)
+		{
+			for (uint i = 0; i < h; i++)
+			{
+				for (uint j = 0; j < w; j++)
+					temp_row[j] = mat[i][j];
+
+				Daub_DecompositionStep(temp_row, w, normal);
+
+				for (uint j = 0; j < w; j++)
+					mat[i][j] = temp_row[j];
+			}
+		}
+
+		if (h >= 4)
+		{
+			for (uint i = 0; i < w; i++)
+			{
+				for (uint j = 0; j < h; j++)
+					temp_col[j] = mat[j][i];
+
+				Daub_DecompositionStep(temp_col, h, normal);
+
+				for (uint j = 0; j < h; j++)
+					mat[j][i] = temp_col[j];
+			}
+		}
+
+		if (w >= 4) w /= 2;
+		if (h >= 4) h /= 2;
+	}
+
+	delete [] temp_row;
+	delete [] temp_col;
+}
+
+template <typename T>
+void Daub_NonStandardComposition(T **mat, uint rows, uint cols, bool normal)
+{
+	uint r = 4, c = 4;
+	T *temp_row = new T[cols];
+	T *temp_col = new T[rows];
+
+	while (c <= cols || r <= rows)
+	{
+		if (r <= rows)
+		{
+			for (uint i = 0; i < c; i++)
+			{
+				for (uint j = 0; j < rows; j++)
+					temp_col[j] = mat[j][i];
+
+				Daub_CompositionStep(temp_col, r, normal);
+
+				for (uint j = 0; j < rows; j++)
+					mat[j][i] = temp_col[j];
+			}
+		}
+
+		if (c <= cols)
+		{
+			for (uint i = 0; i < r; i++)
+			{
+				for (uint j = 0; j < cols; j++)
+					temp_row[j] = mat[i][j];
+
+				Daub_CompositionStep(temp_row, c, normal);
+
+				for (uint j = 0; j < cols; j++)
+					mat[i][j] = temp_row[j];
+			}
+		}
+
+		if (c <= cols) c *= 2;
+		if (r <= rows) r *= 2;
+	}
+
+	delete [] temp_row;
+	delete [] temp_col;
+}
+
+template <typename T>
+void Daub_NonStandardNormalization(T **mat, uint n, bool invert = false)
+{
+	T factor;
+	uint start, end;
+
+	uint levels = (uint)log2((double)n);
+
+	for (uint i = 1; i < levels; i++)
+	{
+		if (i == 1) start = 0;
+		else start = (uint)pow(2.0, (double)i);
+		end = (uint)pow(2.0, (double)i + 1);
+
+		factor = pow(T(2.0), T(levels - i));
+
+		if (i == 1)
+		{
+			if (invert)
+			{
+				for (uint l = 0; l < 4; l++)
+				for (uint c = 0; c < 4; c++)
+					mat[l][c] *= factor;
+			}
+			else
+			{
+				for (uint l = 0; l < 4; l++)
+				for (uint c = 0; c < 4; c++)
+					mat[l][c] /= factor;
+			}
+
+			continue;
+		}
+
+		if (invert)
+		{
+			for (uint l = 0; l < end / 2; l++)
+			for (uint c = start; c < end; c++)
+				mat[l][c] *= factor;
+		}
+		else
+		{
+			for (uint l = 0; l < end / 2; l++)
+			for (uint c = start; c < end; c++)
+				mat[l][c] /= factor;
+		}
+
+		if (invert)
+		{
+			for (uint l = start; l < end; l++)
+			for (uint c = 0; c < end; c++)
+				mat[l][c] *= factor;
+		}
+		else
+		{
+			for (uint l = start; l < end; l++)
+			for (uint c = 0; c < end; c++)
+				mat[l][c] /= factor;
+		}
+
+	}
+}
