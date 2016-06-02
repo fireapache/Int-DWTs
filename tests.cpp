@@ -3581,6 +3581,193 @@ void fundamentalTest5()
 	delete [] vec;
 }
 
+void fundamentalTest6()
+{
+	cout << "********************" << endl;
+	cout << "*     This fundamental (6) test is about the standard normalized Daubechies" << endl;
+	cout << "* (db2) decomposition and composition steps. It uses a 8x8 matrix in order " << endl;
+	cout << "* to help the visualization of the result and further comparison with " << endl;
+	cout << "* its concept." << endl;
+	cout << "********************" << endl;
+	cout << endl;
+
+	double **mat = new double*[8];
+
+	for (int m = 0; m < 8; m++)
+		mat[m] = new double[8];
+
+	mat[0][0] = 5; mat[0][1] = 6; mat[0][2] = 1; mat[0][3] = 2; mat[0][4] = 1; mat[0][5] = 3; mat[0][6] = 4; mat[0][7] = 7;
+	mat[1][0] = 4; mat[1][1] = 2; mat[1][2] = 5; mat[1][3] = 5; mat[1][4] = 4; mat[1][5] = 2; mat[1][6] = 1; mat[1][7] = 5;
+	mat[2][0] = 3; mat[2][1] = 1; mat[2][2] = 7; mat[2][3] = 1; mat[2][4] = 6; mat[2][5] = 4; mat[2][6] = 9; mat[2][7] = 0;
+	mat[3][0] = 6; mat[3][1] = 3; mat[3][2] = 5; mat[3][3] = 1; mat[3][4] = 1; mat[3][5] = 5; mat[3][6] = 3; mat[3][7] = 7;
+	mat[4][0] = 5; mat[4][1] = 6; mat[4][2] = 1; mat[4][3] = 2; mat[4][4] = 3; mat[4][5] = 6; mat[4][6] = 4; mat[4][7] = 5;
+	mat[5][0] = 4; mat[5][1] = 2; mat[5][2] = 5; mat[5][3] = 5; mat[5][4] = 8; mat[5][5] = 3; mat[5][6] = 2; mat[5][7] = 1;
+	mat[6][0] = 3; mat[6][1] = 1; mat[6][2] = 7; mat[6][3] = 1; mat[6][4] = 7; mat[6][5] = 9; mat[6][6] = 5; mat[6][7] = 8;
+	mat[7][0] = 6; mat[7][1] = 3; mat[7][2] = 5; mat[7][3] = 1; mat[7][4] = 5; mat[7][5] = 6; mat[7][6] = 1; mat[7][7] = 2;
+
+	cout << "Input:" << endl;
+	cout << endl;
+	printMatrix(mat, 8);
+	cout << endl;
+
+	cout << "==================== Original method (literature):" << endl;
+	cout << endl;
+
+	Daub_StandardDecomposition(mat, 8, 8, true);
+
+	cout << "Normalized Decomposition:" << endl;
+	cout << endl;
+	printMatrix(mat, 8);
+	cout << endl;
+
+	Daub_StandardComposition(mat, 8, 8, true);
+
+	cout << "Normalized Composition:" << endl;
+	cout << endl;
+	printMatrix(mat, 8);
+	cout << endl;
+
+	mat[0][0] = 5; mat[0][1] = 6; mat[0][2] = 1; mat[0][3] = 2; mat[0][4] = 1; mat[0][5] = 3; mat[0][6] = 4; mat[0][7] = 7;
+	mat[1][0] = 4; mat[1][1] = 2; mat[1][2] = 5; mat[1][3] = 5; mat[1][4] = 4; mat[1][5] = 2; mat[1][6] = 1; mat[1][7] = 5;
+	mat[2][0] = 3; mat[2][1] = 1; mat[2][2] = 7; mat[2][3] = 1; mat[2][4] = 6; mat[2][5] = 4; mat[2][6] = 9; mat[2][7] = 0;
+	mat[3][0] = 6; mat[3][1] = 3; mat[3][2] = 5; mat[3][3] = 1; mat[3][4] = 1; mat[3][5] = 5; mat[3][6] = 3; mat[3][7] = 7;
+	mat[4][0] = 5; mat[4][1] = 6; mat[4][2] = 1; mat[4][3] = 2; mat[4][4] = 3; mat[4][5] = 6; mat[4][6] = 4; mat[4][7] = 5;
+	mat[5][0] = 4; mat[5][1] = 2; mat[5][2] = 5; mat[5][3] = 5; mat[5][4] = 8; mat[5][5] = 3; mat[5][6] = 2; mat[5][7] = 1;
+	mat[6][0] = 3; mat[6][1] = 1; mat[6][2] = 7; mat[6][3] = 1; mat[6][4] = 7; mat[6][5] = 9; mat[6][6] = 5; mat[6][7] = 8;
+	mat[7][0] = 6; mat[7][1] = 3; mat[7][2] = 5; mat[7][3] = 1; mat[7][4] = 5; mat[7][5] = 6; mat[7][6] = 1; mat[7][7] = 2;
+
+	cout << "==================== Developed method:" << endl;
+	cout << endl;
+
+	Daub_StandardDecomposition(mat, 8, 8, false);
+
+	cout << "Non Normalized Decomposition:" << endl;
+	cout << endl;
+	printMatrix(mat, 8);
+	cout << endl;
+
+	Daub_StandardNormalization(mat, 8);
+
+	cout << "Normalization Step Decomposition:" << endl;
+	cout << endl;
+	printMatrix(mat, 8);
+	cout << endl;
+
+	Daub_StandardComposition(mat, 8, 8, true);
+
+	cout << "Normalized Composition:" << endl;
+	cout << endl;
+	printMatrix(mat, 8);
+	cout << endl;
+
+}
+
+void fundamentalTest7()
+{
+	cout << "********************" << endl;
+	cout << "*     This fundamental (6) test is about the non standard normalized Daubechies" << endl;
+	cout << "* (db2) decomposition and composition steps. It uses a 8x8 matrix in order " << endl;
+	cout << "* to help the visualization of the result and further comparison with " << endl;
+	cout << "* its concept." << endl;
+	cout << "********************" << endl;
+	cout << endl;
+
+	double **mat = new double*[8];
+
+	for (int m = 0; m < 8; m++)
+		mat[m] = new double[8];
+
+	mat[0][0] = 5; mat[0][1] = 6; mat[0][2] = 1; mat[0][3] = 2; mat[0][4] = 1; mat[0][5] = 3; mat[0][6] = 4; mat[0][7] = 7;
+	mat[1][0] = 4; mat[1][1] = 2; mat[1][2] = 5; mat[1][3] = 5; mat[1][4] = 4; mat[1][5] = 2; mat[1][6] = 1; mat[1][7] = 5;
+	mat[2][0] = 3; mat[2][1] = 1; mat[2][2] = 7; mat[2][3] = 1; mat[2][4] = 6; mat[2][5] = 4; mat[2][6] = 9; mat[2][7] = 0;
+	mat[3][0] = 6; mat[3][1] = 3; mat[3][2] = 5; mat[3][3] = 1; mat[3][4] = 1; mat[3][5] = 5; mat[3][6] = 3; mat[3][7] = 7;
+	mat[4][0] = 5; mat[4][1] = 6; mat[4][2] = 1; mat[4][3] = 2; mat[4][4] = 3; mat[4][5] = 6; mat[4][6] = 4; mat[4][7] = 5;
+	mat[5][0] = 4; mat[5][1] = 2; mat[5][2] = 5; mat[5][3] = 5; mat[5][4] = 8; mat[5][5] = 3; mat[5][6] = 2; mat[5][7] = 1;
+	mat[6][0] = 3; mat[6][1] = 1; mat[6][2] = 7; mat[6][3] = 1; mat[6][4] = 7; mat[6][5] = 9; mat[6][6] = 5; mat[6][7] = 8;
+	mat[7][0] = 6; mat[7][1] = 3; mat[7][2] = 5; mat[7][3] = 1; mat[7][4] = 5; mat[7][5] = 6; mat[7][6] = 1; mat[7][7] = 2;
+
+	//// ********************** Comparison standard and non standard
+	//
+	//Daub_StandardDecomposition(mat, 8, 8, true);
+	//cout << endl;
+	//printMatrix(mat, 8);
+	//cout << endl;
+	//
+	//mat[0][0] = 5; mat[0][1] = 6; mat[0][2] = 1; mat[0][3] = 2; mat[0][4] = 1; mat[0][5] = 3; mat[0][6] = 4; mat[0][7] = 7;
+	//mat[1][0] = 4; mat[1][1] = 2; mat[1][2] = 5; mat[1][3] = 5; mat[1][4] = 4; mat[1][5] = 2; mat[1][6] = 1; mat[1][7] = 5;
+	//mat[2][0] = 3; mat[2][1] = 1; mat[2][2] = 7; mat[2][3] = 1; mat[2][4] = 6; mat[2][5] = 4; mat[2][6] = 9; mat[2][7] = 0;
+	//mat[3][0] = 6; mat[3][1] = 3; mat[3][2] = 5; mat[3][3] = 1; mat[3][4] = 1; mat[3][5] = 5; mat[3][6] = 3; mat[3][7] = 7;
+	//mat[4][0] = 5; mat[4][1] = 6; mat[4][2] = 1; mat[4][3] = 2; mat[4][4] = 3; mat[4][5] = 6; mat[4][6] = 4; mat[4][7] = 5;
+	//mat[5][0] = 4; mat[5][1] = 2; mat[5][2] = 5; mat[5][3] = 5; mat[5][4] = 8; mat[5][5] = 3; mat[5][6] = 2; mat[5][7] = 1;
+	//mat[6][0] = 3; mat[6][1] = 1; mat[6][2] = 7; mat[6][3] = 1; mat[6][4] = 7; mat[6][5] = 9; mat[6][6] = 5; mat[6][7] = 8;
+	//mat[7][0] = 6; mat[7][1] = 3; mat[7][2] = 5; mat[7][3] = 1; mat[7][4] = 5; mat[7][5] = 6; mat[7][6] = 1; mat[7][7] = 2;
+	//
+	//Daub_NonStandardDecomposition(mat, 8, 8, true);
+	//cout << endl;
+	//printMatrix(mat, 8);
+	//cout << endl;
+	//
+	//return;
+	//
+	//// **********************
+
+	cout << "Input:" << endl;
+	cout << endl;
+	printMatrix(mat, 8);
+	cout << endl;
+
+	cout << "==================== Original method (literature):" << endl;
+	cout << endl;
+
+	Daub_NonStandardDecomposition(mat, 8, 8, true);
+
+	cout << "Normalized Decomposition:" << endl;
+	cout << endl;
+	printMatrix(mat, 8);
+	cout << endl;
+
+	Daub_NonStandardComposition(mat, 8, 8, true);
+
+	cout << "Normalized Composition:" << endl;
+	cout << endl;
+	printMatrix(mat, 8);
+	cout << endl;
+
+	mat[0][0] = 5; mat[0][1] = 6; mat[0][2] = 1; mat[0][3] = 2; mat[0][4] = 1; mat[0][5] = 3; mat[0][6] = 4; mat[0][7] = 7;
+	mat[1][0] = 4; mat[1][1] = 2; mat[1][2] = 5; mat[1][3] = 5; mat[1][4] = 4; mat[1][5] = 2; mat[1][6] = 1; mat[1][7] = 5;
+	mat[2][0] = 3; mat[2][1] = 1; mat[2][2] = 7; mat[2][3] = 1; mat[2][4] = 6; mat[2][5] = 4; mat[2][6] = 9; mat[2][7] = 0;
+	mat[3][0] = 6; mat[3][1] = 3; mat[3][2] = 5; mat[3][3] = 1; mat[3][4] = 1; mat[3][5] = 5; mat[3][6] = 3; mat[3][7] = 7;
+	mat[4][0] = 5; mat[4][1] = 6; mat[4][2] = 1; mat[4][3] = 2; mat[4][4] = 3; mat[4][5] = 6; mat[4][6] = 4; mat[4][7] = 5;
+	mat[5][0] = 4; mat[5][1] = 2; mat[5][2] = 5; mat[5][3] = 5; mat[5][4] = 8; mat[5][5] = 3; mat[5][6] = 2; mat[5][7] = 1;
+	mat[6][0] = 3; mat[6][1] = 1; mat[6][2] = 7; mat[6][3] = 1; mat[6][4] = 7; mat[6][5] = 9; mat[6][6] = 5; mat[6][7] = 8;
+	mat[7][0] = 6; mat[7][1] = 3; mat[7][2] = 5; mat[7][3] = 1; mat[7][4] = 5; mat[7][5] = 6; mat[7][6] = 1; mat[7][7] = 2;
+
+	cout << "==================== Developed method:" << endl;
+	cout << endl;
+
+	Daub_NonStandardDecomposition(mat, 8, 8, false);
+
+	cout << "Non Normalized Decomposition:" << endl;
+	cout << endl;
+	printMatrix(mat, 8);
+	cout << endl;
+
+	Daub_NonStandardNormalization(mat, 8);
+
+	cout << "Normalization Step Decomposition:" << endl;
+	cout << endl;
+	printMatrix(mat, 8);
+	cout << endl;
+
+	Daub_NonStandardComposition(mat, 8, 8, true);
+
+	cout << "Normalized Composition:" << endl;
+	cout << endl;
+	printMatrix(mat, 8);
+	cout << endl;
+
+}
+
 void fundamentalTest(unsigned int n)
 {
 	switch(n)
@@ -3602,6 +3789,12 @@ void fundamentalTest(unsigned int n)
 			break;
 		case 5:
 			fundamentalTest5();
+			break;
+		case 6:
+			fundamentalTest6();
+			break;
+		case 7:
+			fundamentalTest7();
 			break;
 		default:
 			cout << "\n\tFundamental test " << n << " not found!\n\n";
