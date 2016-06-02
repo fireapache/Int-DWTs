@@ -3503,7 +3503,7 @@ void fundamentalTest5()
 	cout << "********************" << endl;
 	cout << endl;
 
-	double *vec = new double[8];
+	double *vec = new double[16];
 
 	vec[0] = 9.0;
 	vec[1] = 7.0;
@@ -3513,23 +3513,31 @@ void fundamentalTest5()
 	vec[5] = 6.0;
 	vec[6] = 2.0;
 	vec[7] = 1.0;
+	vec[8] = 9.0;
+	vec[9] = 7.0;
+	vec[10] = 4.0;
+	vec[11] = 3.0;
+	vec[12] = 1.0;
+	vec[13] = 6.0;
+	vec[14] = 7.0;
+	vec[15] = 2.0;
 
 	cout << "Input:" << endl;
 	cout << endl;
-	printVector(vec, 8);
+	printVector(vec, 16);
 	cout << endl;
 	cout << "From the literature:" << endl;
 	cout << endl;
 
 	cout << "Normalized Decomposition:" << endl;
 	cout << endl;
-	Daub_Decomposition(vec, 8, true);
-	printVector(vec, 8);
+	Daub_Decomposition(vec, 16, true);
+	printVector(vec, 16);
 
 	cout << "Normalized Composition:" << endl;
 	cout << endl;
-	Daub_Composition(vec, 8, true);
-	printVector(vec, 8);
+	Daub_Composition(vec, 16, true);
+	printVector(vec, 16);
 
 	cout << endl;
 	cout << "Developed:" << endl;
@@ -3543,21 +3551,29 @@ void fundamentalTest5()
 	vec[5] = 6.0;
 	vec[6] = 2.0;
 	vec[7] = 1.0;
+	vec[8] = 9.0;
+	vec[9] = 7.0;
+	vec[10] = 4.0;
+	vec[11] = 3.0;
+	vec[12] = 1.0;
+	vec[13] = 6.0;
+	vec[14] = 7.0;
+	vec[15] = 2.0;
 
 	cout << "Normalized Decomposition:" << endl;
 	cout << endl;
-	Daub_Decomposition(vec, 8, false);
-	printVector(vec, 8);
+	Daub_Decomposition(vec, 16, false);
+	printVector(vec, 16);
 
 	cout << "Normalization Step:" << endl;
 	cout << endl;
-	Daub_Normalization(vec, 8);
-	printVector(vec, 8);
+	Daub_Normalization(vec, 16);
+	printVector(vec, 16);
 	
 	cout << "Normalized Composition:" << endl;
 	cout << endl;
-	Daub_Composition(vec, 8, true);
-	printVector(vec, 8);
+	Daub_Composition(vec, 16, true);
+	printVector(vec, 16);
 	
 
 	cout << endl;
