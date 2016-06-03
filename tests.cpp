@@ -3768,6 +3768,146 @@ void fundamentalTest7()
 
 }
 
+void fundamentalTest8()
+{
+	cout << "********************" << endl;
+	cout << "*     This fundamental (8) test is about the standard normalized Daubechies" << endl;
+	cout << "* (db2) decomposition and composition procedures. It uses a 16x16 matrix and" << endl;
+	cout << "* performs 2 normalization steps for each procedure." << endl;
+	cout << "********************" << endl;
+	cout << endl;
+
+	uint n = 16;
+
+	double **mat1 = new double*[n];
+	double **mat2 = new double*[n];
+
+	for (uint i = 0; i < n; i++)
+	{
+		mat1[i] = new double[n];
+		mat2[i] = new double[n];
+
+		for (uint j = 0; j < n; j++)
+		{
+			mat1[i][j] = mat2[i][j] = (double)(rand() % n);
+		}
+	}
+
+	cout << "Input:" << endl;
+	cout << endl;
+	printMatrix(mat1, n);
+	cout << endl;
+
+	cout << "==================== Original method (literature):" << endl;
+	cout << endl;
+
+	Daub_StandardDecomposition(mat1, n, n, true);
+
+	cout << "Normalized Decomposition:" << endl;
+	cout << endl;
+	printMatrix(mat1, n);
+	cout << endl;
+
+	Daub_StandardComposition(mat1, n, n, true);
+
+	cout << "Normalized Composition:" << endl;
+	cout << endl;
+	printMatrix(mat1, n);
+	cout << endl;
+
+	cout << "==================== Developed method:" << endl;
+	cout << endl;
+
+	cout << "Input:" << endl;
+	cout << endl;
+	printMatrix(mat2, n);
+	cout << endl;
+
+	Daub_StandardDecomposition(mat2, n, n, false, true);
+
+	cout << "Optimal Normalized Decomposition:" << endl;
+	cout << endl;
+	printMatrix(mat2, n);
+	cout << endl;
+
+	//Daub_StandardNormalization(mat2, n);
+
+	//cout << "Normalization Step Decomposition:" << endl;
+	//cout << endl;
+	//printMatrix(mat2, n);
+	//cout << endl;
+
+	Daub_StandardComposition(mat2, n, n, true);
+
+	cout << "Normalized Composition:" << endl;
+	cout << endl;
+	printMatrix(mat2, n);
+	cout << endl;
+
+	for (uint i = 0; i < n; i++)
+	{
+		delete[] mat1[i];
+		delete[] mat2[i];
+	}
+
+	delete[] mat1;
+	delete[] mat2;
+}
+
+void fundamentalTest9()
+{
+	cout << "********************" << endl;
+	cout << "*     This fundamental (9) test is about the non standard normalized Daubechies" << endl;
+	cout << "* (db2) decomposition and composition procedures. It uses a 16x16 matrix and" << endl;
+	cout << "* performs no normalizing optimizations due to the fact it does not work on this" << endl;
+	cout << "* approach."
+	cout << "********************" << endl;
+	cout << endl;
+
+	uint n = 16;
+
+	double **mat1 = new double*[n];
+
+	for (uint i = 0; i < n; i++)
+	{
+		mat1[i] = new double[n];
+
+		for (uint j = 0; j < n; j++)
+		{
+			mat1[i][j] = (double)(rand() % n);
+		}
+	}
+
+	cout << "Input:" << endl;
+	cout << endl;
+	printMatrix(mat1, n);
+	cout << endl;
+
+	cout << "==================== Developed method:" << endl;
+	cout << endl;
+
+	Daub_NonStandardDecomposition(mat1, n, n, true);
+
+	cout << "Normalized Decomposition:" << endl;
+	cout << endl;
+	printMatrix(mat1, n);
+	cout << endl;
+
+	Daub_NonStandardComposition(mat1, n, n, true);
+
+	cout << "Normalized Composition:" << endl;
+	cout << endl;
+	printMatrix(mat1, n);
+	cout << endl;
+
+	for (uint i = 0; i < n; i++)
+	{
+		delete[] mat1[i];
+	}
+
+	delete[] mat1;
+}
+
 void fundamentalTest(unsigned int n)
 {
 	switch(n)
@@ -3795,6 +3935,12 @@ void fundamentalTest(unsigned int n)
 			break;
 		case 7:
 			fundamentalTest7();
+			break;
+		case 8:
+			fundamentalTest8();
+			break;
+		case 9:
+			fundamentalTest9();
 			break;
 		default:
 			cout << "\n\tFundamental test " << n << " not found!\n\n";
