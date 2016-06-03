@@ -3665,7 +3665,7 @@ void fundamentalTest6()
 void fundamentalTest7()
 {
 	cout << "********************" << endl;
-	cout << "*     This fundamental (6) test is about the non standard normalized Daubechies" << endl;
+	cout << "*     This fundamental (7) test is about the non standard normalized Daubechies" << endl;
 	cout << "* (db2) decomposition and composition steps. It uses a 8x8 matrix in order " << endl;
 	cout << "* to help the visualization of the result and further comparison with " << endl;
 	cout << "* its concept." << endl;
