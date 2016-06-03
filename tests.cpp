@@ -3860,7 +3860,7 @@ void fundamentalTest9()
 	cout << "*     This fundamental (9) test is about the non standard normalized Daubechies" << endl;
 	cout << "* (db2) decomposition and composition procedures. It uses a 16x16 matrix and" << endl;
 	cout << "* performs no normalizing optimizations due to the fact it does not work on this" << endl;
-	cout << "* approach."
+	cout << "* approach." << endl;
 	cout << "********************" << endl;
 	cout << endl;
 
