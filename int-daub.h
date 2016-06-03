@@ -12,16 +12,16 @@ using namespace cxsc;
 #endif
 
 template <typename T>
-void Daub_Decomposition(T *vec, uint n, bool normal)
+void Daub_Decomposition(T *vec, uint n, bool normal, bool optimalFilters = true)
 {
 	for (uint size = n; size >= 4; size >>= 1)
 	{
-		Daub_DecompositionStep(vec, size, normal);
+		Daub_DecompositionStep(vec, size, normal, optimalFilters);
 	}
 }
 
 template <typename T>
-void Daub_DecompositionStep(T *v, uint n, bool normal)
+void Daub_DecompositionStep(T *v, uint n, bool normal, bool optimalFilters = true)
 {
 	if (n < 4) return;
 
@@ -36,14 +36,38 @@ void Daub_DecompositionStep(T *v, uint n, bool normal)
 
 	T* result = new T[n];
 
-	for (i = 0, j = 0; j < n - 3; j += 2, i++)
+	if (optimalFilters)
 	{
-		result[i] = (v[j] + v[j+3] + v3*(v[j+1] + v[j+2]) + sqrt3*(v[j] + v[j+1] - v[j+2] - v[j+3])) / denom;
-		result[i+half] = (v[j] - v[j+3] + v3*(v[j+2] - v[j+1]) + sqrt3*(v[j+1] - v[j] + v[j+2] - v[j+3])) / denom;
-	}
+		for (i = 0, j = 0; j < n - 3; j += 2, i++)
+		{
+			result[i] = (v[j] + v[j+3] + v3*(v[j+1] + v[j+2]) + sqrt3*(v[j] + v[j+1] - v[j+2] - v[j+3])) / denom;
+			result[i+half] = (v[j] - v[j+3] + v3*(v[j+2] - v[j+1]) + sqrt3*(v[j+1] - v[j] + v[j+2] - v[j+3])) / denom;
+		}
 
-	result[i] = (v[n-2] + v[1] + v3*(v[n-1] + v[0]) + sqrt3*(v[n-2] + v[n-1] - v[0] - v[1])) / denom;
-	result[i+half] = (v[n-2] - v[1] + v3*(v[0] - v[n-1]) + sqrt3*(v[n-1] - v[n-2] + v[0] - v[1])) / denom;
+		result[i] = (v[n-2] + v[1] + v3*(v[n-1] + v[0]) + sqrt3*(v[n-2] + v[n-1] - v[0] - v[1])) / denom;
+		result[i+half] = (v[n-2] - v[1] + v3*(v[0] - v[n-1]) + sqrt3*(v[n-1] - v[n-2] + v[0] - v[1])) / denom;
+	}
+	else
+	{
+		denom = T(4) * sqrt(T(2));
+		T h0 = (T(1) + sqrt3) / denom;
+		T h1 = (T(3) + sqrt3) / denom;
+		T h2 = (T(3) - sqrt3) / denom;
+		T h3 = (T(1) - sqrt3) / denom;
+		T g0 = h3;
+		T g1 = -h2;
+		T g2 = h1;
+		T g3 = -h0;
+
+		for (i = 0, j = 0; j < n - 3; j += 2, i++)
+		{
+			result[i] = v[j]*h0 + v[j+1]*h1 + v[j+2]*h2 + v[j+3]*h3;
+			result[i+half] = v[j]*g0 + v[j+1]*g1 + v[j+2]*g2 + v[j+3]*g3;
+		}
+
+		result[i] = v[n-2]*h0 + v[n-1]*h1 + v[0]*h2 + v[1]*h3;
+		result[i+half] = v[n-2]*g0 + v[n-1]*g1 + v[0]*g2 + v[1]*g3;
+	}
 
 	for (i = 0; i < n; i++)
 	{
@@ -54,16 +78,16 @@ void Daub_DecompositionStep(T *v, uint n, bool normal)
 }
 
 template <typename T>
-void Daub_Composition(T *vec, uint n, bool normal)
+void Daub_Composition(T *vec, uint n, bool normal, bool optimalFilters = true)
 {
 	for (uint size = 4; size <= n; size <<= 1)
 	{
-		Daub_CompositionStep(vec, size, normal);
+		Daub_CompositionStep(vec, size, normal, optimalFilters);
 	}
 }
 
 template <typename T>
-void Daub_CompositionStep(T *v, uint n, bool normal)
+void Daub_CompositionStep(T *v, uint n, bool normal, bool optimalFilters = true)
 {
 	if (n < 4) return;
 
@@ -79,13 +103,46 @@ void Daub_CompositionStep(T *v, uint n, bool normal)
 
 	T* result = new T[n];
 
-	result[0] = (v[0] + v[half] + v3*(v[half - 1] + v[n - 1]) + sqrt3*(v[n - 1] + v[0] - v[half - 1] - v[half])) / denom;
-	result[1] = (v[half - 1] - v[n - 1] + v3*(v[0] - v[half]) + sqrt3*(v[0] + v[half] - v[half - 1] - v[n - 1])) / denom;
-
-	for (i = 0, j = 2; i < half - 1; i++)
+	if (optimalFilters)
 	{
-		result[j++] = (v[i + 1] + v[i + halfPls1] + v3*(v[i] + v[i + half]) + sqrt3*(v[i + half] + v[i + 1] - v[i] - v[i + halfPls1])) / denom;
-		result[j++] = (v[i] - v[i + half] + v3*(v[i + 1] - v[i + halfPls1]) + sqrt3*(v[i + 1] + v[i + halfPls1] - v[i] - v[i + half])) / denom;
+		result[0] = (v[0] + v[half] + v3*(v[half - 1] + v[n - 1]) + sqrt3*(v[n - 1] + v[0] - v[half - 1] - v[half])) / denom;
+		result[1] = (v[half - 1] - v[n - 1] + v3*(v[0] - v[half]) + sqrt3*(v[0] + v[half] - v[half - 1] - v[n - 1])) / denom;
+
+		for (i = 0, j = 2; i < half - 1; i++)
+		{
+			result[j++] = (v[i + 1] + v[i + halfPls1] + v3*(v[i] + v[i + half]) + sqrt3*(v[i + half] + v[i + 1] - v[i] - v[i + halfPls1])) / denom;
+			result[j++] = (v[i] - v[i + half] + v3*(v[i + 1] - v[i + halfPls1]) + sqrt3*(v[i + 1] + v[i + halfPls1] - v[i] - v[i + half])) / denom;
+		}
+	}
+	else
+	{
+		denom = T(4) * sqrt(T(2));
+		T h0 = (T(1) + sqrt3) / denom;
+		T h1 = (T(3) + sqrt3) / denom;
+		T h2 = (T(3) - sqrt3) / denom;
+		T h3 = (T(1) - sqrt3) / denom;
+		T g0 = h3;
+		T g1 = -h2;
+		T g2 = h1;
+		T g3 = -h0;
+
+		T Ih0 = h2;
+		T Ih1 = g2;
+		T Ih2 = h0;
+		T Ih3 = g0;
+		T Ig0 = h3;
+		T Ig1 = g3;
+		T Ig2 = h1;
+		T Ig3 = g1;
+
+		result[0] = v[half - 1] * Ih0 + v[n - 1] * Ih1 + v[0] * Ih2 + v[half] * Ih3;
+		result[1] = v[half - 1] * Ig0 + v[n - 1] * Ig1 + v[0] * Ig2 + v[half] * Ig3;
+
+		for (i = 0, j = 2; i < half - 1; i++)
+		{
+			result[j++] = v[i] * Ih0 + v[i + half] * Ih1 + v[i + 1] * Ih2 + v[i + halfPls1] * Ih3;
+			result[j++] = v[i] * Ig0 + v[i + half] * Ig1 + v[i + 1] * Ig2 + v[i + halfPls1] * Ig3;
+		}
 	}
 
 	for (i = 0; i < n; i++)
