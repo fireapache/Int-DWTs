@@ -3908,6 +3908,62 @@ void fundamentalTest9()
 	delete[] mat1;
 }
 
+void fundamentalTest10()
+{
+	cout << "********************" << endl;
+	cout << "*     This fundamental (10) test is about the normalized Daubechies (db2)" << endl;
+	cout << "* decomposition and composition steps. It uses a 16 long vector and applies " << endl;
+	cout << "* both optimized and original filters." << endl;
+	cout << "********************" << endl;
+	cout << endl;
+	uint n = 16;
+	double *vec1 = new double[n];
+	double *vec2 = new double[n];
+
+	for (uint i = 0; i < n; i++)
+	{
+		vec1[i] = vec2[i] = (double)(rand() % n);
+	}
+
+	cout << "Input:" << endl;
+	cout << endl;
+	printVector(vec1, n);
+	cout << endl;
+	cout << "Using non optimized filters:" << endl;
+	cout << endl;
+
+	cout << "Normalized Decomposition:" << endl;
+	cout << endl;
+	Daub_Decomposition(vec1, n, true, false);
+	printVector(vec1, n);
+
+	cout << "Normalized Composition:" << endl;
+	cout << endl;
+	Daub_Composition(vec1, n, true, false);
+	printVector(vec1, n);
+
+	cout << endl;
+	cout << "Using optimized filters:" << endl;
+	cout << endl;
+	cout << "Input:" << endl;
+	cout << endl;
+	printVector(vec2, n);
+	cout << endl;
+
+	cout << "Normalized Decomposition:" << endl;
+	cout << endl;
+	Daub_Decomposition(vec2, n, true, true);
+	printVector(vec2, n);
+
+	cout << "Normalized Composition:" << endl;
+	cout << endl;
+	Daub_Composition(vec2, n, true, false);
+	printVector(vec2, n);
+
+	delete[] vec1;
+	delete[] vec2;
+}
+
 void fundamentalTest(unsigned int n)
 {
 	switch(n)
@@ -3941,6 +3997,9 @@ void fundamentalTest(unsigned int n)
 			break;
 		case 9:
 			fundamentalTest9();
+			break;
+		case 10:
+			fundamentalTest10();
 			break;
 		default:
 			cout << "\n\tFundamental test " << n << " not found!\n\n";
