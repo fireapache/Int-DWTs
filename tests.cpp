@@ -3497,7 +3497,7 @@ void fundamentalTest5()
 {
 	cout << "********************" << endl;
 	cout << "*     This fundamental (5) test is about the normalized Daubechies (db2)" << endl;
-	cout << "* decomposition and composition steps. It uses a 8 long vector in order " << endl;
+	cout << "* decomposition and composition steps. It uses a 16 long vector in order " << endl;
 	cout << "* to help the visualization of the result and further comparison with " << endl;
 	cout << "* its concept." << endl;
 	cout << "********************" << endl;
