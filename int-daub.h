@@ -180,7 +180,7 @@ void Daub_Normalization(T *vec, uint n, bool invert = false)
 }
 
 template <typename T>
-void Daub_StandardDecomposition(T *mat, uint rows, uint cols, bool normal, bool stepnorm = false)
+void Daub_StandardDecomposition(T *mat, uint rows, uint cols, bool normal, bool stepnorm = false, bool optimalFilters = true)
 {
 	double *temp_row = new double[cols];
 	double *temp_col = new double[rows];
@@ -190,13 +190,13 @@ void Daub_StandardDecomposition(T *mat, uint rows, uint cols, bool normal, bool 
 		for (uint j = 0; j < cols; j++)
 			temp_row[j] = mat[i][j];
 
-		Daub_Decomposition(temp_row, cols, normal);
+		Daub_Decomposition(temp_row, cols, normal, optimalFilters);
 
 		for (uint j = 0; j < cols; j++)
 			mat[i][j] = temp_row[j];
 	}
 
-	if (!normal && stepnorm)
+	if (!normal && stepnorm && optimalFilters)
 	{
 		Daub_StandardStepNormalization(mat, rows, cols, true);
 	}
@@ -212,13 +212,13 @@ void Daub_StandardDecomposition(T *mat, uint rows, uint cols, bool normal, bool 
 		for (uint j = 0; j < rows; j++)
 			temp_col[j] = mat[j][i];
 
-		Daub_Decomposition(temp_col, rows, normal);
+		Daub_Decomposition(temp_col, rows, normal, optimalFilters);
 
 		for (uint j = 0; j < rows; j++)
 			mat[j][i] = temp_col[j];
 	}
 
-	if (!normal && stepnorm)
+	if (!normal && stepnorm && optimalFilters)
 	{
 		Daub_StandardStepNormalization(mat, rows, cols, false);
 	}
@@ -234,7 +234,7 @@ void Daub_StandardDecomposition(T *mat, uint rows, uint cols, bool normal, bool 
 }
 
 template <typename T>
-void Daub_StandardComposition(T *mat, uint rows, uint cols, bool normal)
+void Daub_StandardComposition(T *mat, uint rows, uint cols, bool normal, bool optimalFilters = true)
 {
 	double *temp_row = new double[cols];
 	double *temp_col = new double[rows];
@@ -244,7 +244,7 @@ void Daub_StandardComposition(T *mat, uint rows, uint cols, bool normal)
 		for (uint j = 0; j < rows; j++)
 			temp_col[j] = mat[j][i];
 
-		Daub_Composition(temp_col, rows, normal);
+		Daub_Composition(temp_col, rows, normal, optimalFilters);
 
 		for (uint j = 0; j < rows; j++)
 			mat[j][i] = temp_col[j];
@@ -261,7 +261,7 @@ void Daub_StandardComposition(T *mat, uint rows, uint cols, bool normal)
 		for (uint j = 0; j < cols; j++)
 			temp_row[j] = mat[i][j];
 
-		Daub_Composition(temp_row, cols, normal);
+		Daub_Composition(temp_row, cols, normal, optimalFilters);
 
 		for (uint j = 0; j < cols; j++)
 			mat[i][j] = temp_row[j];
