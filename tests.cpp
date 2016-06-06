@@ -3613,14 +3613,14 @@ void fundamentalTest6()
 	cout << "==================== Original method (literature):" << endl;
 	cout << endl;
 
-	Daub_StandardDecomposition(mat, 8, 8, true);
+	Daub_StandardDecomposition(mat, 8, 8, true, false, false);
 
 	cout << "Normalized Decomposition:" << endl;
 	cout << endl;
 	printMatrix(mat, 8);
 	cout << endl;
 
-	Daub_StandardComposition(mat, 8, 8, true);
+	Daub_StandardComposition(mat, 8, 8, true, false);
 
 	cout << "Normalized Composition:" << endl;
 	cout << endl;
@@ -3801,14 +3801,14 @@ void fundamentalTest8()
 	cout << "==================== Original method (literature):" << endl;
 	cout << endl;
 
-	Daub_StandardDecomposition(mat1, n, n, true);
+	Daub_StandardDecomposition(mat1, n, n, true, false, false);
 
 	cout << "Normalized Decomposition:" << endl;
 	cout << endl;
 	printMatrix(mat1, n);
 	cout << endl;
 
-	Daub_StandardComposition(mat1, n, n, true);
+	Daub_StandardComposition(mat1, n, n, true, false);
 
 	cout << "Normalized Composition:" << endl;
 	cout << endl;
