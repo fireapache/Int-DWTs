@@ -392,7 +392,7 @@ void Daub_StandardStepNormalization(T **mat, uint rows, uint cols, bool horizont
 }
 
 template <typename T>
-void Daub_NonStandardDecomposition(T **mat, uint rows, uint cols, bool normal)
+void Daub_NonStandardDecomposition(T **mat, uint rows, uint cols, bool normal, bool optimalFilters = true)
 {
 	uint h = rows, w = cols;
 	T *temp_row = new T[cols];
@@ -407,7 +407,7 @@ void Daub_NonStandardDecomposition(T **mat, uint rows, uint cols, bool normal)
 				for (uint j = 0; j < w; j++)
 					temp_row[j] = mat[i][j];
 
-				Daub_DecompositionStep(temp_row, w, normal);
+				Daub_DecompositionStep(temp_row, w, normal, optimalFilters);
 
 				for (uint j = 0; j < w; j++)
 					mat[i][j] = temp_row[j];
@@ -421,7 +421,7 @@ void Daub_NonStandardDecomposition(T **mat, uint rows, uint cols, bool normal)
 				for (uint j = 0; j < h; j++)
 					temp_col[j] = mat[j][i];
 
-				Daub_DecompositionStep(temp_col, h, normal);
+				Daub_DecompositionStep(temp_col, h, normal, optimalFilters);
 
 				for (uint j = 0; j < h; j++)
 					mat[j][i] = temp_col[j];
@@ -437,7 +437,7 @@ void Daub_NonStandardDecomposition(T **mat, uint rows, uint cols, bool normal)
 }
 
 template <typename T>
-void Daub_NonStandardComposition(T **mat, uint rows, uint cols, bool normal)
+void Daub_NonStandardComposition(T **mat, uint rows, uint cols, bool normal, bool optimalFilters = true)
 {
 	uint r = 4, c = 4;
 	T *temp_row = new T[cols];
@@ -452,7 +452,7 @@ void Daub_NonStandardComposition(T **mat, uint rows, uint cols, bool normal)
 				for (uint j = 0; j < rows; j++)
 					temp_col[j] = mat[j][i];
 
-				Daub_CompositionStep(temp_col, r, normal);
+				Daub_CompositionStep(temp_col, r, normal, optimalFilters);
 
 				for (uint j = 0; j < rows; j++)
 					mat[j][i] = temp_col[j];
@@ -466,7 +466,7 @@ void Daub_NonStandardComposition(T **mat, uint rows, uint cols, bool normal)
 				for (uint j = 0; j < cols; j++)
 					temp_row[j] = mat[i][j];
 
-				Daub_CompositionStep(temp_row, c, normal);
+				Daub_CompositionStep(temp_row, c, normal, optimalFilters);
 
 				for (uint j = 0; j < cols; j++)
 					mat[i][j] = temp_row[j];
