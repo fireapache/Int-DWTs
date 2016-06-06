@@ -3719,14 +3719,14 @@ void fundamentalTest7()
 	cout << "==================== Original method (literature):" << endl;
 	cout << endl;
 
-	Daub_NonStandardDecomposition(mat, 8, 8, true);
+	Daub_NonStandardDecomposition(mat, 8, 8, true, false);
 
 	cout << "Normalized Decomposition:" << endl;
 	cout << endl;
 	printMatrix(mat, 8);
 	cout << endl;
 
-	Daub_NonStandardComposition(mat, 8, 8, true);
+	Daub_NonStandardComposition(mat, 8, 8, true, false);
 
 	cout << "Normalized Composition:" << endl;
 	cout << endl;
@@ -3867,23 +3867,25 @@ void fundamentalTest9()
 	uint n = 16;
 
 	double **mat1 = new double*[n];
+	double **mat2 = new double*[n];
 
 	for (uint i = 0; i < n; i++)
 	{
 		mat1[i] = new double[n];
+		mat2[i] = new double[n];
 
 		for (uint j = 0; j < n; j++)
 		{
-			mat1[i][j] = (double)(rand() % n);
+			mat1[i][j] = mat2[i][j] = (double)(rand() % n);
 		}
 	}
+
+	cout << "==================== Original method (literature):" << endl;
+	cout << endl;
 
 	cout << "Input:" << endl;
 	cout << endl;
 	printMatrix(mat1, n);
-	cout << endl;
-
-	cout << "==================== Developed method:" << endl;
 	cout << endl;
 
 	Daub_NonStandardDecomposition(mat1, n, n, true);
@@ -3900,12 +3902,36 @@ void fundamentalTest9()
 	printMatrix(mat1, n);
 	cout << endl;
 
+	cout << "==================== Developed method:" << endl;
+	cout << endl;
+
+	cout << "Input:" << endl;
+	cout << endl;
+	printMatrix(mat2, n);
+	cout << endl;
+
+	Daub_NonStandardDecomposition(mat2, n, n, true);
+
+	cout << "Normalized Decomposition:" << endl;
+	cout << endl;
+	printMatrix(mat2, n);
+	cout << endl;
+
+	Daub_NonStandardComposition(mat2, n, n, true);
+
+	cout << "Normalized Composition:" << endl;
+	cout << endl;
+	printMatrix(mat2, n);
+	cout << endl;
+
 	for (uint i = 0; i < n; i++)
 	{
 		delete[] mat1[i];
+		delete[] mat2[i];
 	}
 
 	delete[] mat1;
+	delete[] mat2;
 }
 
 void fundamentalTest10()
