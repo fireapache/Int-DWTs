@@ -1,5 +1,401 @@
 #include "tests.h"
 
+void test16Desc()
+{
+	cout << endl;
+	cout << "	==================== Test 5 ====================" << endl;
+	cout << endl;
+	cout << "	* This test is about time mesurement and calculus " << endl;
+	cout << "	exactitude for the one-dimensional Daubechies Wavelet " << endl;
+	cout << "	Transform." << endl;
+}
+
+void test16Param()
+{
+	cout << endl;
+	cout << "	Parameters: <size>" << endl;
+	cout << "	" << endl;
+	cout << "	<size> must be an unsigned integer greater" << endl;
+	cout << "	than 0 and also be power of two." << endl;
+	cout << endl;
+}
+
+double test16_OriginalDecomp(double *vec, interval *ivec, int n, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		Daub_Decomposition(vec, n, true, false);
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		Daub_Decomposition(ivec, n, true, false);
+	}
+
+	return timer;
+}
+
+double test16_DevelopedDecomp(double *vec, interval *ivec, int n, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		Daub_Decomposition(vec, n, false);
+		Daub_Normalization(vec, n);
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		Daub_Decomposition(ivec, n, false);
+		Daub_Normalization(ivec, n);
+	}
+
+	return timer;
+}
+
+double test16_OriginalComp(double *vec, interval *ivec, int n, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		Daub_Composition(vec, n, true, false);
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		Daub_Composition(ivec, n, true, false);
+	}
+
+	return timer;
+}
+
+double test16_DevelopedComp(double *vec, interval *ivec, int n, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		Daub_Composition(vec, n, true);
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		Daub_Composition(ivec, n, true);
+	}
+
+	return timer;
+}
+
+double test16_OriginalDecompComp(double *vec, interval *ivec, int n, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		Daub_Decomposition(vec, n, true, false);
+		Daub_Composition(vec, n, true, false);
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		Daub_Decomposition(ivec, n, true, false);
+		Daub_Composition(ivec, n, true, false);
+	}
+
+	return timer;
+}
+
+double test16_DevelopedDecompComp(double *vec, interval *ivec, int n, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		Daub_Decomposition(vec, n, false);
+		Daub_Normalization(vec, n);
+		Daub_Composition(vec, n, true);
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		Daub_Decomposition(ivec, n, false);
+		Daub_Normalization(ivec, n);
+		Daub_Composition(ivec, n, true);
+	}
+
+	return timer;
+}
+
+int test16(int argc, char **argv)
+{
+	if (argc < 1)
+	{
+		cout << endl;
+		cout << "	ERROR: lack of parameters." << endl;
+		test16Desc();
+		test16Param();
+		return 1;
+	}
+
+	uint n = atoi(argv[0]);
+
+	if (n <= 0)
+	{
+		cout << endl;
+		cout << "	ERROR: <size> has to be greater than 0." << endl;
+		test16Desc();
+		test16Param();
+		return 1;
+	}
+	else if (!isPowerOfTwo(n))
+	{
+		cout << endl;
+		cout << "	ERROR: <size> has to be power of two." << endl;
+		test16Desc();
+		test16Param();
+		return 1;
+	}
+
+	test16Desc();
+	cout << endl;
+	cout << "Computing vector of size " << n << "..." << endl;
+	cout << endl;
+
+	real error, oldError;
+
+	TimeMesurement timeMesure, oldMesure;
+
+	double *inputVec = new double[n];		// Vectors used as input for all executions.
+	interval *inputiVec = new interval[n];
+
+	double *auxVec = new double[n];			// Auxiliary vectors used for each execution.
+	interval *auxiVec = new interval[n];
+
+	double *times = new double[30];			// Vector to store the time of each execution.
+
+	// Fill input vectors with n random values.
+	for (uint i = 0; i < n; ++i)
+	{
+		inputVec[i] = rand() % n;
+		inputiVec[i] = interval(inputVec[i]);
+	}
+
+	cout << "========== Decomposition: " << endl;
+	cout << "\t\t";
+	cout << "Speedup" << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << "\t\t";
+	cout << "Error (%)" << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyVector(inputVec, auxVec, n);
+		times[i] = test16_OriginalDecomp(auxVec, auxiVec, n, true);
+	}
+
+	oldMesure = timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << "\t\t";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyVector(inputiVec, auxiVec, n);
+	test16_OriginalDecomp(auxVec, auxiVec, n, false);
+
+	oldError = INT_error(auxiVec, n);
+
+	cout << '\t' << oldError;
+	cout << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyVector(inputVec, auxVec, n);
+		times[i] = test16_DevelopedDecomp(auxVec, auxiVec, n, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Developed";
+	cout << '\t' << speedupCalc(timeMesure.mean, oldMesure.mean);
+	cout << "\t\t" << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyVector(inputiVec, auxiVec, n);
+	test16_DevelopedDecomp(auxVec, auxiVec, n, false);
+
+	error = INT_error(auxiVec, n);
+
+	cout << '\t' << error;
+	cout << '\t' << relativeGain(error, oldError);
+	cout << endl;
+
+	cout << endl;
+	cout << "========== Composition: " << endl;
+	cout << "\t\t";
+	cout << "Speedup" << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << "\t\t";
+	cout << "Error (%)" << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyVector(inputVec, auxVec, n);
+		times[i] = test16_OriginalComp(auxVec, auxiVec, n, true);
+	}
+
+	oldMesure = timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << "\t\t";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyVector(inputiVec, auxiVec, n);
+	test16_OriginalComp(auxVec, auxiVec, n, false);
+
+	oldError = INT_error(auxiVec, n);
+
+	cout << '\t' << oldError;
+	cout << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyVector(inputVec, auxVec, n);
+		times[i] = test16_DevelopedComp(auxVec, auxiVec, n, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Developed";
+	cout << '\t' << speedupCalc(timeMesure.mean, oldMesure.mean);
+	cout << "\t\t" << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyVector(inputiVec, auxiVec, n);
+	test16_DevelopedComp(auxVec, auxiVec, n, false);
+
+	error = INT_error(auxiVec, n);
+
+	cout << '\t' << error;
+	cout << '\t' << relativeGain(error, oldError);
+	cout << endl;
+
+	ImageQuality<double> imgQ, oldImgQ;
+
+	cout << endl;
+	cout << "========== Decomposition & Composition: " << endl;
+	cout << "\t\t";
+	cout << "Speedup" << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << "\t\t";
+	cout << "EUC" << "\t\t";
+	cout << "MSE" << "\t\t";
+	cout << "PSNR" << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyVector(inputVec, auxVec, n);
+		times[i] = test16_OriginalDecompComp(auxVec, auxiVec, n, true);
+	}
+
+	oldMesure = timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << "\t\t";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyVector(inputiVec, auxiVec, n);
+	test16_OriginalDecompComp(auxVec, auxiVec, n, false);
+
+	oldError = INT_error(auxiVec, n);
+
+	cout << '\t' << oldError;
+
+	double oldMax = maxValue(auxVec, n);
+
+	oldImgQ = imgQ = imageQuality(auxVec, inputVec, oldMax, n);
+
+	cout << '\t' << imgQ.euc;
+	cout << '\t' << imgQ.mse;
+	cout << '\t' << imgQ.psnr << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyVector(inputVec, auxVec, n);
+		times[i] = test16_DevelopedDecompComp(auxVec, auxiVec, n, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Developed";
+	cout << '\t' << speedupCalc(timeMesure.mean, oldMesure.mean);
+	cout << "\t\t" << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyVector(inputiVec, auxiVec, n);
+	test16_DevelopedDecompComp(auxVec, auxiVec, n, false);
+
+	error = INT_error(auxiVec, n);
+
+	cout << '\t' << error;
+
+	double max = maxValue(auxVec, n);
+
+	imgQ = imageQuality(auxVec, inputVec, n, n);
+
+	cout << '\t' << imgQ.euc;
+	cout << '\t' << imgQ.mse;
+	cout << '\t' << imgQ.psnr << endl;
+
+	cout << endl;
+	cout << "Quality gain (%)" << endl;
+	cout << endl;
+
+	cout << "EUC" << "\t\t" << relativeGain(imgQ.euc, oldImgQ.euc) << endl;
+	cout << "MSE" << "\t\t" << relativeGain(imgQ.mse, oldImgQ.mse) << endl;
+	cout << "PSNR" << "\t\t" << -relativeGain(imgQ.psnr, oldImgQ.psnr) << endl;
+	cout << "Error" << "\t\t" << relativeGain(error, oldError) << endl;
+
+	cout << endl;
+
+	// Deallocating memory.
+	delete[] inputVec;
+	delete[] inputiVec;
+	delete[] auxVec;
+	delete[] auxiVec;
+	delete[] times;
+
+	return 0;
+
+}
+
 void test15Desc()
 {
 	cout << endl;
@@ -4058,6 +4454,7 @@ void listAllTests()
 	test13Desc();
 	test14Desc();
 	test15Desc();
+	test16Desc();
 
 	cout << endl;
 }
@@ -4118,6 +4515,9 @@ int testIndexer(int argc, char **argv)
 					break;
 				case 4:
 					test15(newArgs.argc, newArgs.argv);
+					break;
+				case 5:
+					test16(newArgs.argc, newArgs.argv);
 					break;
 				default:
 					cout << endl;
