@@ -3560,7 +3560,7 @@ void fundamentalTest5()
 	vec[14] = 7.0;
 	vec[15] = 2.0;
 
-	cout << "Normalized Decomposition:" << endl;
+	cout << "Non Normalized Decomposition:" << endl;
 	cout << endl;
 	Daub_Decomposition(vec, 16, false);
 	printVector(vec, 16);
