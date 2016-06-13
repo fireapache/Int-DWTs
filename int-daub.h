@@ -27,16 +27,39 @@ void Daub_DecompositionStep(T *v, uint n, bool normal, bool optimalFilters = tru
 
 	T* result = new T[n];
 
+	T a, b, c, d, t1, t2, *offset;
+
 	if (optimalFilters)
 	{
+		offset = v;
+
 		for (i = 0, j = 0; j < n - 3; j += 2, i++)
 		{
-			result[i] = (v[j] + v[j+3] + v3*(v[j+1] + v[j+2]) + sqrt3*(v[j] + v[j+1] - v[j+2] - v[j+3])) / denom;
-			result[i+half] = (v[j] - v[j+3] + v3*(v[j+2] - v[j+1]) + sqrt3*(v[j+1] - v[j] + v[j+2] - v[j+3])) / denom;
+			a = *(offset++);
+			b = *(offset++);
+			c = *(offset++);
+			d = *offset;
+
+			t1 = a - c;
+			t2 = b - d;
+
+			result[i] = (a + d + v3*(b + c) + sqrt3*(t1 + t2)) / denom;
+			result[i+half] = (a - d + v3*(c - b) + sqrt3*(t2 - t1)) / denom;
+
+			offset--;
 		}
 
-		result[i] = (v[n-2] + v[1] + v3*(v[n-1] + v[0]) + sqrt3*(v[n-2] + v[n-1] - v[0] - v[1])) / denom;
-		result[i+half] = (v[n-2] - v[1] + v3*(v[0] - v[n-1]) + sqrt3*(v[n-1] - v[n-2] + v[0] - v[1])) / denom;
+		offset = v + n - 2;
+		a = *(offset++);
+		b = *offset;
+		c = *v;
+		d = *(v + 1);
+
+		t1 = a - c;
+		t2 = b - d;
+
+		result[i] = (a + d + v3*(b + c) + sqrt3*(t1 + t2)) / denom;
+		result[i+half] = (a - d + v3*(c - b) + sqrt3*(t2 - t1)) / denom;
 	}
 	else
 	{
@@ -50,14 +73,35 @@ void Daub_DecompositionStep(T *v, uint n, bool normal, bool optimalFilters = tru
 		T g2 = h1;
 		T g3 = -h0;
 
+		offset = v;
+
 		for (i = 0, j = 0; j < n - 3; j += 2, i++)
 		{
-			result[i] = v[j]*h0 + v[j+1]*h1 + v[j+2]*h2 + v[j+3]*h3;
-			result[i+half] = v[j]*g0 + v[j+1]*g1 + v[j+2]*g2 + v[j+3]*g3;
+			a = *(offset++);
+			b = *(offset++);
+			c = *(offset++);
+			d = *offset;
+
+			t1 = a - c;
+			t2 = b - d;
+
+			result[i] = a*h0 + b*h1 + c*h2 + d*h3;
+			result[i+half] = a*g0 + b*g1 + c*g2 + d*g3;
+
+			offset--;
 		}
 
-		result[i] = v[n-2]*h0 + v[n-1]*h1 + v[0]*h2 + v[1]*h3;
-		result[i+half] = v[n-2]*g0 + v[n-1]*g1 + v[0]*g2 + v[1]*g3;
+		offset = v + n - 2;
+		a = *(offset++);
+		b = *offset;
+		c = *v;
+		d = *(v + 1);
+
+		t1 = a - c;
+		t2 = b - d;
+
+		result[i] = a*h0 + b*h1 + c*h2 + d*h3;
+		result[i+half] = a*g0 + b*g1 + c*g2 + d*g3;
 	}
 
 	for (i = 0; i < n; i++)
