@@ -12,15 +12,6 @@ using namespace cxsc;
 #endif
 
 template <typename T>
-void Daub_Decomposition(T *vec, uint n, bool normal, bool optimalFilters = true)
-{
-	for (uint size = n; size >= 4; size >>= 1)
-	{
-		Daub_DecompositionStep(vec, size, normal, optimalFilters);
-	}
-}
-
-template <typename T>
 void Daub_DecompositionStep(T *v, uint n, bool normal, bool optimalFilters = true)
 {
 	if (n < 4) return;
@@ -78,11 +69,11 @@ void Daub_DecompositionStep(T *v, uint n, bool normal, bool optimalFilters = tru
 }
 
 template <typename T>
-void Daub_Composition(T *vec, uint n, bool normal, bool optimalFilters = true)
+void Daub_Decomposition(T *vec, uint n, bool normal, bool optimalFilters = true)
 {
-	for (uint size = 4; size <= n; size <<= 1)
+	for (uint size = n; size >= 4; size >>= 1)
 	{
-		Daub_CompositionStep(vec, size, normal, optimalFilters);
+		Daub_DecompositionStep(vec, size, normal, optimalFilters);
 	}
 }
 
@@ -154,6 +145,15 @@ void Daub_CompositionStep(T *v, uint n, bool normal, bool optimalFilters = true)
 }
 
 template <typename T>
+void Daub_Composition(T *vec, uint n, bool normal, bool optimalFilters = true)
+{
+	for (uint size = 4; size <= n; size <<= 1)
+	{
+		Daub_CompositionStep(vec, size, normal, optimalFilters);
+	}
+}
+
+template <typename T>
 void Daub_Normalization(T *vec, uint n, bool invert = false)
 {
 	uint levels = (uint)log2(n);
@@ -168,7 +168,9 @@ void Daub_Normalization(T *vec, uint n, bool invert = false)
 		
 		uint end = (uint)pow(2.0, (double)(level + 1));
 		
-		factor = pow(T(2), T(levels - level) / T(2));
+		int currentLevel = (int)(levels - level);
+
+		factor = pow(T(2), T(currentLevel) / T(2));
 
 		if (invert)
 		for (uint i = start; i < end; i++)
@@ -176,6 +178,74 @@ void Daub_Normalization(T *vec, uint n, bool invert = false)
 		else
 		for (uint i = start; i < end; i++)
 			vec[i] /= factor;
+	}
+}
+
+template <typename T>
+void Daub_StandardStepNormalization(T **mat, uint rows, uint cols, bool horizontal, bool invert = false)
+{
+	uint levels = (uint)log2(rows);
+	T factor;
+
+	for (uint level = 1; level < levels; level++)
+	{
+		uint start;
+
+		if (level == 1) start = 0;
+		else start = (uint)pow(2.0, (double)(level));
+
+		uint end = (uint)pow(2.0, (double)(level + 1));
+
+		int currentLevel = (int)(levels - level);
+
+		factor = pow(T(2), T(currentLevel) / T(2));
+
+		if (invert)
+		{
+			if (horizontal)
+			{
+				for (uint i = 0; i < rows; i++)
+				{
+					for (uint j = start; j < end; j++)
+					{
+						mat[i][j] *= factor;
+					}
+				}
+			}
+			else
+			{
+				for (uint i = start; i < end; i++)
+				{
+					for (uint j = 0; j < cols; j++)
+					{
+						mat[i][j] *= factor;
+					}
+				}
+			}
+		}
+		else
+		{
+			if (horizontal)
+			{
+				for (uint i = 0; i < rows; i++)
+				{
+					for (uint j = start; j < end; j++)
+					{
+						mat[i][j] /= factor;
+					}
+				}
+			}
+			else
+			{
+				for (uint i = start; i < end; i++)
+				{
+					for (uint j = 0; j < cols; j++)
+					{
+						mat[i][j] /= factor;
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -318,72 +388,6 @@ void Daub_StandardNormalization(T **mat, uint n, bool invert = false)
 					{
 						if (invert)	mat[row][c] *= factor;
 						else 		mat[row][c] /= factor;
-					}
-				}
-			}
-		}
-	}
-}
-
-template <typename T>
-void Daub_StandardStepNormalization(T **mat, uint rows, uint cols, bool horizontal, bool invert = false)
-{
-	uint levels = (uint)log2(rows);
-	T factor;
-
-	for (uint level = 1; level < levels; level++)
-	{
-		uint start;
-
-		if (level == 1) start = 0;
-		else start = (uint)pow(2.0, (double)(level));
-
-		uint end = (uint)pow(2.0, (double)(level + 1));
-
-		factor = pow(T(2), T(levels - level) / T(2));
-
-		if (invert)
-		{
-			if (horizontal)
-			{
-				for (uint i = 0; i < rows; i++)
-				{
-					for (uint j = start; j < end; j++)
-					{
-						mat[i][j] *= factor;
-					}
-				}
-			}
-			else
-			{
-				for (uint i = start; i < end; i++)
-				{
-					for (uint j = 0; j < cols; j++)
-					{
-						mat[i][j] *= factor;
-					}
-				}
-			}
-		}
-		else
-		{
-			if (horizontal)
-			{
-				for (uint i = 0; i < rows; i++)
-				{
-					for (uint j = start; j < end; j++)
-					{
-						mat[i][j] /= factor;
-					}
-				}
-			}
-			else
-			{
-				for (uint i = start; i < end; i++)
-				{
-					for (uint j = 0; j < cols; j++)
-					{
-						mat[i][j] /= factor;
 					}
 				}
 			}

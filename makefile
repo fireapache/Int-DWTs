@@ -32,7 +32,7 @@ LFLAGS = -L $(HOME)/cxsc/lib
 LIBS = -lcxsc -lm
 
 # define the C source files
-CSRCS = int-dwts.cpp int-haar.cpp misc.cpp main.cpp tests.cpp
+CSRCS = int-dwts.cpp int-haar.cpp int-daub.cpp misc.cpp main.cpp tests.cpp
 CUDASRCS = int-haar-cuda.cu cuda-tests.cu
 
 # define the C object files 
