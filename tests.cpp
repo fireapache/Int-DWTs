@@ -1,5 +1,474 @@
 #include "tests.h"
 
+void test17Desc()
+{
+	cout << endl;
+	cout << "	==================== Test 6 ====================" << endl;
+	cout << endl;
+	cout << "	* This test is about time mesurement and calculus " << endl;
+	cout << "	exactitude of the 2D Daubechies Wavelet Transform." << endl;
+}
+
+void test17Param()
+{
+	cout << endl;
+	cout << "	Parameters: <order>" << endl;
+	cout << "	" << endl;
+	cout << "	The <order> of matrix must be an unsigned integer " << endl;
+	cout << "	greater than 0 and also be power of two." << endl;
+	cout << endl;
+}
+
+double test17_OriginalDecomp(double **mat, interval **imat, int n, bool standard, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		
+		if (standard)	Daub_StandardDecomposition(mat, n, n, true, false, false);
+		else			Daub_NonStandardDecomposition(mat, n, n, true, false);
+		
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		if (standard)	Daub_StandardDecomposition(imat, n, n, true, false, false);
+		else			Daub_NonStandardDecomposition(imat, n, n, true, false);
+	}
+
+	return timer;
+}
+
+double test17_DevelopedDecomp(double **mat, interval **imat, int n, bool standard, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		
+		if (standard)	Daub_StandardDecomposition(mat, n, n, false, true);
+		else			Daub_NonStandardDecomposition(mat, n, n, true);
+
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		if (standard)	Daub_StandardDecomposition(imat, n, n, false, true);
+		else			Daub_NonStandardDecomposition(imat, n, n, true);
+	}
+
+	return timer;
+}
+
+double test17_OriginalComp(double **mat, interval **imat, int n, bool standard, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		
+		if (standard)	Daub_StandardComposition(mat, n, n, true, false);
+		else			Daub_NonStandardComposition(mat, n, n, true, false);
+
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		if (standard)	Daub_StandardComposition(imat, n, n, true, false);
+		else			Daub_NonStandardComposition(imat, n, n, true, false);
+	}
+
+	return timer;
+}
+
+double test17_DevelopedComp(double **mat, interval **imat, int n, bool standard, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		
+		if (standard)	Daub_StandardComposition(mat, n, n, true);
+		else			Daub_NonStandardComposition(mat, n, n, true);
+
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		if (standard)	Daub_StandardComposition(imat, n, n, true);
+		else			Daub_NonStandardComposition(imat, n, n, true);
+	}
+
+	return timer;
+}
+
+double test17_OriginalDecompComp(double **mat, interval **imat, int n, bool standard, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		
+		if (standard)
+		{
+			Daub_StandardDecomposition(mat, n, n, true, false, false);
+			Daub_StandardComposition(mat, n, n, true, false);
+		}
+		else
+		{
+			Daub_NonStandardDecomposition(mat, n, n, true, false);
+			Daub_NonStandardComposition(mat, n, n, true, false);
+		}
+
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		if (standard)
+		{
+			Daub_StandardDecomposition(imat, n, n, true, false, false);
+			Daub_StandardComposition(imat, n, n, true, false);
+		}
+		else
+		{
+			Daub_NonStandardDecomposition(imat, n, n, true, false);
+			Daub_NonStandardComposition(imat, n, n, true, false);
+		}
+	}
+
+	return timer;
+}
+
+double test17_DevelopedDecompComp(double **mat, interval **imat, int n, bool standard, bool getTime)
+{
+	double timer = 0.0;
+
+	if (getTime)
+	{
+		// Get time of execution.
+		startTimeCounter();
+		
+		if (standard)
+		{
+			Daub_StandardDecomposition(mat, n, n, false, true);
+			Daub_StandardComposition(mat, n, n, true);
+		}
+		else
+		{
+			Daub_NonStandardDecomposition(mat, n, n, true);
+			Daub_NonStandardComposition(mat, n, n, true);
+		}
+
+		timer = getTimeCounter();
+	}
+	else
+	{
+		// Interval transformation for error calculation.
+		if (standard)
+		{
+			Daub_StandardDecomposition(imat, n, n, false, true);
+			Daub_StandardComposition(imat, n, n, true);
+		}
+		else
+		{
+			Daub_NonStandardDecomposition(imat, n, n, true);
+			Daub_NonStandardComposition(imat, n, n, true);
+		}
+	}
+
+	return timer;
+}
+
+void test17_Script(double **inputMat, double **auxMat, interval **inputiMat, interval **auxiMat, uint n, bool standard)
+{
+	double *times = new double[30];			// Vector to store the time of each execution.
+	TimeMesurement timeMesure, oldMesure;
+	real error, oldError;
+
+	if (standard) cout << "========== Standard Decomposition: " << endl;
+	else cout << "========== Non Standard Decomposition: " << endl;
+	cout << "\t\t";
+	cout << "Speedup" << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << "\t\t";
+	cout << "Error (%)" << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyMatrix(inputMat, auxMat, n);
+		times[i] = test17_OriginalDecomp(auxMat, auxiMat, n, standard, true);
+	}
+
+	oldMesure = timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << "\t\t";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyMatrix(inputiMat, auxiMat, n);
+	test17_OriginalDecomp(auxMat, auxiMat, n, standard, false);
+
+	oldError = INT_error(auxiMat, n, n);
+
+	cout << '\t' << oldError;
+	cout << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyMatrix(inputMat, auxMat, n);
+		times[i] = test17_DevelopedDecomp(auxMat, auxiMat, n, standard, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Developed";
+	cout << '\t' << speedupCalc(timeMesure.mean, oldMesure.mean) << '\t';
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyMatrix(inputiMat, auxiMat, n);
+	test17_DevelopedDecomp(auxMat, auxiMat, n, standard, false);
+
+	error = INT_error(auxiMat, n, n);
+
+	cout << '\t' << error;
+	cout << '\t' << relativeGain(error, oldError);
+	cout << endl;
+
+	cout << endl;
+	if (standard) cout << "========== Standard Composition: " << endl;
+	else cout << "========== Non Standard Composition: " << endl;
+	cout << "\t\t";
+	cout << "Speedup" << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << "\t\t";
+	cout << "Error (%)" << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyMatrix(inputMat, auxMat, n);
+		times[i] = test17_OriginalComp(auxMat, auxiMat, n, standard, true);
+	}
+
+	oldMesure = timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << "\t\t";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyMatrix(inputiMat, auxiMat, n);
+	test17_OriginalComp(auxMat, auxiMat, n, standard, false);
+
+	oldError = INT_error(auxiMat, n, n);
+
+	cout << '\t' << oldError;
+	cout << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyMatrix(inputMat, auxMat, n);
+		times[i] = test17_DevelopedComp(auxMat, auxiMat, n, standard, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Developed";
+	cout << '\t' << speedupCalc(timeMesure.mean, oldMesure.mean) << '\t';
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyMatrix(inputiMat, auxiMat, n);
+	test17_DevelopedComp(auxMat, auxiMat, n, standard, false);
+
+	error = INT_error(auxiMat, n, n);
+
+	cout << '\t' << error;
+	cout << '\t' << relativeGain(error, oldError);
+	cout << endl;
+
+	ImageQuality<double> imgQ, oldImgQ;
+
+	cout << endl;
+	if (standard) cout << "========== Standard Decomposition & Composition: " << endl;
+	else cout << "========== Non Standard Decomposition & Composition: " << endl;
+	cout << "\t\t";
+	cout << "Speedup" << "\t\t";
+	cout << "Time" << "\t\t";
+	cout << "StdDev" << "\t\t";
+	cout << "Error" << "\t\t";
+	cout << "EUC" << "\t\t";
+	cout << "MSE" << "\t\t";
+	cout << "PSNR" << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyMatrix(inputMat, auxMat, n);
+		times[i] = test17_OriginalDecompComp(auxMat, auxiMat, n, standard, true);
+	}
+
+	oldMesure = timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Original";
+	cout << "\t\t";
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyMatrix(inputiMat, auxiMat, n);
+	test17_OriginalDecompComp(auxMat, auxiMat, n, standard, false);
+
+	oldError = INT_error(auxiMat, n, n);
+
+	cout << '\t' << oldError;
+
+	double oldMax = maxValue(auxMat, n, n);
+
+	oldImgQ = imgQ = imageQuality(auxMat, inputMat, oldMax, n);
+
+	cout << '\t' << imgQ.euc;
+	cout << '\t' << imgQ.mse;
+	cout << '\t' << imgQ.psnr << endl;
+
+	for (int i = 0; i < 30; ++i)
+	{
+		copyMatrix(inputMat, auxMat, n);
+		times[i] = test17_DevelopedDecompComp(auxMat, auxiMat, n, standard, true);
+	}
+
+	timeMesure = runTimeMesurement(times, 30);
+
+	cout << "Developed";
+	cout << '\t' << speedupCalc(timeMesure.mean, oldMesure.mean) << '\t';
+	cout << '\t' << timeMesure.mean;
+	cout << '\t' << timeMesure.stdDev;
+
+	copyMatrix(inputiMat, auxiMat, n);
+	test17_DevelopedDecompComp(auxMat, auxiMat, n, standard, false);
+
+	error = INT_error(auxiMat, n, n);
+
+	cout << '\t' << error;
+
+	double max = maxValue(auxMat, n, n);
+
+	imgQ = imageQuality(auxMat, inputMat, max, n);
+
+	cout << '\t' << imgQ.euc;
+	cout << '\t' << imgQ.mse;
+	cout << '\t' << imgQ.psnr << endl;
+
+	cout << endl;
+	cout << "Quality gain (%)" << endl;
+	cout << endl;
+
+	cout << "EUC" << "\t\t" << relativeGain(imgQ.euc, oldImgQ.euc) << endl;
+	cout << "MSE" << "\t\t" << relativeGain(imgQ.mse, oldImgQ.mse) << endl;
+	cout << "PSNR" << "\t\t" << -relativeGain(imgQ.psnr, oldImgQ.psnr) << endl;
+	cout << "Error" << "\t\t" << relativeGain(error, oldError) << endl;
+
+	cout << endl;
+
+	delete[] times;
+}
+
+int test17(int argc, char **argv)
+{
+	if (argc < 1)
+	{
+		cout << endl;
+		cout << "	ERROR: lack of parameters." << endl;
+		test17Desc();
+		test17Param();
+		return 1;
+	}
+
+	uint n = atoi(argv[0]);
+
+	if (n <= 0)
+	{
+		cout << endl;
+		cout << "	ERROR: <order> has to be greater than 0." << endl;
+		test17Desc();
+		test17Param();
+		return 1;
+	}
+	else if (!isPowerOfTwo(n))
+	{
+		cout << endl;
+		cout << "	ERROR: <order> has to be power of two." << endl;
+		test17Desc();
+		test17Param();
+		return 1;
+	}
+
+	test17Desc();
+	cout << endl;
+	cout << "Computing matrix of order " << n << "..." << endl;
+	cout << n << " X " << n << " = " << n * n << "..." << endl;
+	cout << endl;
+
+	double **inputMat = new double*[n];		// Matrices used as input for all executions.
+	interval **inputiMat = new interval*[n];
+
+	double **auxMat = new double*[n];		// Auxiliary matrices used for each execution.
+	interval **auxiMat = new interval*[n];
+
+	// Allocate and fill input matrices with n*n random values.
+	for (uint i = 0; i < n; ++i)
+	{
+		inputMat[i] = new double[n];
+		inputiMat[i] = new interval[n];
+
+		auxMat[i] = new double[n];
+		auxiMat[i] = new interval[n];
+
+		for (uint j = 0; j < n; ++j)
+		{
+			inputMat[i][j] = rand() % n;
+			inputiMat[i][j] = interval(inputMat[i][j]);
+		}
+	}
+
+	test17_Script(inputMat, auxMat, inputiMat, auxiMat, n, true);
+	test17_Script(inputMat, auxMat, inputiMat, auxiMat, n, false);
+
+	// Deallocating memory.
+
+	for (uint i = 0; i < n; ++i)
+	{
+		delete[] inputMat[i];
+		delete[] inputiMat[i];
+		delete[] auxMat[i];
+		delete[] auxiMat[i];
+	}
+
+	delete[] inputMat;
+	delete[] inputiMat;
+	delete[] auxMat;
+	delete[] auxiMat;
+
+	return 0;
+}
+
 void test16Desc()
 {
 	cout << endl;
@@ -4455,6 +4924,7 @@ void listAllTests()
 	test14Desc();
 	test15Desc();
 	test16Desc();
+	test17Desc();
 
 	cout << endl;
 }
@@ -4518,6 +4988,9 @@ int testIndexer(int argc, char **argv)
 					break;
 				case 5:
 					test16(newArgs.argc, newArgs.argv);
+					break;
+				case 6:
+					test17(newArgs.argc, newArgs.argv);
 					break;
 				default:
 					cout << endl;
