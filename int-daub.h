@@ -180,10 +180,10 @@ void Daub_Normalization(T *vec, uint n, bool invert = false)
 }
 
 template <typename T>
-void Daub_StandardDecomposition(T *mat, uint rows, uint cols, bool normal, bool stepnorm = false, bool optimalFilters = true)
+void Daub_StandardDecomposition(T **mat, uint rows, uint cols, bool normal, bool stepnorm = false, bool optimalFilters = true)
 {
-	double *temp_row = new double[cols];
-	double *temp_col = new double[rows];
+	T *temp_row = new T[cols];
+	T *temp_col = new T[rows];
 
 	for (uint i = 0; i < rows; i++)
 	{
@@ -234,10 +234,10 @@ void Daub_StandardDecomposition(T *mat, uint rows, uint cols, bool normal, bool 
 }
 
 template <typename T>
-void Daub_StandardComposition(T *mat, uint rows, uint cols, bool normal, bool optimalFilters = true)
+void Daub_StandardComposition(T **mat, uint rows, uint cols, bool normal, bool optimalFilters = true)
 {
-	double *temp_row = new double[cols];
-	double *temp_col = new double[rows];
+	T *temp_row = new T[cols];
+	T *temp_col = new T[rows];
 
 	for (uint i = 0; i < cols; i++)
 	{
