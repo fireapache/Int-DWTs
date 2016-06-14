@@ -138,15 +138,37 @@ void Daub_CompositionStep(T *v, uint n, bool normal, bool optimalFilters = true)
 
 	T* result = new T[n];
 
+	T a, b, c, d, t1, t2;
+	T *offset1, *offset2;
+
 	if (optimalFilters)
 	{
-		result[0] = (v[0] + v[half] + v3*(v[half - 1] + v[n - 1]) + sqrt3*(v[n - 1] + v[0] - v[half - 1] - v[half])) / denom;
-		result[1] = (v[half - 1] - v[n - 1] + v3*(v[0] - v[half]) + sqrt3*(v[0] + v[half] - v[half - 1] - v[n - 1])) / denom;
+		a = *(v + half - 1);
+		b = *(v + n - 1);
+		c = *v;
+		d = *(v + half);
+
+		t1 = c - a;
+		t2 = b - d;
+
+		result[0] = (c + d + v3*(a + b) + sqrt3*(t1 + t2)) / denom;
+		result[1] = (a - b + v3*(c - d) + sqrt3*(t1 - t2)) / denom;
 
 		for (i = 0, j = 2; i < half - 1; i++)
 		{
-			result[j++] = (v[i + 1] + v[i + halfPls1] + v3*(v[i] + v[i + half]) + sqrt3*(v[i + half] + v[i + 1] - v[i] - v[i + halfPls1])) / denom;
-			result[j++] = (v[i] - v[i + half] + v3*(v[i + 1] - v[i + halfPls1]) + sqrt3*(v[i + 1] + v[i + halfPls1] - v[i] - v[i + half])) / denom;
+			offset1 = v + i;
+			offset2 = v + half + i;
+
+			a = *(offset1++);
+			b = *(offset2++);
+			c = *(offset1++);
+			d = *(offset2++);
+
+			t1 = c - a;
+			t2 = b - d;
+
+			result[j++] = (c + d + v3*(a + b) + sqrt3*(t1 + t2)) / denom;
+			result[j++] = (a - b + v3*(c - d) + sqrt3*(t1 - t2)) / denom;
 		}
 	}
 	else
@@ -170,13 +192,26 @@ void Daub_CompositionStep(T *v, uint n, bool normal, bool optimalFilters = true)
 		T Ig2 = h1;
 		T Ig3 = g1;
 
-		result[0] = v[half - 1] * Ih0 + v[n - 1] * Ih1 + v[0] * Ih2 + v[half] * Ih3;
-		result[1] = v[half - 1] * Ig0 + v[n - 1] * Ig1 + v[0] * Ig2 + v[half] * Ig3;
+		a = *(v + half - 1);
+		b = *(v + n - 1);
+		c = *v;
+		d = *(v + half);
+
+		result[0] = a * Ih0 + b * Ih1 + c * Ih2 + d * Ih3;
+		result[1] = a * Ig0 + b * Ig1 + c * Ig2 + d * Ig3;
 
 		for (i = 0, j = 2; i < half - 1; i++)
 		{
-			result[j++] = v[i] * Ih0 + v[i + half] * Ih1 + v[i + 1] * Ih2 + v[i + halfPls1] * Ih3;
-			result[j++] = v[i] * Ig0 + v[i + half] * Ig1 + v[i + 1] * Ig2 + v[i + halfPls1] * Ig3;
+			offset1 = v + i;
+			offset2 = v + half + i;
+
+			a = *(offset1++);
+			b = *(offset2++);
+			c = *(offset1++);
+			d = *(offset2++);
+
+			result[j++] = a * Ih0 + b * Ih1 + c * Ih2 + d * Ih3;
+			result[j++] = a * Ig0 + b * Ig1 + c * Ig2 + d * Ig3;
 		}
 	}
 
