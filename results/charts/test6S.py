@@ -36,14 +36,14 @@ error_config = {'ecolor': '0.3'}
 
 plt.sca(ax[0])
 
-developed = (-37.4045, -26.1372, -30.8247)
+developed = (-19.5443, -8.22712, -14.0361)
 std_dev = (0.0, 0.0, 0.0)
 
 plt.ylabel('Performance (%)')
 plt.title('Decimated 2D Standard DB2')
 plt.xticks(index, ('Decomposition', 'Composition', 'Decomp & Comp'))
 plt.grid(True)
-plt.ylim([-50.0,10.0])
+plt.ylim([-25.0,5.0])
 # ax[0].xaxis.set_visible(False)
 
 Performance = ax[0].bar(index, developed, bar_width,
@@ -64,7 +64,7 @@ plt.axhline(y=0, xmin=min(index) - 0.5, xmax=max(index) + 0.5, color='black')
 
 plt.sca(ax[1])
 
-developedError = (-2.350246E+004, -1.768478E+003, -8.604131E+006)
+developedError = (-2.190991E+004, -1.756793E+003, -8.023537E+006)
 
 plt.ylabel('Accuracy (%)')
 plt.xticks(index, ('Decomposition', 'Composition', 'Decomp & Comp'))
@@ -81,13 +81,13 @@ Errors = ax[1].bar(index, developedError, bar_width,
 
 plt.sca(ax[2])
 
-MetricResults = (66.7538, 88.9469, 3.27304)
+MetricResults = (65.8016, 88.3047, 3.18919)
 
 
 plt.ylabel('Metrics (%)')
 plt.xticks(index, ('EUC', 'MSE', 'PSNR'))
 plt.grid(True)
-plt.ylim([0.0,110.0])
+plt.ylim([0.0,100.0])
 plt.xlim([min(index) - 0.5, max(index) + 0.5])
 
 Metrics = ax[2].bar(index, MetricResults, bar_width,
