@@ -131,7 +131,7 @@ void Daub_CompositionStep(T *v, uint n, bool normal, bool optimalFilters = true)
 	T denom;
 	uint i, j;
 	const uint half = n >> 1;
-	const uint halfPls1 = half + 1;
+	//const uint halfPls1 = half + 1;
 
 	if (normal) denom = T(4) * sqrt(T(2));
 	else denom = T(4);
@@ -235,7 +235,7 @@ void Daub_Composition(T *vec, uint n, bool normal, bool optimalFilters = true)
 template <typename T>
 void Daub_Normalization(T *vec, uint n, bool invert = false)
 {
-	uint levels = (uint)log2(n);
+	uint levels = (uint)log2((double)(n));
 	T factor;
 	
 	for (uint level = 1; level < levels; level++)
@@ -263,7 +263,7 @@ void Daub_Normalization(T *vec, uint n, bool invert = false)
 template <typename T>
 void Daub_StandardStepNormalization(T **mat, uint rows, uint cols, bool horizontal, bool invert = false)
 {
-	uint levels = (uint)log2(rows);
+	uint levels = (uint)log2((double)(rows));
 	T factor;
 
 	for (uint level = 1; level < levels; level++)
@@ -429,7 +429,7 @@ void Daub_StandardComposition(T **mat, uint rows, uint cols, bool normal, bool o
 template <typename T>
 void Daub_StandardNormalization(T **mat, uint n, bool invert = false)
 {
-	uint levels = (uint)log2(n);
+	uint levels = (uint)log2((double)(n));
 	T factor;
 
 	for (uint levelR = 1; levelR < levels; levelR++)
