@@ -1,4 +1,3 @@
-
 	==================== Test 5 ====================
 
 	* This test is about time mesurement and calculus 
@@ -8,24 +7,23 @@
 Computing vector of size 1048576...
 
 ========== Decomposition: 
-		Speedup		Time		StdDev		Error		Error (%)
-Original			0.0206522	0.000330133	6.544590E-005
-Developed	-61.2816		0.0333082	0.000205545	  0.024128	-3.676639E+004
+			Speedup		Time		StdDev			Error			Error (%)
+Original				0.0227109	0.000494331		6.544590E-005
+Developed	-30.8133	0.0297088	0.000162719		0.022481		-3.425046E+004
 
 ========== Composition: 
-		Speedup		Time		StdDev		Error		Error (%)
-Original			0.0210366	8.4325e-05	2.188608E-008
-Developed	-48.0563		0.031146	0.000182659	4.628673E-007	-2.014894E+003
+			Speedup		Time		StdDev			Error			Error (%)
+Original				0.0217165	0.00011107		2.188608E-008
+Developed	-18.2249	0.0256743	0.000708367		4.903413E-007	-2.140426E+003
 
 ========== Decomposition & Composition: 
-		Speedup		Time		StdDev		Error		EUC		MSE		PSNR
-Original			0.0415559	0.000166101	5.145010E-005	2.56739e-06	6.28614e-18	292.428
-Developed	-54.8134		0.0643341	0.000216744	 11.244011	8.15419e-07	6.34106e-19	302.39
+			Speedup		Time		StdDev			Error			EUC				MSE				PSNR
+Original				0.0443039	0.000170893		5.145010E-005	2.56739e-06		6.28614e-18		292.428
+Developed	-23.5204	0.0547244	0.000229103		10.476748		7.85891e-07		5.89013e-19		302.711
 
 Quality gain (%)
 
-EUC		68.2394
-MSE		89.9126
-PSNR		3.40673
-Error		-2.185411E+007
-
+EUC		69.3895
+MSE		90.63
+PSNR	3.51628
+Error	-2.036283E+007
