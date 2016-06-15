@@ -9,13 +9,13 @@
 CC = nvcc
 
 SEQ_CC = clang++
-PAR_CC = nvcc -G
+PAR_CC = nvcc
 
 EMPTY =
 
 # define any compile-time flags
 CFLAGS =
-DEBUGCFLAGS = -g
+DEBUGCFLAGS = 
 
 # define any directories containing header files other than /usr/include
 #
