@@ -6,16 +6,16 @@
 #
 
 # define the C compiler to use
-CC = nvcc
+CC = g++
 
-SEQ_CC = clang++
+SEQ_CC = g++
 PAR_CC = nvcc
 
 EMPTY =
 
 # define any compile-time flags
-CFLAGS =
-DEBUGCFLAGS = 
+CFLAGS = -O3
+DEBUGCFLAGS = -g
 
 # define any directories containing header files other than /usr/include
 #
@@ -59,10 +59,16 @@ MAIN = tests.exe
 # Selects the compiler to be used...
 #
 
-ifdef SEQ
-CC = $(SEQ_CC)
-else
+ifdef PAR
 CC = $(PAR_CC)
+else
+CC = $(SEQ_CC)
+endif
+
+ifdef DEBUG
+FLAGS = $(DEBUGCFLAGS)
+else
+FLAGS = $(CFLAGS)
 endif
 
 .PHONY: depend clean
@@ -76,8 +82,8 @@ message:
 	@echo	Int-DWTs library has been compiled
 	@echo  
 
-$(MAIN): $(COBJS) CUDAOBJS
-	$(CC) $(DEBUGCFLAGS) $(INCLUDES) -o $(MAIN) $(COBJS) $(CUDAOBJS) $(LFLAGS) $(LIBS)
+$(MAIN): $(COBJS)
+	$(CC) $(FLAGS) $(INCLUDES) -o $(MAIN) $(COBJS) $(LFLAGS) $(LIBS)
 
 ################################
 
@@ -86,17 +92,17 @@ $(MAIN): $(COBJS) CUDAOBJS
 # the rule(a .c file) and $@: the name of the target of the rule (a .o file) 
 # (see the gnu make manual section about automatic variables)
 .cpp.o:
-	$(CC) $(DEBUGCFLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
 
 ################################
 
 CUDAOBJS: $(CUDAOBJS)
 
 cuda-tests.o: cuda-tests.cu
-	$(CC) $(DEBUGCFLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
 
 int-haar-cuda.o: int-haar-cuda.cu
-	$(CC) $(DEBUGCFLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
 
 ################################
 
