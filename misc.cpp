@@ -119,8 +119,10 @@ double getTimeCounter()
 #else
 	gettimeofday(&tTime, NULL);
     double usecDiff = tTime.tv_usec - tCounter.tv_usec;
+    double secDiff = tTime.tv_sec - tCounter.tv_sec;
     if (usecDiff < 0) returnTime = (double)(usecDiff + 1000000) / 1000000.0;
     else returnTime = usecDiff / 1000000.0;
+    returnTime += secDiff;
 #endif
 
     return returnTime;
