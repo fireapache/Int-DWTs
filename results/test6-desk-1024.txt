@@ -1,0 +1,52 @@
+	==================== Test 6 ====================
+
+	* This test is about time mesurement and calculus 
+	exactitude of the 2D Daubechies Wavelet Transform.
+
+Computing matrix of order 1024...
+1024 X 1024 = 1048576...
+
+========== Standard Decomposition: 
+			Speedup		Time		StdDev		Error			Error (%)
+Original				0.0654505	0.179495	3.789319E-008
+Developed	-16.9559	0.0765482	0.179501	8.340256E-006	-2.190991E+004
+
+========== Standard Composition: 
+			Speedup		Time		StdDev		Error			Error (%)
+Original				0.0633018	0.179479	8.367351E-011
+Developed	-15.2257	0.07294		0.179494	1.553644E-009	-1.756793E+003
+
+========== Standard Decomposition & Composition: 
+			Speedup		Time		StdDev		Error			EUC				MSE				PSNR
+Original				0.128995	0.249432	8.742722E-008	2.48167e-09		5.87339e-24		292.5
+Developed	-42.5754	0.183915	0.30017	  	0.007015		8.48692e-10		6.8691e-25		301.829
+
+Quality gain (%)
+
+EUC		65.8016
+MSE		88.3047
+PSNR	3.18919
+Error	-8.023537E+006
+
+========== Non Standard Decomposition: 
+			Speedup		Time		StdDev		Error		Error (%)
+Original				0.0653049	0.179506	3.783498E-008
+Developed	-21.2564	0.0791864	0.1795	1.902337E-005	-5.017985E+004
+
+========== Non Standard Composition: 
+			Speedup		Time		StdDev		Error		Error (%)
+Original				0.0845348	0.179489	1.705303E-011
+Developed	-7.55436	0.0909209	0.179505	3.938112E-010	-2.209333E+003
+
+========== Non Standard Decomposition & Composition: 
+			Speedup		Time		StdDev		Error			EUC				MSE				PSNR
+Original				0.149653	0.249464	4.975800E-008	2.41421e-09		5.55839e-24		292.74
+Developed	-35.8211	0.20326		0.30001	  	0.011936		1.36555e-09		1.77834e-24		297.689
+
+Quality gain (%)
+
+EUC		43.437
+MSE		68.0063
+PSNR	1.6907
+Error	-2.398778E+007
+
