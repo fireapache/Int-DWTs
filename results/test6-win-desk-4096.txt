@@ -8,46 +8,46 @@ Computing matrix of order 4096...
 4096 X 4096 = 16777216...
 
 ========== Standard Decomposition: 
-		Speedup		Time		StdDev		Error		Error (%)
-Original			0.897739	0.0037666	0
-Developed	-17.2276		1.0524	0.00234561	0	-1.#IND
+			Speedup		Time		StdDev			Error		Error (%)
+Original				0.897739	0.0037666		0
+Developed	-17.2276	1.0524		0.00234561		0			-1.#IND
 
 ========== Standard Composition: 
-		Speedup		Time		StdDev		Error		Error (%)
-Original			0.890179	0.00398954	0
-Developed	-39.1348		1.23855	0.00201274	0	-1.#IND
+			Speedup		Time		StdDev			Error		Error (%)
+Original				0.890179	0.00398954		0
+Developed	-39.1348	1.23855		0.00201274		0			-1.#IND
 
 ========== Standard Decomposition & Composition: 
-		Speedup		Time		StdDev		Error		EUC		MSE		PSNR
-Original			1.78588	0.00599722	0	4.82158e-008	1.38567e-022	290.826
-Developed	-28.5081		2.295	0.00764587	0	1.43118e-008	1.22087e-023	301.378
+			Speedup		Time		StdDev			Error		EUC				MSE				PSNR
+Original				1.78588		0.00599722		0			4.82158e-008	1.38567e-022	290.826
+Developed	-28.5081	2.295		0.00764587		0			1.43118e-008	1.22087e-023	301.378
 
 Quality gain (%)
 
 EUC		70.3171
 MSE		91.1893
-PSNR		3.62828
-Error		-1.#IND
+PSNR	3.62828
+Error	-1.#IND
 
 ========== Non Standard Decomposition: 
-		Speedup		Time		StdDev		Error		Error (%)
-Original			1.0516	0.00682806	0
-Developed	-21.4457		1.27712	0.0038811	0	-1.#IND
+			Speedup		Time		StdDev			Error		Error (%)
+Original				1.0516		0.00682806		0
+Developed	-21.4457	1.27712		0.0038811		0			-1.#IND
 
 ========== Non Standard Composition: 
-		Speedup		Time		StdDev		Error		Error (%)
-Original			1.55557	0.0049925	0
-Developed	-15.1709		1.79156	0.00407062	0	-1.#IND
+			Speedup		Time		StdDev			Error		Error (%)
+Original				1.55557		0.0049925		0
+Developed	-15.1709	1.79156		0.00407062		0			-1.#IND
 
 ========== Non Standard Decomposition & Composition: 
-		Speedup		Time		StdDev		Error		EUC		MSE		PSNR
-Original			2.6096	0.00945899	0	4.77799e-008	1.36073e-022	290.905
-Developed	-17.5597		3.06784	0.00820209	0	2.62779e-008	4.11587e-023	296.098
+			Speedup		Time		StdDev			Error		EUC				MSE				PSNR
+Original				2.6096		0.00945899		0			4.77799e-008	1.36073e-022	290.905
+Developed	-17.5597	3.06784		0.00820209		0			2.62779e-008	4.11587e-023	296.098
 
 Quality gain (%)
 
 EUC		45.0022
 MSE		69.7524
-PSNR		1.78515
-Error		-1.#IND
+PSNR	1.78515
+Error	-1.#IND
 
