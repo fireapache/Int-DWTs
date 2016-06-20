@@ -8,18 +8,17 @@ import matplotlib.pyplot as plt
 n_groups = 3
 
 # fig, ax = plt.subplots(nrows=3, sharex=True, figsize=(5, 6))
-fig = plt.figure(figsize=(5, 6))
+fig = plt.figure(figsize=(5, 4))
 fig.subplots_adjust(hspace=0.01)
 
 ax = []
 
-ax.append(fig.add_subplot(311))
-ax.append(fig.add_subplot(312, sharex=ax[0]))
-ax.append(fig.add_subplot(313))
+ax.append(fig.add_subplot(211))
+ax.append(fig.add_subplot(212))
 
-# ax.append(fig.add_subplot(337))
-# ax.append(fig.add_subplot(338))
-# ax.append(fig.add_subplot(339))
+#ax.append(fig.add_subplot(311))
+#ax.append(fig.add_subplot(312, sharex=ax[0]))
+#ax.append(fig.add_subplot(313))
 
 patterns1 = ('/', '\\', '-', '|')
 patterns2 = ('o', 'O', '.', '*')
@@ -36,14 +35,14 @@ error_config = {'ecolor': '0.3'}
 
 plt.sca(ax[0])
 
-developed = (-30.8133, -18.2249, -23.5204)
+developed = (-34.0885, -24.6276, -27.6439)
 std_dev = (0.0, 0.0, 0.0)
 
 plt.ylabel('Performance (%)')
-plt.title('Decimated 1D DB2')
+plt.title('2D Non Standard Daubechies #2')
 plt.xticks(index, ('Decomposition', 'Composition', 'Decomp & Comp'))
 plt.grid(True)
-plt.ylim([-35.0,5.0])
+plt.ylim([-50.0,10.0])
 # ax[0].xaxis.set_visible(False)
 
 Performance = ax[0].bar(index, developed, bar_width,
@@ -62,35 +61,35 @@ plt.axhline(y=0, xmin=min(index) - 0.5, xmax=max(index) + 0.5, color='black')
 
 # plt.legend(loc='upper left', prop={'size':11})
 
+# plt.sca(ax[1])
+
+# developedError = (-3.425046E+004, -2.140426E+003, -2.036283E+007)
+
+# plt.ylabel('Accuracy (%)')
+# plt.xticks(index, ('Decomposition', 'Composition', 'Decomp & Comp'))
+# plt.grid(True)
+# plt.ylim([-0.3E+008,0.0])
+
+# Errors = ax[1].bar(index, developedError, bar_width,
+#                  alpha=opacity,
+#                  color=colors1,
+#                  #yerr=std_ori,
+#                  error_kw=error_config,
+#                  label='Developed',
+#                  align='center')
+
 plt.sca(ax[1])
 
-developedError = (-3.425046E+004, -2.140426E+003, -2.036283E+007)
-
-plt.ylabel('Accuracy (%)')
-plt.xticks(index, ('Decomposition', 'Composition', 'Decomp & Comp'))
-plt.grid(True)
-plt.ylim([-0.3E+008,0.0])
-
-Errors = ax[1].bar(index, developedError, bar_width,
-                 alpha=opacity,
-                 color=colors1,
-                 #yerr=std_ori,
-                 error_kw=error_config,
-                 label='Developed',
-                 align='center')
-
-plt.sca(ax[2])
-
-MetricResults = (69.3895, 90.63, 3.51628)
+MetricResults = (43.0555, 67.5732, 1.67659)
 
 
 plt.ylabel('Metrics (%)')
 plt.xticks(index, ('EUC', 'MSE', 'PSNR'))
 plt.grid(True)
-plt.ylim([0.0,110.0])
+plt.ylim([0.0,80.0])
 plt.xlim([min(index) - 0.5, max(index) + 0.5])
 
-Metrics = ax[2].bar(index, MetricResults, bar_width,
+Metrics = ax[1].bar(index, MetricResults, bar_width,
                  alpha=opacity,
                  color=colors2,
                  #yerr=std_ori,
