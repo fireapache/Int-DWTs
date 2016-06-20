@@ -1,0 +1,31 @@
+
+	==================== Test 5 ====================
+
+	* This test is about time mesurement and calculus 
+	exactitude for the one-dimensional Daubechies Wavelet 
+	Transform.
+
+Computing vector of size 16777216...
+
+========== Decomposition: 
+		Speedup		Time		StdDev		Error		Error (%)
+Original			0.223775	0.00823998	0
+Developed	-26.6314		0.28337	0.00500761	0	-1.#IND
+
+========== Composition: 
+		Speedup		Time		StdDev		Error		Error (%)
+Original			0.215326	0.00891556	0
+Developed	-68.8626		0.363605	0.00357715	0	-1.#IND
+
+========== Decomposition & Composition: 
+		Speedup		Time		StdDev		Error		EUC		MSE		PSNR
+Original			0.432264	0.00865648	0	4.01653e-007	9.61572e-021	290.479
+Developed	-49.5178		0.646311	0.00630055	0	1.13928e-007	7.73644e-022	355.609
+
+Quality gain (%)
+
+EUC		71.6352
+MSE		91.9544
+PSNR		22.4217
+Error		-1.#IND
+
