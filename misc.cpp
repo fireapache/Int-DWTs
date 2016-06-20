@@ -45,7 +45,7 @@ bool isPowerOfTwo(unsigned int x)
 double** carregar_imagem(char *arquivo, ImageInfo *imageInfo)
 {
     char auxc[5];
-    int l, c, aux, temp[3];
+    int l, c, aux, temp[3], r;
     double **data;
     FILE *imagem;
     ImageInfo imgInfo;
@@ -56,19 +56,19 @@ double** carregar_imagem(char *arquivo, ImageInfo *imageInfo)
         return NULL;
     }
 
-    fscanf(imagem, "%s", imgInfo.magic);
+    r = fscanf(imagem, "%s", imgInfo.magic);
     fgetc(imagem);
 
-    fscanf(imagem,"%s", auxc);
+    r = fscanf(imagem,"%s", auxc);
     if (auxc[0]=='#')
     {
         while(fgetc(imagem) != '\n');
-        fscanf (imagem,"%d", &imgInfo.x);
+        r = fscanf (imagem,"%d", &imgInfo.x);
     }
     else imgInfo.x = atoi(auxc);
 
-	fscanf(imagem,"%d", &imgInfo.y);
-    fscanf(imagem, "%d", &aux);
+	r = fscanf(imagem,"%d", &imgInfo.y);
+    r = fscanf(imagem, "%d", &aux);
 
     data = new double*[imgInfo.x];
 
@@ -80,9 +80,9 @@ double** carregar_imagem(char *arquivo, ImageInfo *imageInfo)
     for (l = 0; l < imgInfo.y; l++)
     for (c = 0; c < imgInfo.x; c++)
     {
-        fscanf(imagem, "%d", &temp[0]);
-        fscanf(imagem, "%d", &temp[1]);
-        fscanf(imagem, "%d", &temp[2]);
+        r = fscanf(imagem, "%d", &temp[0]);
+        r = fscanf(imagem, "%d", &temp[1]);
+        r = fscanf(imagem, "%d", &temp[2]);
         data[l][c] = ((double)temp[2] + (double)temp[1] + (double)temp[0]) / 3.0;
     }
 
@@ -123,6 +123,7 @@ double getTimeCounter()
     if (usecDiff < 0) returnTime = (double)(usecDiff + 1000000) / 1000000.0;
     else returnTime = usecDiff / 1000000.0;
     returnTime += secDiff;
+    if (secDiff < 0) cout << "Ops... " << secDiff << endl;
 #endif
 
     return returnTime;
