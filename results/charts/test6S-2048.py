@@ -83,7 +83,7 @@ plt.sca(ax[1])
 MetricResults = (69.6679, 90.7997, 3.55141)
 
 
-plt.ylabel('Metrics (%)')
+plt.ylabel('Quality (%)')
 plt.xticks(index, ('EUC', 'MSE', 'PSNR'))
 plt.grid(True)
 plt.ylim([0.0,100.0])
@@ -98,4 +98,5 @@ Metrics = ax[1].bar(index, MetricResults, bar_width,
                  align='center')
 
 plt.tight_layout()
-plt.show()
+#plt.show()
+fig.savefig("test6S-2048.pdf", format='pdf')
