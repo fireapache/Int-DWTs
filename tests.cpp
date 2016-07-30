@@ -432,10 +432,19 @@ int test17(int argc, char **argv)
 	double **auxMat = new double*[n];		// Auxiliary matrices used for each execution.
 	interval **auxiMat = new interval*[n];
 
+	ImageInfo imgInfo;
+	inputMat = carregar_imagem("input.ppm", &imgInfo);
+
+	if (inputMat == NULL)
+	{
+		cout << "Error: No input image!" << endl;
+		goto test17end;
+	}
+
 	// Allocate and fill input matrices with n*n random values.
 	for (uint i = 0; i < n; ++i)
 	{
-		inputMat[i] = new double[n];
+		//inputMat[i] = new double[n];
 		inputiMat[i] = new interval[n];
 
 		auxMat[i] = new double[n];
@@ -443,7 +452,7 @@ int test17(int argc, char **argv)
 
 		for (uint j = 0; j < n; ++j)
 		{
-			inputMat[i][j] = rand() % n;
+			//inputMat[i][j] = rand() % n;
 			inputiMat[i][j] = interval(inputMat[i][j]);
 		}
 	}
@@ -452,6 +461,8 @@ int test17(int argc, char **argv)
 	test17_Script(inputMat, auxMat, inputiMat, auxiMat, n, false);
 
 	// Deallocating memory.
+
+test17end:
 
 	for (uint i = 0; i < n; ++i)
 	{
@@ -482,9 +493,9 @@ void test16Desc()
 void test16Param()
 {
 	cout << endl;
-	cout << "	Parameters: <size>" << endl;
+	cout << "	Parameters: <image_size>" << endl;
 	cout << "	" << endl;
-	cout << "	<size> must be an unsigned integer greater" << endl;
+	cout << "	<image_size> must be an unsigned integer greater" << endl;
 	cout << "	than 0 and also be power of two." << endl;
 	cout << endl;
 }
@@ -633,7 +644,7 @@ int test16(int argc, char **argv)
 	if (n <= 0)
 	{
 		cout << endl;
-		cout << "	ERROR: <size> has to be greater than 0." << endl;
+		cout << "	ERROR: <image_size> has to be greater than 0." << endl;
 		test16Desc();
 		test16Param();
 		return 1;
@@ -641,11 +652,13 @@ int test16(int argc, char **argv)
 	else if (!isPowerOfTwo(n))
 	{
 		cout << endl;
-		cout << "	ERROR: <size> has to be power of two." << endl;
+		cout << "	ERROR: <image_size> has to be power of two." << endl;
 		test16Desc();
 		test16Param();
 		return 1;
 	}
+
+	n = n*n;
 
 	test16Desc();
 	cout << endl;
@@ -664,10 +677,21 @@ int test16(int argc, char **argv)
 
 	double *times = new double[30];			// Vector to store the time of each execution.
 
+	ImageInfo imgInfo;
+	double **inputMat = carregar_imagem("input.ppm", &imgInfo);
+
+	if (inputMat == NULL)
+	{
+		cout << "Error: No input image!" << endl;
+		goto test16end;
+	}
+	
+	inputVec = matrixToVector(inputMat, static_cast<uint>(imgInfo.x));
+
 	// Fill input vectors with n random values.
 	for (uint i = 0; i < n; ++i)
 	{
-		inputVec[i] = rand() % n;
+		//inputVec[i] = rand() % n;
 		inputiVec[i] = interval(inputVec[i]);
 	}
 
@@ -854,7 +878,10 @@ int test16(int argc, char **argv)
 
 	cout << endl;
 
+test16end:
+
 	// Deallocating memory.
+	deleteMatrix(inputMat, n);
 	delete[] inputVec;
 	delete[] inputiVec;
 	delete[] auxVec;
