@@ -35,14 +35,14 @@ error_config = {'ecolor': '0.3'}
 
 plt.sca(ax[0])
 
-developed = (-21.4457, -15.1709, -17.5597)
+developed = (-21.9542, -15.203, -17.3513)
 std_dev = (0.0, 0.0, 0.0)
 
 plt.ylabel('Performance (%)')
 plt.title('2D Non Standard Daubechies #3')
 plt.xticks(index, ('Decomposition', 'Composition', 'Decomp & Comp'))
 plt.grid(True)
-plt.ylim([-30.0,5.0])
+plt.ylim([-25.0,5.0])
 # ax[0].xaxis.set_visible(False)
 
 Performance = ax[0].bar(index, developed, bar_width,
@@ -80,7 +80,7 @@ plt.axhline(y=0, xmin=min(index) - 0.5, xmax=max(index) + 0.5, color='black')
 
 plt.sca(ax[1])
 
-MetricResults = (45.0022, 69.7524, 1.78515)
+MetricResults = (43.8987, 68.5265, 1.73043)
 
 
 plt.ylabel('Quality (%)')

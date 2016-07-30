@@ -35,7 +35,7 @@ error_config = {'ecolor': '0.3'}
 
 plt.sca(ax[0])
 
-developed = (-24.7182, -63.2871, -43.8194)
+developed = (-24.7602, -64.5103, -44.2794)
 std_dev = (0.0, 0.0, 0.0)
 
 plt.ylabel('Performance (%)')
@@ -80,7 +80,7 @@ plt.axhline(y=0, xmin=min(index) - 0.5, xmax=max(index) + 0.5, color='black')
 
 plt.sca(ax[1])
 
-MetricResults = (66.3943, 88.7066, 3.24003)
+MetricResults = (66.3953, 88.7073, 3.24865)
 
 
 plt.ylabel('Quality (%)')
