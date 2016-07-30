@@ -64,6 +64,22 @@ TimeMesurement runTimeMesurement(double *times, uint n);
 bool isPowerOfTwo(unsigned int x);
 
 template <typename T>
+T* matrixToVector(T **mat, uint n)
+{
+	T *vec = new T[n*n];
+
+	for (uint i = 0; i < n; i++)
+	{
+		for (uint j = 0; j < n; j++)
+		{
+			vec[i*n + j] = mat[i][j];
+		}
+	}
+
+	return vec;
+}
+
+template <typename T>
 T** genRandomMatrix(uint rows, uint cols, uint max)
 {
 	T **result;
