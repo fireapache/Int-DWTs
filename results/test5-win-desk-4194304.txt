@@ -7,25 +7,26 @@
 
 Computing vector of size 4194304...
 
-========== Decomposition: 
-		Speedup		Time		StdDev		Error		Error (%)
-Original			0.0547269	0.00318754	0
-Developed	-26.1813		0.0690551	0.00155045	0	-1.#IND
+========== Decomposition:
+                Speedup         Time            StdDev          Error           Error (%)
+Original                        0.0544617       0.00066164      0
+Developed       -28.738         0.0701129       0.000688075     0       		-1.#IND
 
-========== Composition: 
-		Speedup		Time		StdDev		Error		Error (%)
-Original			0.0498328	0.000411668	0
-Developed	-78.2904		0.0888472	0.000474684	0	-1.#IND
+========== Composition:
+                Speedup         Time            StdDev          Error           Error (%)
+Original                        0.051615        0.000423808     0
+Developed       -75.2237        0.0904417       0.000477003     0       		-1.#IND
 
-========== Decomposition & Composition: 
-		Speedup		Time		StdDev		Error		EUC		MSE		PSNR
-Original			0.102338	0.00104293	0	1.94521e-007	9.02134e-021	290.756
-Developed	-53.5784		0.157169	0.00147963	0	5.68203e-008	7.69745e-022	343.59
+========== Decomposition & Composition:
+                Speedup         Time            StdDev          Error           EUC             MSE             PSNR
+Original                        0.107706        0.002891        0       		1.43852e-009    4.93367e-025    290.745
+Developed       -51.8567        0.163558        0.00288182      0       		4.3375e-010     4.48558e-026    385.935
 
 Quality gain (%)
 
-EUC		70.7896
-MSE		91.4675
-PSNR		18.1713
-Error		-1.#IND
+EUC             69.8474
+MSE             90.9082
+PSNR            32.7402
+Error           -1.#IND
+
 

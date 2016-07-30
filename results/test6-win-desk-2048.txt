@@ -7,47 +7,48 @@
 Computing matrix of order 2048...
 2048 X 2048 = 4194304...
 
-========== Standard Decomposition: 
-		Speedup		Time		StdDev		Error		Error (%)
-Original			0.157843	0.00280435	0
-Developed	-23.6195		0.195124	0.00203999	0	-1.#IND
+========== Standard Decomposition:
+                Speedup         Time            StdDev          Error           Error (%)
+Original                        0.153337        0.0010167       0
+Developed       -24.7926        0.191354        0.00116243      0       		-1.#IND
 
-========== Standard Composition: 
-		Speedup		Time		StdDev		Error		Error (%)
-Original			0.154927	0.00266528	0
-Developed	-56.083		0.241814	0.00232843	0	-1.#IND
+========== Standard Composition:
+                Speedup         Time            StdDev          Error           Error (%)
+Original                        0.15159 		0.00241247      0
+Developed       -58.4749        0.240232        0.00288092      0       		-1.#IND
 
-========== Standard Decomposition & Composition: 
-		Speedup		Time		StdDev		Error		EUC		MSE		PSNR
-Original			0.311011	0.00182228	0	1.06602e-008	2.70939e-023	291.889
-Developed	-40.2084		0.436064	0.00311464	0	3.23346e-009	2.49274e-024	302.256
-
-Quality gain (%)
-
-EUC		69.6679
-MSE		90.7997
-PSNR		3.55141
-Error		-1.#IND
-
-========== Non Standard Decomposition: 
-		Speedup		Time		StdDev		Error		Error (%)
-Original			0.164917	0.00223526	0
-Developed	-34.0885		0.221135	0.00157093	0	-1.#IND
-
-========== Non Standard Composition: 
-		Speedup		Time		StdDev		Error		Error (%)
-Original			0.242936	0.00312278	0
-Developed	-24.6276		0.302765	0.00474117	0	-1.#IND
-
-========== Non Standard Decomposition & Composition: 
-		Speedup		Time		StdDev		Error		EUC		MSE		PSNR
-Original			0.409169	0.00354656	0	1.08684e-008	2.81625e-023	291.721
-Developed	-27.6439		0.522279	0.00353883	0	6.18896e-009	9.13219e-024	296.612
+========== Standard Decomposition & Composition:
+                Speedup         Time            StdDev          Error           EUC             MSE             PSNR
+Original                        0.304643        0.00312887      0       		1.45988e-009    5.08132e-025    290.617
+Developed       -40.7431        0.428765        0.00155095      0       		3.83161e-010    3.50028e-026    302.235
 
 Quality gain (%)
 
-EUC		43.0555
-MSE		67.5732
-PSNR		1.67659
-Error		-1.#IND
+EUC             73.754
+MSE             93.1115
+PSNR            3.99796
+Error           -1.#IND
+
+========== Non Standard Decomposition:
+                Speedup         Time            StdDev          Error           Error (%)
+Original                        0.161266        0.00191366      0
+Developed       -34.8609        0.217485        0.00109227      0       		-1.#IND
+
+========== Non Standard Composition:
+                Speedup         Time            StdDev          Error           Error (%)
+Original                        0.236027        0.00112016      0
+Developed       -25.3408        0.295838        0.0016414       0       		-1.#IND
+
+========== Non Standard Decomposition & Composition:
+                Speedup         Time            StdDev          Error           EUC             MSE             PSNR
+Original                        0.399874        0.00430945      0       		1.40318e-009    4.69425e-025    290.961
+Developed       -28.1077        0.512269        0.00152347      0       		7.99145e-010    1.52262e-025    295.85
+
+Quality gain (%)
+
+EUC             43.0475
+MSE             67.5642
+PSNR            1.68055
+Error           -1.#IND
+
 
