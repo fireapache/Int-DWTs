@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 n_groups = 3
 
 # fig, ax = plt.subplots(nrows=3, sharex=True, figsize=(5, 6))
-fig = plt.figure(figsize=(5, 4))
+fig = plt.figure(figsize=(3, 4))
 fig.subplots_adjust(hspace=0.01)
 
 ax = []
@@ -38,9 +38,9 @@ plt.sca(ax[0])
 developed = (-41.7821, -29.078, -34.1368)
 std_dev = (0.0, 0.0, 0.0)
 
-plt.ylabel('Performance (%)')
-plt.title('2D Non Standard Daubechies #1')
-plt.xticks(index, ('Decomposition', 'Composition', 'Decomp & Comp'))
+plt.ylabel('Desempenho (%)')
+plt.title('TWD 2D Nao Padrao #1')
+plt.xticks(index, ('D', 'C', 'D & C'))
 plt.grid(True)
 plt.ylim([-50.0,10.0])
 # ax[0].xaxis.set_visible(False)
@@ -83,7 +83,7 @@ plt.sca(ax[1])
 MetricResults = (44.4377, 69.1283, 1.74946)
 
 
-plt.ylabel('Quality (%)')
+plt.ylabel('Qaulidade (%)')
 plt.xticks(index, ('EUC', 'MSE', 'PSNR'))
 plt.grid(True)
 plt.ylim([0.0,80.0])

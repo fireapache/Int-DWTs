@@ -680,6 +680,8 @@ int test16(int argc, char **argv)
 	ImageInfo imgInfo;
 	double **inputMat = carregar_imagem("input.ppm", &imgInfo);
 
+	double max, oldMax;
+
 	if (inputMat == NULL)
 	{
 		cout << "Error: No input image!" << endl;
@@ -831,7 +833,7 @@ int test16(int argc, char **argv)
 
 	cout << '\t' << oldError;
 
-	double oldMax = maxValue(auxVec, n);
+	oldMax = maxValue(auxVec, n);
 
 	oldImgQ = imgQ = imageQuality(auxVec, inputVec, oldMax, n);
 
@@ -859,7 +861,7 @@ int test16(int argc, char **argv)
 
 	cout << '\t' << error;
 
-	double max = maxValue(auxVec, n);
+	max = maxValue(auxVec, n);
 
 	imgQ = imageQuality(auxVec, inputVec, n, n);
 
@@ -881,7 +883,7 @@ int test16(int argc, char **argv)
 test16end:
 
 	// Deallocating memory.
-	deleteMatrix(inputMat, n);
+	deleteMatrix(inputMat, imgInfo.x);
 	delete[] inputVec;
 	delete[] inputiVec;
 	delete[] auxVec;

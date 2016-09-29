@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 n_groups = 3
 
 # fig, ax = plt.subplots(nrows=3, sharex=True, figsize=(5, 6))
-fig = plt.figure(figsize=(5, 4))
+fig = plt.figure(figsize=(3, 4))
 fig.subplots_adjust(hspace=0.01)
 
 ax = []
@@ -38,9 +38,9 @@ plt.sca(ax[0])
 developed = (-21.9542, -15.203, -17.3513)
 std_dev = (0.0, 0.0, 0.0)
 
-plt.ylabel('Performance (%)')
-plt.title('2D Non Standard Daubechies #3')
-plt.xticks(index, ('Decomposition', 'Composition', 'Decomp & Comp'))
+plt.ylabel('')
+plt.title('TWD 2D Nao Padrao #3')
+plt.xticks(index, ('D', 'C', 'D & C'))
 plt.grid(True)
 plt.ylim([-25.0,5.0])
 # ax[0].xaxis.set_visible(False)
@@ -66,7 +66,7 @@ plt.axhline(y=0, xmin=min(index) - 0.5, xmax=max(index) + 0.5, color='black')
 # developedError = (-3.425046E+004, -2.140426E+003, -2.036283E+007)
 
 # plt.ylabel('Accuracy (%)')
-# plt.xticks(index, ('Decomposition', 'Composition', 'Decomp & Comp'))
+# plt.xticks(index, ('D', 'Composition', 'Decomp & Comp'))
 # plt.grid(True)
 # plt.ylim([-0.3E+008,0.0])
 
@@ -83,7 +83,7 @@ plt.sca(ax[1])
 MetricResults = (43.8987, 68.5265, 1.73043)
 
 
-plt.ylabel('Quality (%)')
+plt.ylabel('')
 plt.xticks(index, ('EUC', 'MSE', 'PSNR'))
 plt.grid(True)
 plt.ylim([0.0,80.0])
