@@ -57,7 +57,7 @@ struct MatrixMap
 };
 
 template <typename T>
-void MatrixMapping(T **matrix, MatrixMap<T> *map, uint n)
+void matrixMapping(T **matrix, MatrixMap<T> *map, uint n)
 {
 	for (uint i = 0; i < n; i++)
 	{
@@ -71,7 +71,7 @@ void MatrixMapping(T **matrix, MatrixMap<T> *map, uint n)
 }
 
 template <typename T>
-void MatrixRemapping(T **matrix, MatrixMap<T> *map, uint n)
+void matrixRemapping(T **matrix, MatrixMap<T> *map, uint n)
 {
 	for (uint i = 0; i < n*n; i++)
 	{
@@ -131,13 +131,49 @@ void sort(MatrixMap<T> *a, MatrixMap<T> *b, uint low, uint high)
 }
 
 template <typename T>
+T getMinValue(MatrixMap<T> *v, uint n)
+{
+	if (!v) return T(0);
+
+	T minValue = v[0].value;
+
+	for (uint i = 0; i < n; i++)
+	{
+		if (v[i].value < minValue)
+		{
+			minValue = v[i].value;
+		}
+	}
+
+	return minValue;
+}
+
+template <typename T>
+T getMaxValue(MatrixMap<T> *v, uint n)
+{
+	if (!v) return T(0);
+
+	T maxValue = v[0].value;
+
+	for (uint i = 0; i < n; i++)
+	{
+		if (v[i].value > maxValue)
+		{
+			maxValue = v[i].value;
+		}
+	}
+
+	return maxValue;
+}
+
+template <typename T>
 T getThreshold(MatrixMap<T> *v, uint n, double ratio)
 {
 	T threshold;
 	T error;
 	T totalEnergy = T(0);
-	T tMin = minValue(v, n);
-	T tMax = maxValue(v, n);
+	T tMin = getMinValue(v, n);
+	T tMax = getMaxValue(v, n);
 
 	if (ratio > 1.0) ratio = 1.0;
 	else if (ratio < 0.0) ratio = 0.0;

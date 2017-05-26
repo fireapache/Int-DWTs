@@ -54,4 +54,6 @@ void freeNewArgs(NewArgs& newArgs);
 void listAllTests();
 int testIndexer(int argc, char **argv);
 
+void imgCompressionTest(int argc, char **argv);
+
 #endif /* TESTS_H */

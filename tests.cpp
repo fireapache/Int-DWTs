@@ -5053,3 +5053,40 @@ int testIndexer(int argc, char **argv)
 
 	return code;
 }
+
+void imgCompressionTest(int argc, char **argv)
+{
+	if (argc < 3)
+	{
+		cout << "Poucos argumentos!" << endl;
+		return;
+	}
+
+	char *inputfile = argv[1];
+	char *outputfile = argv[2];
+
+	ImageInfo imgInfo;
+	double **img = carregar_imagem(inputfile, &imgInfo);
+
+	if (NULL) return;
+
+	MatrixMap<double> *map = new MatrixMap<double>[imgInfo.x * imgInfo.y];
+	MatrixMap<double> *mergeResult = new MatrixMap<double>[imgInfo.x * imgInfo.y];
+
+	Haar_MatrixDecomposition(img, imgInfo.x, imgInfo.y, true, false);
+	matrixMapping(img, map, imgInfo.x);
+	sort(map, mergeResult, 0, imgInfo.x * imgInfo.y - 1);
+
+	delete[] mergeResult;
+
+	compress(map, imgInfo.x * imgInfo.y, 0.03);
+	matrixRemapping(img, map, imgInfo.x);
+
+	Haar_MatrixComposition(img, imgInfo.x, imgInfo.y, true, false);
+
+	escrever_imagem(outputfile, img, imgInfo);
+
+	delete[] map;
+
+	deleteMatrix(img, imgInfo.x);
+}
