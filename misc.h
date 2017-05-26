@@ -48,6 +48,13 @@ typedef struct TimeMesurement
 	double stdDev;
 } TimeMesurement;
 
+typedef struct MatrixMap
+{
+	uint x;
+	uint y;
+	T value;
+} MatrixMap;
+
 void startTimeCounter();
 double getTimeCounter();
 void escrever_imagem(char *arquivo, double **matriz, ImageInfo imgInfo);
