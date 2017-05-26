@@ -16,14 +16,14 @@ void Daub_DecompositionStep(T *v, uint n, bool normal, bool optimalFilters = tru
 {
 	if (n < 4) return;
 
-	T v3 = T(3);
-	T sqrt3 = sqrt(T(3));
-	T denom;
+	double v3 = 3.0;
+	double sqrt3 = sqrt(3.0);
+	double denom;
 	uint i, j;
 	const uint half = n >> 1;
 
-	if (normal) denom = T(4) * sqrt(T(2));
-	else denom = T(4);
+	if (normal) denom = 4.0 * sqrt(2.0);
+	else denom = 4.0;
 
 	T* result = new T[n];
 
@@ -63,15 +63,15 @@ void Daub_DecompositionStep(T *v, uint n, bool normal, bool optimalFilters = tru
 	}
 	else
 	{
-		denom = T(4) * sqrt(T(2));
-		T h0 = (T(1) + sqrt3) / denom;
-		T h1 = (T(3) + sqrt3) / denom;
-		T h2 = (T(3) - sqrt3) / denom;
-		T h3 = (T(1) - sqrt3) / denom;
-		T g0 = h3;
-		T g1 = -h2;
-		T g2 = h1;
-		T g3 = -h0;
+		denom = 4.0 * sqrt(2.0);
+		double h0 = (1.0 + sqrt3) / denom;
+		double h1 = (3.0 + sqrt3) / denom;
+		double h2 = (3.0 - sqrt3) / denom;
+		double h3 = (1.0 - sqrt3) / denom;
+		double g0 = h3;
+		double g1 = -h2;
+		double g2 = h1;
+		double g3 = -h0;
 
 		offset = v;
 
@@ -126,15 +126,15 @@ void Daub_CompositionStep(T *v, uint n, bool normal, bool optimalFilters = true)
 {
 	if (n < 4) return;
 
-	T v3 = T(3);
-	T sqrt3 = sqrt(T(3));
-	T denom;
+	double v3 = 3.0;
+	double sqrt3 = sqrt(3.0);
+	double denom;
 	uint i, j;
 	const uint half = n >> 1;
 	//const uint halfPls1 = half + 1;
 
-	if (normal) denom = T(4) * sqrt(T(2));
-	else denom = T(4);
+	if (normal) denom = 4.0 * sqrt(2.0);
+	else denom = 4.0;
 
 	T* result = new T[n];
 
@@ -173,24 +173,24 @@ void Daub_CompositionStep(T *v, uint n, bool normal, bool optimalFilters = true)
 	}
 	else
 	{
-		denom = T(4) * sqrt(T(2));
-		T h0 = (T(1) + sqrt3) / denom;
-		T h1 = (T(3) + sqrt3) / denom;
-		T h2 = (T(3) - sqrt3) / denom;
-		T h3 = (T(1) - sqrt3) / denom;
-		T g0 = h3;
-		T g1 = -h2;
-		T g2 = h1;
-		T g3 = -h0;
+		denom = 4.0 * sqrt(2.0);
+		double h0 = (1.0 + sqrt3) / denom;
+		double h1 = (3.0 + sqrt3) / denom;
+		double h2 = (3.0 - sqrt3) / denom;
+		double h3 = (1.0 - sqrt3) / denom;
+		double g0 = h3;
+		double g1 = -h2;
+		double g2 = h1;
+		double g3 = -h0;
 
-		T Ih0 = h2;
-		T Ih1 = g2;
-		T Ih2 = h0;
-		T Ih3 = g0;
-		T Ig0 = h3;
-		T Ig1 = g3;
-		T Ig2 = h1;
-		T Ig3 = g1;
+		double Ih0 = h2;
+		double Ih1 = g2;
+		double Ih2 = h0;
+		double Ih3 = g0;
+		double Ig0 = h3;
+		double Ig1 = g3;
+		double Ig2 = h1;
+		double Ig3 = g1;
 
 		a = *(v + half - 1);
 		b = *(v + n - 1);
@@ -236,7 +236,7 @@ template <typename T>
 void Daub_Normalization(T *vec, uint n, bool invert = false)
 {
 	uint levels = (uint)log2((double)(n));
-	T factor;
+	double factor;
 	
 	for (uint level = 1; level < levels; level++)
 	{
@@ -249,7 +249,7 @@ void Daub_Normalization(T *vec, uint n, bool invert = false)
 		
 		int currentLevel = (int)(levels - level);
 
-		factor = pow(T(2), T(currentLevel) / T(2));
+		factor = pow(2.0, double(currentLevel) / 2.0);
 
 		if (invert)
 		for (uint i = start; i < end; i++)
