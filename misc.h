@@ -48,12 +48,154 @@ typedef struct TimeMesurement
 	double stdDev;
 } TimeMesurement;
 
-typedef struct MatrixMap
+template <typename T>
+struct MatrixMap
 {
 	uint x;
 	uint y;
 	T value;
-} MatrixMap;
+};
+
+template <typename T>
+void MatrixMapping(T **matrix, MatrixMap<T> *map, uint n)
+{
+	for (uint i = 0; i < n; i++)
+	{
+		for (uint j = 0; j < n; j++)
+		{
+			map[(i*n) + j].x = i;
+			map[(i*n) + j].y = j;
+			map[(i*n) + j].value = matrix[i][j];
+		}
+	}
+}
+
+template <typename T>
+void MatrixRemapping(T **matrix, MatrixMap<T> *map, uint n)
+{
+	for (uint i = 0; i < n*n; i++)
+	{
+		matrix[map[i].x][map[i].y] = map[i].value;
+	}
+}
+
+template <typename T>
+void merging(MatrixMap<T> *a, MatrixMap<T> *b, uint low, uint mid, uint high)
+{
+	uint l1, l2, i;
+
+	for (l1 = low, l2 = mid + 1, i = low; l1 <= mid && l2 <= high; i++)
+	{
+		if (a[l1].value <= a[l2].value)
+		{
+			b[i] = a[l1++];
+		}
+		else
+		{
+			b[i] = a[l2++];
+		}
+	}
+
+	while (l1 <= mid)
+	{
+		b[i++] = a[l1++];
+	}
+
+	while (l2 <= high)
+	{
+		b[i++] = a[l2++];
+	}
+
+	for (i = low; i <= high; i++)
+	{
+		a[i] = b[i];
+	}
+}
+
+template <typename T>
+void sort(MatrixMap<T> *a, MatrixMap<T> *b, uint low, uint high)
+{
+	uint mid;
+
+	if (low < high)
+	{
+		mid = (low + high) / 2;
+		sort(a, b, low, mid);
+		sort(a, b, mid + 1, high);
+		merging(a, b, low, mid, high);
+	}
+	else
+	{
+		return;
+	}
+}
+
+template <typename T>
+T getThreshold(MatrixMap<T> *v, uint n, double ratio)
+{
+	T threshold;
+	T error;
+	T totalEnergy = T(0);
+	T tMin = minValue(v, n);
+	T tMax = maxValue(v, n);
+
+	if (ratio > 1.0) ratio = 1.0;
+	else if (ratio < 0.0) ratio = 0.0;
+
+	for (uint i = 0; i < n; i++)
+	{
+		totalEnergy += pow(static_cast<double>(v[i].value), 2.0);
+	}
+
+	error = totalEnergy * ratio;
+
+	T temp;
+
+	do
+	{
+		threshold = (tMax + tMin) / 2;
+		totalEnergy = T(0);
+
+		for (uint i = 0; i < n; i++)
+		{
+			if (v[i].value < threshold)
+			{
+				totalEnergy += pow(static_cast<double>(v[i].value), 2.0);
+			}
+			else break;
+		}
+
+		if (totalEnergy < error)
+		{
+			tMin = threshold;
+		}
+		else
+		{
+			tMax = threshold;
+		}
+
+		temp = tMax - tMin;
+
+	} while ((tMax - tMin) > 0.001);
+
+	return threshold;
+}
+
+template <typename T>
+void compress(MatrixMap<T> *v, uint n, double ratio)
+{
+	T threshold = getThreshold(v, n, ratio);
+
+	for (uint i = 0; i < n; i++)
+	{
+		if (v[i].value < threshold)
+		{
+			v[i].value = T(0);
+		}
+		else break;
+	}
+
+}
 
 void startTimeCounter();
 double getTimeCounter();
